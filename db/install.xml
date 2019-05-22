@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="question/type/cloudpoodll/db" VERSION="20110310" COMMENT="XMLDB file for Moodle question/type/cloudpoodll"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
+>
+    <TABLES>
+        <TABLE NAME="qtype_cloudpoodll_opts" COMMENT="Extra options for cloudpoodll questions.">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
+                <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Foreign key linking to the question table."/>
+                <FIELD NAME="responseformat" TYPE="char" LENGTH="16" NOTNULL="true" DEFAULT="editor" SEQUENCE="false"
+                       COMMENT="The type of input area students should be given for their response."/>
+                <FIELD NAME="graderinfo" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false"
+                       COMMENT="Information shown to people with permission to manually grade the question, when they are grading."/>
+                <FIELD NAME="graderinfoformat" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="The text format for graderinfo."/>
+                <FIELD NAME="qresource" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" COMMENT="The URL of an image file to be be used as whiteboard background."/>
+                <FIELD NAME="timelimit" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="language" TYPE="char" LENGTH="255" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" DEFAULT="none" COMMENT="the speaker language"/>
+                <FIELD NAME="expiredays" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="100" SEQUENCE="false"/>
+                <FIELD NAME="transcode" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Tramscode to MP3 or not"/>
+                <FIELD NAME="transcriber" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Transcriber"/>
+                <FIELD NAME="audioskin" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" DEFAULT="onetwothree" COMMENT="audio recorder skin"/>
+                <FIELD NAME="videoskin" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" DEFAULT="onetwothree" COMMENT="video recorder skin"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="questionid"/>
+                <KEY NAME="questionid" TYPE="foreign-unique" FIELDS="questionid" REFTABLE="question" REFFIELDS="id" PREVIOUS="primary"/>
+            </KEYS>
+        </TABLE>
+    </TABLES>
+</XMLDB>
