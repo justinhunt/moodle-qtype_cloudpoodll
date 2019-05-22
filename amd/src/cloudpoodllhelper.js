@@ -5,6 +5,8 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
 
     return {
 
+        configs: {},
+
         init: function (opts) {
             var config ={};
             config.component = opts["component"];
@@ -20,13 +22,16 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                 transcript: $("input[name=" + name + "transcript]"),
                 answer: $("input[name=" + name + "]"),
             };
+            this.configs[data_id] = config;
+            var that=this;
 
             //setup recorder
             var gspeech = "";
-            var cp = cloudpoodll.clone();
+
             cp.init(config.data_id, function (evt) {
+                var theconfig=that.configs[evt.id];
                 //we need to only do our event (not another recorder on this page)
-                if (evt.id!=config.data_id){return;}
+                if (!theconfig){return;}
 
                 switch (evt.type) {
                     case "recording":
@@ -37,15 +42,15 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                         break;
                     case "speech":
                         gspeech += "  " + evt.capturedspeech;
-                        config.controls.transcript.val(gspeech);
-                        config.controls.answer.val(gspeech);
+                        theconfig.controls.transcript.val(gspeech);
+                        theconfig.controls.answer.val(gspeech);
                         break;
                     case "awaitingprocessing":
-                        if (config.uploadstate != "posted") {
-                            config.controls.mediaurl.val(evt.mediaurl);
-                            config.controls.answer.val(evt.mediaurl);
+                        if (theconfig.uploadstate != "posted") {
+                            theconfig.controls.mediaurl.val(evt.mediaurl);
+                            theconfig.controls.answer.val(evt.mediaurl);
                         }
-                        config.uploadstate = "posted";
+                        theconfig.uploadstate = "posted";
                         break;
                     case "error":
                         alert("PROBLEM: " + evt.message);
