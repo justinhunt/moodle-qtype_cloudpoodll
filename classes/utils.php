@@ -43,9 +43,9 @@ class utils {
 
     public static function fetch_options_transcribers() {
         $options = array(constants::TRANSCRIBER_NONE => get_string("transcriber_none", constants::M_COMP),
-                constants::TRANSCRIBER_GOOGLECHROME => get_string("transcriber_googlechrome", constants::M_COMP),
                 constants::TRANSCRIBER_AMAZONTRANSCRIBE => get_string("transcriber_amazontranscribe", constants::M_COMP),
-                constants::TRANSCRIBER_GOOGLECLOUDSPEECH => get_string("transcriber_googlecloud", constants::M_COMP));
+                constants::TRANSCRIBER_GOOGLECLOUDSPEECH => get_string("transcriber_googlecloud", constants::M_COMP),
+                constants::TRANSCRIBER_GOOGLECHROME => get_string("transcriber_googlechrome", constants::M_COMP),);
         return $options;
     }
 
@@ -110,14 +110,6 @@ class utils {
                 "365" => "365",
                 "730" => "730",
                 "9999" => get_string('forever', constants::M_COMP)
-        );
-    }
-
-    public static function get_transcriber_options(){
-        return array(
-                constants::TRANSCRIBER_NONE => get_string("transcribernone",constants::M_COMPONENT),
-                constants::TRANSCRIBER_AMAZONTRANSCRIBE => get_string("transcriberamazon",constants::M_COMPONENT),
-                constants::TRANSCRIBER_GOOGLECLOUDSPEECH => get_string("transcribergooglecloud",constants::M_COMPONENT)
         );
     }
 

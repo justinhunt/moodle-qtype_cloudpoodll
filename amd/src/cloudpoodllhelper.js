@@ -5,21 +5,19 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
 
     return {
 
-        uploadstate: false,
-
         init: function (opts) {
-            this.component = opts["component"];
-            this.dom_id = opts["dom_id"];
-            this.inputname = opts["inputname"];
-            this.transcriber = opts["transcriber"];
+            var config ={};
+            config.component = opts["component"];
+            config.dom_id = opts["dom_id"];
+            config.inputname = opts["inputname"];
+            config.transcriber = opts["transcriber"];
+            config.uploadstate= false;
 
-            this.register_controls();
-            this.register_events();
-            this.setup_recorder();
+            config = this.register_controls(config);
+            this.setup_recorder(config);
         },
 
-        setup_recorder: function () {
-            var that = this;
+        setup_recorder: function (config) {
             var gspeech = "";
             var recorder_callback = function (evt) {
                 switch (evt.type) {
@@ -31,15 +29,15 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                         break;
                     case "speech":
                         gspeech += "  " + evt.capturedspeech;
-                        that.controls.transcript.val(gspeech);
-                        that.controls.answer.val(gspeech);
+                        config.controls.transcript.val(gspeech);
+                        config.controls.answer.val(gspeech);
                         break;
                     case "awaitingprocessing":
-                        if (that.uploadstate != "posted") {
-                            that.controls.mediaurl.val(evt.mediaurl);
-                            that.controls.answer.val(evt.mediaurl);
+                        if (config.uploadstate != "posted") {
+                            config.controls.mediaurl.val(evt.mediaurl);
+                            config.controls.answer.val(evt.mediaurl);
                         }
-                        that.uploadstate = "posted";
+                        config.uploadstate = "posted";
                         break;
                     case "error":
                         alert("PROBLEM: " + evt.message);
@@ -47,19 +45,20 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                 }
             };
 
-            cloudpoodll.init(this.dom_id, recorder_callback);
+            cloudpoodll.init(config.dom_id, recorder_callback);
         },
 
-        register_controls: function () {
-            var name = CSS.escape(this.inputname);
-            this.controls = {
+        register_controls: function (config) {
+            var name = CSS.escape(config.inputname);
+            config.controls = {
                 mediaurl: $("input[name=" + name + "mediaurl]"),
                 transcript: $("input[name=" + name + "transcript]"),
                 answer: $("input[name=" + name + "]"),
             };
+            return config;
         },
 
-        register_events: function () {
+        register_events: function (config) {
             //nothing here
         }
     };//end of return object

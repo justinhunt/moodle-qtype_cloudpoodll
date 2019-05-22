@@ -78,7 +78,7 @@ if ($ADMIN->fulltree) {
     $name = 'transcriber';
     $label = get_string($name, $plugin);
     $details = get_string($name . '_details', $plugin);
-    $default = constants::TRANSCRIBER_GOOGLECLOUDSPEECH;
+    $default = constants::TRANSCRIBER_AMAZONTRANSCRIBE;
     $options = utils::fetch_options_transcribers();
     $settings->add(new admin_setting_configselect("$plugin/$name", $label, $details, $default, $options));
 
