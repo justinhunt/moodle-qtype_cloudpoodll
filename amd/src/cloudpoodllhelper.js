@@ -22,7 +22,7 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                 transcript: $("input[name=" + name + "transcript]"),
                 answer: $("input[name=" + name + "]"),
             };
-            this.configs[data_id] = config;
+            this.configs[config.data_id] = config;
             var that=this;
 
             //setup recorder
