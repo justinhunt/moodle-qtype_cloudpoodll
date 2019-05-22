@@ -44,8 +44,8 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                         break;
                 }
             };
-
-            cloudpoodll.init(config.dom_id, recorder_callback);
+            var cp = cloudpoodll.clone();
+            cp.init(config.dom_id, recorder_callback);
         },
 
         register_controls: function (config) {

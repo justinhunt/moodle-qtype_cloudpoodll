@@ -3,6 +3,11 @@ define(["jquery",
         "https://cdn.jsdelivr.net/gh/justinhunt/cloudpoodll@latest/amd/build/cloudpoodll.min.js"],
     function ($, log, CloudPoodll) {
         return {
+            //for making multiple instances
+            clone: function(){
+                return $.extend(true,{},this);
+            },
+
             init: function (recorderid, thecallback) {
                 CloudPoodll.createRecorder(recorderid);
                 CloudPoodll.theCallback = thecallback;
