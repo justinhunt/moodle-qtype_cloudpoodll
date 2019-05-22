@@ -25,6 +25,9 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
             var gspeech = "";
             var cp = cloudpoodll.clone();
             cp.init(config.dom_id, function (evt) {
+                //we need to only do our event (not another recorder on this page)
+                if (evt.id!=config.dom_id){return;}
+
                 switch (evt.type) {
                     case "recording":
                         if (evt.action === "started") {
