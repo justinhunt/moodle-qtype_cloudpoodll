@@ -323,5 +323,5 @@ class utils {
         }
         return $vtt;
     }
-    
+
 }
