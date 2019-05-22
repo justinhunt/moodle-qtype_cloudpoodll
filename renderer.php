@@ -301,7 +301,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $dom_id = html_writer::random_id('');
 
         $recorderdiv = \html_writer::div('', CONSTANTS::M_COMP . '_notcenter',
-                array('id' => $dom_id,
+                array('id' => 'therecorder_' . $dom_id,
                         'data-id' => 'therecorder_' . $dom_id,
                         'data-parent' => $CFG->wwwroot,
                         'data-localloader' => constants::LOADER_URL,
@@ -335,7 +335,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         // set up the AMD for the recorder
         $opts = array(
                 'component' => CONSTANTS::M_COMP,
-                'dom_id' => $dom_id,
+                'data_id' => 'therecorder_' . $dom_id,
                 'inputname' => $inputname,
                 'transcriber' => $transcriber
         );

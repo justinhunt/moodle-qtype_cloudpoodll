@@ -8,7 +8,7 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
         init: function (opts) {
             var config ={};
             config.component = opts["component"];
-            config.dom_id = opts["dom_id"];
+            config.data_id = opts["data_id"];
             config.inputname = opts["inputname"];
             config.transcriber = opts["transcriber"];
             config.uploadstate= false;
@@ -24,9 +24,9 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
             //setup recorder
             var gspeech = "";
             var cp = cloudpoodll.clone();
-            cp.init(config.dom_id, function (evt) {
+            cp.init(config.data_id, function (evt) {
                 //we need to only do our event (not another recorder on this page)
-                if (evt.id!=config.dom_id){return;}
+                if (evt.id!=config.data_id){return;}
 
                 switch (evt.type) {
                     case "recording":
@@ -88,7 +88,7 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                 }
             };
             var cp = cloudpoodll.clone();
-            cp.init(config.dom_id, recorder_callback);
+            cp.init(config.data_id, recorder_callback);
         },
 
         register_controls: function (config) {
