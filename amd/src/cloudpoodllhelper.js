@@ -23,7 +23,8 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
 
             //setup recorder
             var gspeech = "";
-            var recorder_callback = function (evt) {
+            var cp = cloudpoodll.clone();
+            cp.init(config.dom_id, function (evt) {
                 switch (evt.type) {
                     case "recording":
                         if (evt.action === "started") {
@@ -47,9 +48,9 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                         alert("PROBLEM: " + evt.message);
                         break;
                 }
-            };
-            var cp = cloudpoodll.clone();
-            cp.init(config.dom_id, recorder_callback);
+            }//end of callback function
+
+            );//end of cp init
 
             //defunct
             //config = this.register_controls(config);
