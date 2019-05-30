@@ -16,7 +16,7 @@ class constants {
     const M_COMP = 'qtype_cloudpoodll';
     const M_TABLE = 'qtype_cloudpoodll_opts';
 
-    const APPID = 'cloudpoodll_api';//'qtype_cloudpoodll';
+    const APPID = 'qtype_cloudpoodll';
 
     const REC_AUDIO = 'audio';
     const REC_VIDEO = 'video';
