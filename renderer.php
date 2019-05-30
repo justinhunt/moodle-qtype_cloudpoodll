@@ -254,33 +254,45 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         }
 
         //transcription defaults
-        $transcriber = constants::TRANSCRIBER_GOOGLECHROME;
+        $transcriber = constants::TRANSCRIBER_AMAZONTRANSCRIBE;
         $chrometranscribe = '0';
         $subtitle="0";
         $hints->encoder = 'auto';
 
-        // amazon transcribe
-        if ($question->transcriber == constants::TRANSCRIBER_AMAZONTRANSCRIBE) {
-            $can_transcribe = utils::can_transcribe($r_options);
-            if($can_transcribe){
-                $transcriber  = constants::TRANSCRIBER_AMAZONTRANSCRIBE;
-                $subtitle="1";
-            }else{
-                $transcriber  = constants::TRANSCRIBER_NONE;
-            }
-        }
+        //branch based on which transcriber we are using
+        switch($question->transcriber) {
+            // amazon transcribe
+            case constants::TRANSCRIBER_AMAZONTRANSCRIBE:
+                $can_transcribe = utils::can_transcribe($r_options);
+                if ($can_transcribe) {
+                    $transcriber = constants::TRANSCRIBER_AMAZONTRANSCRIBE;
+                    $subtitle = "1";
+                } else{
+                    $transcriber = constants::TRANSCRIBER_NONE;
+                }
+                break;
 
-        // chrometranscribe
-        if ($question->transcriber == constants::TRANSCRIBER_GOOGLECHROME) {
-            $chrometranscribe = '1';
-        } else {
-            $transcriber  = constants::TRANSCRIBER_NONE;
-        }
+            // chrometranscribe
+            case constants::TRANSCRIBER_GOOGLECHROME:
+                $chrometranscribe = '1';
+                break;
 
-        if ($question->transcriber == constants::TRANSCRIBER_GOOGLECLOUDSPEECH) {
-            $transcriber  = constants::TRANSCRIBER_GOOGLECLOUDSPEECH;
-            $subtitle="1";
-            $hints->encoder='stereoaudio';
+                //google cloud speech
+            case constants::TRANSCRIBER_GOOGLECLOUDSPEECH:
+                //we can not use google cloud speech for video, so do not even try
+                if($recordertype === constants::REC_VIDEO){
+                    $transcriber = constants::TRANSCRIBER_AMAZONTRANSCRIBE;
+                    $subtitle = "1";
+                }else {
+                    $transcriber = constants::TRANSCRIBER_GOOGLECLOUDSPEECH;
+                    $subtitle = "1";
+                    $hints->encoder = 'stereoaudio';
+                }
+                break;
+
+            default:
+                $transcriber = constants::TRANSCRIBER_NONE;
+
         }
 
         // transcode
