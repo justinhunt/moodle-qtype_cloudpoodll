@@ -40,6 +40,13 @@ if ($ADMIN->fulltree) {
     $details = utils::fetch_token_for_display(get_config($plugin, 'apiuser'), get_config($plugin, 'apisecret'));
     $settings->add(new admin_setting_configtext("$plugin/$name", $label, $details, '', PARAM_TEXT));
 
+    //apicredshelper
+    $name = 'apicredshelper';
+    $label = get_string($name, $plugin);
+    $details = get_string('apicredshelper_details', $plugin);
+    $settings->add(new qtype_cloudpoodll\setting\apicredshelper("$plugin/$name", $label, $details,''));
+
+
     $name = 'awsregion';
     $label = get_string($name, $plugin);
     $default = constants::REGION_USEAST1;

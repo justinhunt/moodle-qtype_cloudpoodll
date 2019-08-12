@@ -143,3 +143,6 @@ $string['onemin'] = '1 minute';
 $string['xmins'] = '{$a} minutes';
 $string['oneminxsecs'] = '1 minutes {$a} seconds';
 $string['xminsecs'] = '{$a->minutes} minutes {$a->seconds} seconds';
+
+$string['apicredshelper']="Api Creds Helper";
+$string['apicredshelper_details']="--";
