@@ -4,6 +4,7 @@ Version 1.0.1(Build 2019112100)
 -Added more time options
 -Better API cred error reporting
 -Fixed broken en-GB transcription setting
+-fixed styles in transcript container
 
 
 Version 1.0.0(Build 2019050700)
