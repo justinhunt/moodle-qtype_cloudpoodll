@@ -50,16 +50,18 @@ class utils {
     }
 
     public static function get_timelimit_options() {
-        return array(
+        $opts = array(
                 0 => get_string("notimelimit", constants::M_COMP),
                 30 => get_string("xsecs", constants::M_COMP, '30'),
                 45 => get_string("xsecs", constants::M_COMP, '45'),
                 60 => get_string("onemin", constants::M_COMP),
                 90 => get_string("oneminxsecs", constants::M_COMP, '30'),
-                120 => get_string("xmins", constants::M_COMP, '2'),
-                150 => get_string("xminsecs", constants::M_COMP, array('minutes' => 2, 'seconds' => 30)),
-                180 => get_string("xmins", constants::M_COMP, '3')
         );
+        for($x=2;$x<=30;$x++){
+            $opts[$x*60]=get_string("xmins", constants::M_COMP, $x);
+            $opts[($x*60)+30]=get_string("xminsecs", constants::M_COMP, array('minutes' => $x, 'seconds' => 30));
+        }
+        return $opts;
     }
 
     public static function fetch_options_skins($rectype = constants::REC_VIDEO) {
@@ -294,6 +296,48 @@ class utils {
             $token = '';
         }
         return $token;
+    }
+
+    //check token and tokenobject(from cache)
+    //return error message or blank if its all ok
+    public static function fetch_token_error($token){
+        global $CFG;
+
+        //check token authenticated
+        if(empty($token)) {
+            $message = get_string('novalidcredentials', constants::M_COMP,
+                    $CFG->wwwroot . constants::M_PLUGINSETTINGS);
+            return $message;
+        }
+
+        // Fetch from cache and process the results and display.
+        $cache = \cache::make_from_params(\cache_store::MODE_APPLICATION, constants::M_COMP, 'token');
+        $tokenobject = $cache->get('recentpoodlltoken');
+
+        //we should not get here if there is no token, but lets gracefully die, [v unlikely]
+        if (!($tokenobject)) {
+            $message = get_string('notokenincache', constants::M_COMP);
+            return $message;
+        }
+
+        //We have an object but its no good, creds were wrong ..or something. [v unlikely]
+        if (!property_exists($tokenobject, 'token') || empty($tokenobject->token)) {
+            $message = get_string('credentialsinvalid', constants::M_COMP);
+            return $message;
+        }
+        // if we do not have subs.
+        if (!property_exists($tokenobject, 'subs')) {
+            $message = get_string('nosubscriptions', constants::M_COMP);
+            return $message;
+        }
+        // Is app authorised?
+        if (!property_exists($tokenobject, 'apps') || !in_array(constants::M_COMP, $tokenobject->apps)) {
+            $message = get_string('appnotauthorised', constants::M_COMP);
+            return $message;
+        }
+
+        //just return empty if there is no error.
+        return '';
     }
 
     //transcripts become ready in their own time, fetch them here

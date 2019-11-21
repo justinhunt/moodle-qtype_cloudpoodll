@@ -15,6 +15,7 @@ class constants {
     const FILEAREA_GRADERINFO = 'graderinfo';
     const M_COMP = 'qtype_cloudpoodll';
     const M_TABLE = 'qtype_cloudpoodll_opts';
+    const M_PLUGINSETTINGS = '/admin/settings.php?section=qtypesettingcloudpoodll';
 
     const APPID = 'qtype_cloudpoodll';
 
@@ -51,7 +52,7 @@ class constants {
     const REGION_LONDON = 'london';
 
     const LANG_ENUS = 'en-US';
-    const LANG_ENUK = 'en-UK';
+    const LANG_ENUK = 'en-GB';
     const LANG_ENAU = 'en-AU';
     const LANG_ESUS = 'es-US';
     const LANG_FRCA = 'fr-CA';

@@ -304,7 +304,27 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         // fetch cloudpoodll token
         $api_user = get_config(CONSTANTS::M_COMP, 'apiuser');
         $api_secret = get_config(CONSTANTS::M_COMP, 'apisecret');
-        $token = utils::fetch_token($api_user, $api_secret);
+
+
+        //id user has errors with tokens or cloudpoodll API send those back
+        if(empty($api_user) || empty($api_secret)){
+            $message = get_string('nocredentials',constants::M_COMP,
+                    $CFG->wwwroot . constants::M_PLUGINSETTINGS);
+            $errormessage = $this->show_problembox($message);
+            return $errormessage;
+
+        }else{
+            //fetch token
+            $token = utils::fetch_token($api_user, $api_secret);
+
+            //check token authenticated and no errors in it
+            $errormessage = utils::fetch_token_error($token);
+            if(!empty($errormessage)){
+                $errormessage = $this->show_problembox($errormessage);
+                return $errormessage;
+            }
+        }
+
 
         // any recorder hints ... get sorted here
         $string_hints = base64_encode(json_encode($hints));
@@ -356,6 +376,17 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         //$PAGE->requires->strings_for_js(array('reallydeletesubmission'), CONSTANTS::M_COMP);
 
         return $recorderhtml;
+    }
+
+    /**
+     * Return HTML to display message about problem
+     */
+    public function show_problembox($msg) {
+        $output = '';
+        $output .= $this->output->box_start(constants::M_COMP . '_problembox');
+        $output .= $this->notification($msg, 'warning');
+        $output .= $this->output->box_end();
+        return $output;
     }
 }
 
