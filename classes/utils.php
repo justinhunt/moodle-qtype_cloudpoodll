@@ -97,7 +97,9 @@ class utils {
                 constants::REGION_OTTAWA => get_string("ottawa", constants::M_COMP),
                 constants::REGION_FRANKFURT => get_string("frankfurt", constants::M_COMP),
                 constants::REGION_LONDON => get_string("london", constants::M_COMP),
-                constants::REGION_SAOPAULO => get_string("saopaulo", constants::M_COMP)
+                constants::REGION_SAOPAULO => get_string("saopaulo", constants::M_COMP),
+                constants::REGION_SINGAPORE => get_string("singapore",constants::M_COMP),
+                constants::REGION_MUMBAI => get_string("mumbai",constants::M_COMP)
         );
     }
 
@@ -119,42 +121,54 @@ class utils {
     public static function get_lang_options()
     {
         return array(
+                constants::LANG_ARAE => get_string('ar-ae', constants::M_COMP),
+                constants::LANG_ARSA => get_string('ar-sa', constants::M_COMP),
+                constants::LANG_DADK => get_string('da-dk', constants::M_COMP),
+                constants::LANG_DEDE => get_string('de-de', constants::M_COMP),
+                constants::LANG_DECH => get_string('de-ch', constants::M_COMP),
                 constants::LANG_ENUS => get_string('en-us', constants::M_COMP),
+                constants::LANG_ENGB => get_string('en-gb', constants::M_COMP),
                 constants::LANG_ENAU => get_string('en-au', constants::M_COMP),
-                constants::LANG_ENUK => get_string('en-uk', constants::M_COMP),
                 constants::LANG_ENIN => get_string('en-in', constants::M_COMP),
-                constants::LANG_ESES => get_string('es-es', constants::M_COMP),
+                constants::LANG_ENIE => get_string('en-ie', constants::M_COMP),
+                constants::LANG_ENWL => get_string('en-wl', constants::M_COMP),
+                constants::LANG_ENAB => get_string('en-ab', constants::M_COMP),
                 constants::LANG_ESUS => get_string('es-us', constants::M_COMP),
+                constants::LANG_ESES => get_string('es-es', constants::M_COMP),
+                constants::LANG_FAIR => get_string('fa-ir', constants::M_COMP),
                 constants::LANG_FRCA => get_string('fr-ca', constants::M_COMP),
                 constants::LANG_FRFR => get_string('fr-fr', constants::M_COMP),
+                constants::LANG_HIIN => get_string('hi-in', constants::M_COMP),
+                constants::LANG_HEIL => get_string('he-il', constants::M_COMP),
+                constants::LANG_IDID => get_string('id-id', constants::M_COMP),
                 constants::LANG_ITIT => get_string('it-it', constants::M_COMP),
-                constants::LANG_PTBR => get_string('pt-br', constants::M_COMP),
+                constants::LANG_JAJP => get_string('ja-jp', constants::M_COMP),
                 constants::LANG_KOKR => get_string('ko-kr', constants::M_COMP),
-                constants::LANG_DEDE => get_string('de-de', constants::M_COMP),
-                constants::LANG_HIIN => get_string('hi-in', constants::M_COMP)
+                constants::LANG_MSMY => get_string('ms-my', constants::M_COMP),
+                constants::LANG_NLNL => get_string('nl-nl', constants::M_COMP),
+                constants::LANG_PTBR => get_string('pt-br', constants::M_COMP),
+                constants::LANG_PTPT => get_string('pt-pt', constants::M_COMP),
+                constants::LANG_RURU => get_string('ru-ru', constants::M_COMP),
+                constants::LANG_TAIN => get_string('ta-in', constants::M_COMP),
+                constants::LANG_TEIN => get_string('te-in', constants::M_COMP),
+                constants::LANG_TRTR => get_string('tr-tr', constants::M_COMP),
+                constants::LANG_ZHCN => get_string('zh-cn', constants::M_COMP)
         );
     }
 
-    const LANG_KOKR = 'ko-KR';
-    const LANG_DEDE = 'de-DE';
-    const LANG_HIIN = 'hi-IN';
-
     //are we willing and able to transcribe submissions?
     public static function can_transcribe($instance) {
+
         //we default to true
         //but it only takes one no ....
         $ret = true;
 
         //The regions that can transcribe
-        switch ($instance->awsregion) {
-            case "useast1":
-            case "dublin":
-            case "sydney":
-            case "ottawa":
-                break;
+        switch($instance->awsregion){
             default:
-                $ret = false;
+                $ret = true;
         }
+
         return $ret;
     }
 

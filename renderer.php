@@ -204,7 +204,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
      * @return string the HTML for the textarea.
      */
     protected function fetch_recorder($r_options, $question, $inputname) {
-        global $CFG;
+        global $CFG, $USER;
 
         $width = '';
         $height = '';
@@ -336,6 +336,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 array('id' => 'therecorder_' . $dom_id,
                         'data-id' => 'therecorder_' . $dom_id,
                         'data-parent' => $CFG->wwwroot,
+                        'data-owner' => hash('md5',$USER->username),
                         'data-localloader' => constants::LOADER_URL,
                         'data-media' => $recordertype,
                         'data-appid' => constants::APPID,
