@@ -123,7 +123,6 @@ class utils {
         return array(
                 constants::LANG_ARAE => get_string('ar-ae', constants::M_COMP),
                 constants::LANG_ARSA => get_string('ar-sa', constants::M_COMP),
-                constants::LANG_DADK => get_string('da-dk', constants::M_COMP),
                 constants::LANG_DEDE => get_string('de-de', constants::M_COMP),
                 constants::LANG_DECH => get_string('de-ch', constants::M_COMP),
                 constants::LANG_ENUS => get_string('en-us', constants::M_COMP),
