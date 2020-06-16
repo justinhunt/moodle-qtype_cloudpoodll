@@ -1,5 +1,8 @@
 Change List
 =========
+ Version 1.0.3(Build 2020061600)
+ -settings tweaks
+
 Version 1.0.2(Build 2020021100)
 -added languages(arabic, chinese, portuguese, japanese, tamil, telegu, dutch, farsi, wales english, ireland english, scotland english, russian, turkish, malay, indonesian,hebrew, swiss german)
 -added user tagging

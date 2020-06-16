@@ -41,10 +41,12 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configtext("$plugin/$name", $label, $details, '', PARAM_TEXT));
 
     //apicredshelper
+    /*
     $name = 'apicredshelper';
     $label = get_string($name, $plugin);
     $details = get_string('apicredshelper_details', $plugin);
     $settings->add(new qtype_cloudpoodll\setting\apicredshelper("$plugin/$name", $label, $details,''));
+    */
 
 
     $name = 'awsregion';

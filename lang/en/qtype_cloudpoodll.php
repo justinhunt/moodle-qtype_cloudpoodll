@@ -29,9 +29,9 @@ $string['formataudio'] = 'Audio response';
 $string['graderinfo'] = 'Information for graders';
 $string['nlines'] = '{$a} lines';
 $string['cloudpoodll'] = 'Cloud Poodll';
-$string['pluginname'] = 'Cloud Poodll';
+$string['pluginname'] = 'Cloud Poodll Recording';
 $string['pluginname_help'] =
-        'In response to a question (that may include an image) the respondent records an answer. The Cloud Poodll question will not be assigned a grade until it has been reviewed by a teacher and manually graded.';
+        'In response to a question the respondent records an answer, video or audio. The Cloud Poodll question will not be assigned a grade until it has been reviewed by a teacher and manually graded.';
 $string['pluginname_link'] = 'question/type/cloudpoodll';
 $string['pluginnameadding'] = 'Adding a Cloud Poodll recording question';
 $string['pluginnameediting'] = 'Editing a Cloud Poodll question';
@@ -43,12 +43,12 @@ $string['currentresponse'] = 'Current Response:<br />';
 $string['privacy:metadata'] = 'The Cloud Poodll Question plugin does store personal data.';
 
 $string['pluginname_help'] =
-        'In response to a question that may include an image, the respondent speaks an answer of one or more paragraphs. Initially, a grade is awarded automatically based on the number of chars, words, sentences or paragarphs, and the presence of certain target phrases. The automatic grade may be overridden later by the teacher.';
+    'In response to a question the respondent records an answer, video or audio. The Cloud Poodll question will not be assigned a grade until it has been reviewed by a teacher and manually graded. ';
 $string['pluginname_link'] = 'question/type/cloudpoodll';
 $string['pluginnameadding'] = 'Adding a Cloud Poodll question';
 $string['pluginnameediting'] = 'Editing a Cloud Poodll question';
 $string['pluginnamesummary'] =
-        'Allows a short speech segment, consisting of several sentences or paragraphs, to be submitted as a question response. The text will be transcribed after a short delay.';
+        'Students submit audio or video recordings as response to a question. The text can be transcribed after a short delay.';
 
 $string['privacy:metadata'] = 'The Cloud Poodll question type plugin does not store any personal data.';
 

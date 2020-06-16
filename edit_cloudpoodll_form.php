@@ -40,12 +40,12 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
         $qtype = question_bank::get_qtype('cloudpoodll');
         $config = get_config(constants::M_COMP);
 
-        $mform->addElement('select', 'responseformat',
-                get_string('responseformat', constants::M_COMP), $qtype->response_formats());
-        $mform->setDefault('responseformat', 'editor');
-
         $mform->addElement('editor', 'graderinfo', get_string('graderinfo', constants::M_COMP),
                 array('rows' => 10), $this->editoroptions);
+
+        $mform->addElement('select', 'responseformat',
+            get_string('responseformat', constants::M_COMP), $qtype->response_formats());
+        $mform->setDefault('responseformat', 'audio');
 
         // timelimit
         $name = 'timelimit';
