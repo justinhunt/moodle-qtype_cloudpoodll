@@ -37,7 +37,9 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                     case "recording":
                         if (evt.action === "started") {
                             gspeech = "";
-                            // that.controls.updatecontrol.val();
+                            // post a custom event that a filter template might be interested in
+                            var cpquestionStarted = new CustomEvent("cpquestionStarted", {details: evt});
+                            document.dispatchEvent(cpquestionStarted);
                         }
                         break;
                     case "speech":
@@ -49,6 +51,10 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                         if (theconfig.uploadstate != "posted") {
                             theconfig.controls.mediaurl.val(evt.mediaurl);
                             theconfig.controls.answer.val(evt.mediaurl);
+
+                            // post a custom event that a filter template might be interested in
+                            var cpquestionUploaded = new CustomEvent("cpquestionUploaded", {details: evt});
+                            document.dispatchEvent(cpquestionUploaded);
                         }
                         theconfig.uploadstate = "posted";
                         break;

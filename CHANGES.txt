@@ -1,5 +1,9 @@
 Change List
 =========
+Version 1.0.4(Build 2020101700)
+-removed unneeded "empty" message if no transcript
+-added event for external js to listen to (for use in safequizsave block)
+
  Version 1.0.3(Build 2020061600)
  -settings tweaks
 

@@ -103,7 +103,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
 
         if ($have_subtitles) {
             return $player_div;
-        } else if(!empty($transcript)) {
+        } else if(!empty($transcript) && $transcript != constants::BLANK) {
             return $player_div . html_writer::div($transcript, 'qtype_cloudpoodll_transcriptdiv', array());
         }else{
             return $player_div;
