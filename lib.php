@@ -26,6 +26,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+use qtype_cloudpoodll\constants;
+
 /**
  * Checks file access for cloudpoodll questions.
  */

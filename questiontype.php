@@ -88,6 +88,7 @@ class qtype_cloudpoodll extends question_type {
         $options->transcode = $formdata->transcode;
         $options->audioskin = $formdata->audioskin;
         $options->videoskin = $formdata->videoskin;
+        $options->safesave = $formdata->safesave;
 
         $options->responseformat = $formdata->responseformat;
         $options->graderinfo = $this->import_or_save_files($formdata->graderinfo,
@@ -229,6 +230,8 @@ class qtype_cloudpoodll extends question_type {
                 array('#', 'videoskin', 0, '#'), constants::SKIN_123);
         $qo->timelimit = $format->getpath($q,
                 array('#', 'timelimit', 0, '#'), 0);
+        $qo->safesave = $format->getpath($q,
+                array('#', 'safesave', 0, '#'), 0);
 
         return $qo;
 

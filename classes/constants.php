@@ -99,5 +99,5 @@ class constants {
     const REFRESH_URL = '/question/type/cloudpoodll/cloudpoodll/refreshtoken.php';
 
     const extra_fields = ['responseformat', 'graderinfo', 'graderinfoformat', 'qresource', 'language', 'expiredays',
-            'transcriber', 'transcode', 'audioskin', 'videoskin', 'timelimit'];
+            'transcriber', 'transcode', 'audioskin', 'videoskin', 'timelimit','safesave'];
 }

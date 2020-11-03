@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+use qtype_cloudpoodll\constants;
+
 /**
  * Upgrade code for the cloudpoodll question type.
  *
@@ -47,6 +49,20 @@ function xmldb_qtype_cloudpoodll_upgrade($oldversion) {
 
         // cloudpoodll savepoint reached
         upgrade_plugin_savepoint(true, 2017102301, 'qtype', 'cloudpoodll');
+
+    }
+
+    if ($oldversion < 2020110402) {
+
+
+        $table = new xmldb_table(constants::M_TABLE);
+        $field = new xmldb_field('safesave', XMLDB_TYPE_INTEGER, '2', null, XMLDB_TYPE_INTEGER, null, 0);
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // cloudpoodll savepoint reached
+        upgrade_plugin_savepoint(true, 2020110402, 'qtype', 'cloudpoodll');
 
     }
 

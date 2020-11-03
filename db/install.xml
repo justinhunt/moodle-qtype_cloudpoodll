@@ -21,6 +21,7 @@
                 <FIELD NAME="transcriber" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Transcriber"/>
                 <FIELD NAME="audioskin" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" DEFAULT="onetwothree" COMMENT="audio recorder skin"/>
                 <FIELD NAME="videoskin" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" DEFAULT="onetwothree" COMMENT="video recorder skin"/>
+                <FIELD NAME="safesave" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="if true disable submit button till uploaded "/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="questionid"/>

@@ -370,7 +370,8 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 'component' => CONSTANTS::M_COMP,
                 'data_id' => 'therecorder_' . $dom_id,
                 'inputname' => $inputname,
-                'transcriber' => $transcriber
+                'transcriber' => $transcriber,
+                'safesave' => $question->safesave
         );
 
         $this->page->requires->js_call_amd(CONSTANTS::M_COMP . '/cloudpoodllhelper', 'init', array($opts));
@@ -389,6 +390,18 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $output .= $this->output->box_end();
         return $output;
     }
+
+    public function manual_comment(question_attempt $qa, question_display_options $options) {
+        if ($options->manualcomment != question_display_options::EDITABLE) {
+            return '';
+        }
+
+        $question = $qa->get_question();
+        return html_writer::nonempty_tag('div', $question->format_text(
+                $question->graderinfo, $question->graderinfo, $qa, 'qtype_poodllrecording',
+                \qtype_cloudpoodll\constants::FILEAREA_GRADERINFO, $question->id), array('class' => 'graderinfo'));
+    }
+
 }
 
 /**

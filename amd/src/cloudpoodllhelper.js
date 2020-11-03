@@ -14,10 +14,12 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
             config.inputname = opts["inputname"];
             config.transcriber = opts["transcriber"];
             config.uploadstate= false;
+            config.safesave = opts["safesave"];
 
             //register controls
             var name = CSS.escape(config.inputname);
             config.controls = {
+                nextpagebtn: $(".submitbtns .mod_quiz-next-nav"),
                 mediaurl: $("input[name=" + name + "mediaurl]"),
                 transcript: $("input[name=" + name + "transcript]"),
                 answer: $("input[name=" + name + "]"),
@@ -40,6 +42,11 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                             // post a custom event that a filter template might be interested in
                             var cpquestionStarted = new CustomEvent("cpquestionStarted", {details: evt});
                             document.dispatchEvent(cpquestionStarted);
+
+                            //if opts safe save
+                            if(theconfig.safesave==1) {
+                                theconfig.controls.nextpagebtn.attr('disabled', 'disabled');
+                            }
                         }
                         break;
                     case "speech":
@@ -55,6 +62,11 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                             // post a custom event that a filter template might be interested in
                             var cpquestionUploaded = new CustomEvent("cpquestionUploaded", {details: evt});
                             document.dispatchEvent(cpquestionUploaded);
+
+                            //if opts safe save
+                            if(theconfig.safesave==1) {
+                                theconfig.controls.nextpagebtn.removeAttr('disabled', 'disabled');
+                            }
                         }
                         theconfig.uploadstate = "posted";
                         break;
@@ -66,51 +78,8 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
 
             );//end of cp init
 
-            //defunct
-            //config = this.register_controls(config);
-            //this.setup_recorder(config);
         },
 
-        setup_recorder: function (config) {
-            var gspeech = "";
-            var recorder_callback = function (evt) {
-                switch (evt.type) {
-                    case "recording":
-                        if (evt.action === "started") {
-                            gspeech = "";
-                            // that.controls.updatecontrol.val();
-                        }
-                        break;
-                    case "speech":
-                        gspeech += "  " + evt.capturedspeech;
-                        config.controls.transcript.val(gspeech);
-                        config.controls.answer.val(gspeech);
-                        break;
-                    case "awaitingprocessing":
-                        if (config.uploadstate != "posted") {
-                            config.controls.mediaurl.val(evt.mediaurl);
-                            config.controls.answer.val(evt.mediaurl);
-                        }
-                        config.uploadstate = "posted";
-                        break;
-                    case "error":
-                        alert("PROBLEM: " + evt.message);
-                        break;
-                }
-            };
-            var cp = cloudpoodll.clone();
-            cp.init(config.data_id, recorder_callback);
-        },
-
-        register_controls: function (config) {
-            var name = CSS.escape(config.inputname);
-            config.controls = {
-                mediaurl: $("input[name=" + name + "mediaurl]"),
-                transcript: $("input[name=" + name + "transcript]"),
-                answer: $("input[name=" + name + "]"),
-            };
-            return config;
-        },
 
         register_events: function (config) {
             //nothing here

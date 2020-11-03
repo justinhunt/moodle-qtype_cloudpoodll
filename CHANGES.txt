@@ -1,5 +1,9 @@
 Change List
 =========
+Version 1.0.5(Build 2020110401)
+-show grader info on the grade page
+-implement safesave - disable submit button if not uploaded yet
+
 Version 1.0.4(Build 2020101700)
 -removed unneeded "empty" message if no transcript
 -added event for external js to listen to (for use in safequizsave block)

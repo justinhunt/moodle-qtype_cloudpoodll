@@ -107,6 +107,7 @@ class restore_qtype_cloudpoodll_plugin extends restore_qtype_plugin {
             $defaultoptions->graderinfo = '';
             $defaultoptions->qresource = '';
             $defaultoptions->graderinfoformat = FORMAT_HTML;
+            $defaultoptions->safesave = 0;
             $DB->insert_record(constants::M_TABLE, $defaultoptions);
         }
     }

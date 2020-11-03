@@ -175,3 +175,6 @@ $string['xminsecs'] = '{$a->minutes} minutes {$a->seconds} seconds';
 
 $string['apicredshelper']="Api Creds Helper";
 $string['apicredshelper_details']="--";
+
+$string['safesave'] = 'SafeSave';
+$string['safesave_details'] = 'Enable Safe Save - disables next-page/finish button until Cloud Poodll upload is complete.';
