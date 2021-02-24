@@ -100,13 +100,13 @@
 
 .qtype_cloudpoodll_videorec_cont {
     overflow: hidden;
-    padding-top: min(150%,510px);
+    padding-top: min(150%,520px);
     width: 100%;
     position: relative;
 }
 .qtype_cloudpoodll_audiorec_cont {
     overflow: hidden;
-    padding-top: min(90%,300px);
+    padding-top: min(90%,320px);
     width: 100%;
     position: relative;
 }
