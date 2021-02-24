@@ -158,42 +158,31 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
 
         $playerid = html_writer::random_id(CONSTANTS::M_COMP . '_');
 
-        // define player template
-        if ($this->class_name() == 'qtype_cloudpoodll_video') {
-            // video player
-            $player = "<video id='@PLAYERID@' crossorigin='anonymous' controls='true'><source src='@MEDIAURL@'>";
-            if ($havesubtitles) {
-                $player .= "<track src='@VTTURL@' kind='captions' srclang='@LANG@' label='@LANG@' default='true'>";
-            }
-            $player .= '</video>';
-        } else {
-            // audio player
-            $player = "<audio id='@PLAYERID@' crossorigin='anonymous' controls='true'><source src='@MEDIAURL@'>";
-            if ($havesubtitles) {
-                $player .= "<track src='@VTTURL@' kind='captions' srclang='@LANG@' label='@LANG@' default='true'>";
-            }
-            $player .= '</audio>';
+
+
+        $p_options = new \stdClass();
+        $p_options->playerid=$playerid;
+        $p_options->mediaurl=$mediaurl;
+        $p_options->lang=$language;
+        $p_options->maxaudiowidth=480;
+        $p_options->maxvideowidth=480;
+        $p_options->maxvideoheight=360;
+        //transcript bits
+        if ($havesubtitles) {
+            $p_options->transcripturl = $mediaurl . '.vtt';
+            $p_options->component = CONSTANTS::M_COMP;
+            $p_options->containerid = \html_writer::random_id(CONSTANTS::M_COMP . '_');
+            $p_options->cssprefix = CONSTANTS::M_COMP . '_transcript';
+            $PAGE->requires->js_call_amd(CONSTANTS::M_COMP . '/interactivetranscript', 'init', array($p_options));
+            $PAGE->requires->strings_for_js(array('transcripttitle'), CONSTANTS::M_COMP);
+        }else{
+            $p_options->notranscript= true;
         }
 
-        $player = str_replace('@PLAYERID@', $playerid, $player);
-        $player = str_replace('@MEDIAURL@', $mediaurl, $player);
-        $player = str_replace('@LANG@', $language, $player);
-        $player = str_replace('@VTTURL@', $mediaurl . '.vtt', $player);
-
-        // if we have subtitles add the transcript AMD and html
-        if ($havesubtitles) {
-            $transcript_containerid = html_writer::random_id(CONSTANTS::M_COMP . '_');
-            $transcript_container =
-                    html_writer::div('', CONSTANTS::M_COMP . '_transcriptcontainer', array('id' => $transcript_containerid));
-            $player .= $transcript_container;
-
-            // prepare AMD javascript for displaying transcript
-            $opts = array('component' => CONSTANTS::M_COMP,
-                    'playerid' => $playerid,
-                    'containerid' => $transcript_containerid,
-                    'cssprefix' => CONSTANTS::M_COMP . '_transcript');
-            $PAGE->requires->js_call_amd(CONSTANTS::M_COMP . '/interactivetranscript', 'init', array($opts));
-            $PAGE->requires->strings_for_js(array('transcripttitle'), CONSTANTS::M_COMP);
+        if($this->class_name() == 'qtype_cloudpoodll_video') {
+            $player = $this->render_from_template(constants::M_COMP . '/videoplayerstandard', $p_options);
+        }else{
+            $player = $this->render_from_template(constants::M_COMP . '/audioplayerstandard', $p_options);
         }
 
         return $player;
@@ -331,39 +320,39 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
 
         // the elementid of the div in the DOM
         $dom_id = html_writer::random_id('');
+        
+        $t_options= new \stdClass();
+        $t_options->recid ='therecorder_' . $dom_id;
+        $t_options->dataid = 'therecorder_' . $dom_id;
+        $t_options->parent=$CFG->wwwroot;
+        $t_options->owner= hash('md5',$USER->username);
+        $t_options->localloader= constants::LOADER_URL;
+        $t_options->recordertype= $recordertype;
+        $t_options->appid= constants::APPID;
+        $t_options->recorderskin= $recorderskin;
+        $t_options->width= $width;
+        $t_options->height= $height;
+        $t_options->updatecontrol= $inputname;
+        $t_options->timelimit= $timelimit;
+        $t_options->transcode= $transcode;
+        $t_options->transcribe= $transcriber;
+        $t_options->subtitle= $subtitle;
+        $t_options->speechevents= $chrometranscribe;
+        $t_options->language= $question->language;
+        $t_options->expiredays= $question->expiredays;
+        $t_options->awsregion= $r_options->awsregion;
+        $t_options->fallback= $r_options->fallback;
+        $t_options->string_hints= $string_hints;
+        $t_options->token= $token;
 
-        $recorderdiv = \html_writer::div('', CONSTANTS::M_COMP . '_notcenter',
-                array('id' => 'therecorder_' . $dom_id,
-                        'data-id' => 'therecorder_' . $dom_id,
-                        'data-parent' => $CFG->wwwroot,
-                        'data-owner' => hash('md5',$USER->username),
-                        'data-localloader' => constants::LOADER_URL,
-                        'data-media' => $recordertype,
-                        'data-appid' => constants::APPID,
-                        'data-type' => $recorderskin,
-                        'data-width' => $width,
-                        'data-height' => $height,
-                        'data-updatecontrol' => $inputname,
-                        'data-timelimit' => $timelimit,
-                        'data-transcode' => $transcode,
-                        'data-transcribe' => $transcriber,
-                        'data-subtitle' => $subtitle,
-                        'data-speechevents' => $chrometranscribe,
-                        'data-language' => $question->language,
-                        'data-expiredays' => $question->expiredays,
-                        'data-region' => $r_options->awsregion,
-                        'data-fallback' => $r_options->fallback,
-                        'data-hints' => $string_hints,
-                        'data-token' => $token // localhost
-                    //'data-token' => '643eba92a1447ac0c6a882c85051461a' // cloudpoodll
-                )
-        );
+        if($recordertype ==constants::REC_AUDIO) {
+            $t_options->iframeclass=constants::CLASS_AUDIOREC_IFRAME;
+            $recorderhtml = $this->render_from_template(constants::M_COMP . '/audiorecordercontainer', $t_options);
+        }else{
+            $t_options->iframeclass=constants::CLASS_VIDEOREC_IFRAME;
+            $recorderhtml = $this->render_from_template(constants::M_COMP . '/videorecordercontainer', $t_options);
+        }
 
-        $containerdiv = \html_writer::div($recorderdiv, constants::CLASS_REC_CONTAINER . ' ',
-                array('id' => constants::CLASS_REC_CONTAINER . $dom_id));
-
-        // this is the finalhtml
-        $recorderhtml = \html_writer::div($containerdiv, constants::CLASS_REC_OUTER);
 
         // set up the AMD for the recorder
         $opts = array(
@@ -375,8 +364,6 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         );
 
         $this->page->requires->js_call_amd(CONSTANTS::M_COMP . '/cloudpoodllhelper', 'init', array($opts));
-        //$PAGE->requires->strings_for_js(array('reallydeletesubmission'), CONSTANTS::M_COMP);
-
         return $recorderhtml;
     }
 

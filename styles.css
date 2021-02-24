@@ -31,7 +31,7 @@
 
 /* interactive transcript */
 .qtype_cloudpoodll_transcriptcontainer {
-    max-width: 610px;
+    max-width: 480px;
     width: 100%;
     font-family: Arial, sans-serif;
     /*overflow-x: scroll; */
@@ -98,3 +98,49 @@
     width: auto;
 }
 
+.qtype_cloudpoodll_videorec_cont {
+    overflow: hidden;
+    padding-top: min(150%,510px);
+    width: 100%;
+    position: relative;
+}
+.qtype_cloudpoodll_audiorec_cont {
+    overflow: hidden;
+    padding-top: min(90%,300px);
+    width: 100%;
+    position: relative;
+}
+
+.qtype_cloudpoodll_audiorec_iframe {
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position: absolute;
+    max-width: 400px;
+}
+.qtype_cloudpoodll_videorec_iframe {
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position: absolute;
+    max-width: 450px;
+}
+
+.qtype_cloudpoodll_video_cont {
+    position: relative;
+    height: 0;
+}
+
+.qtype_cloudpoodll_audio {
+    width: 100%;
+}
+
+.qtype_cloudpoodll_video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}

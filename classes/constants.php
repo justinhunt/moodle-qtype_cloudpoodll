@@ -38,9 +38,12 @@ class constants {
 
     const CLASS_REC_CONTAINER = 'qtype_cloudpoodll_rec_cont';
     const CLASS_REC_OUTER = 'qtype_cloudpoodll_rec_outer';
+    const CLASS_AUDIOREC_IFRAME ='qtype_cloudpoodll_audiorec_iframe';
+    const CLASS_VIDEOREC_IFRAME ='qtype_cloudpoodll_videorec_iframe';
     const ID_REC = 'qtype_cloudpoodll_therecorder';
     const ID_UPDATE_CONTROL = 'qtype_cloudpoodll_updatecontrol';
     const NAME_UPDATE_CONTROL = 'filename';
+
 
     const REGION_USEAST1 = 'useast1';
     const REGION_TOKYO = 'tokyo';
