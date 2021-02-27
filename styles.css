@@ -100,15 +100,25 @@
 
 .qtype_cloudpoodll_videorec_cont {
     overflow: hidden;
-    padding-top: min(150%,520px);
+    padding-top: 510px;
     width: 100%;
     position: relative;
 }
 .qtype_cloudpoodll_audiorec_cont {
     overflow: hidden;
-    padding-top: min(90%,320px);
+    padding-top: 320px;
     width: 100%;
     position: relative;
+}
+
+@media screen and (max-width: 667px) {
+
+    .qtype_cloudpoodll_videorec_cont {
+        padding-top: 150%;
+    }
+    .qtype_cloudpoodll_audiorec_cont {
+        padding-top: 90%;
+    }
 }
 
 .qtype_cloudpoodll_audiorec_iframe {
