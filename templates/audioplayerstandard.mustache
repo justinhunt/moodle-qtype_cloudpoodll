@@ -14,9 +14,9 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-
+<div class="qtype_cloudpoodll_audio_cont">
 <audio id='{{playerid}}' class='nomediaplugin qtype_cloudpoodll_audio' crossorigin='anonymous' controls='true'
-       preload='auto' playsInline="playsInline" style="max-width: {{maxaudiowidth}}px">
+       preload='auto' playsInline="playsInline">
 <source src='{{{mediaurl}}}'>
 {{^notranscript}}
 <track src='{{{transcripturl}}}' kind='captions' srclang='{{lang}}' label='{{lang}}' default='true'>
@@ -25,3 +25,4 @@
 {{^notranscript}}
 <div class='qtype_cloudpoodll_transcriptcontainer' id='{{containerid}}'></div>
 {{/notranscript}}
+</div>
