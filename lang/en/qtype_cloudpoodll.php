@@ -80,6 +80,8 @@ $string['london'] = 'London, U.K';
 $string['saopaulo'] = 'Sao Paulo, Brazil';
 $string['mumbai'] = 'Mumbai, India';
 $string['singapore'] = 'Singapore';
+$string['capetown'] = 'Capetown, South Africa';
+$string['bahrain'] = 'Bahrain';
 
 $string['forever'] = 'Never expire';
 
