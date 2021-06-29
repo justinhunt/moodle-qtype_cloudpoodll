@@ -29,6 +29,7 @@ class constants {
     const SKIN_ONCE = 'once';
     const SKIN_UPLOAD = 'upload';
     const SKIN_PUSH = 'push';
+    const SKIN_SCREEN = 'screen';
 
     const FALLBACK_UPLOAD = 'upload';
     const FALLBACK_IOSUPLOAD = 'iosupload';

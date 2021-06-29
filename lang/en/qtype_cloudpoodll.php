@@ -135,6 +135,7 @@ $string['skin123'] = 'One Two Three';
 $string['skinonce'] = 'Once';
 $string['skinupload'] = 'Upload';
 $string['skinpush'] = 'Push';
+$string['skinscreen'] = 'Screen Recording (video)';
 
 $string['fallback'] = 'non-HTML5 Fallback';
 $string['fallback_details'] =

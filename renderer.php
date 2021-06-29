@@ -229,6 +229,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                         $height = '450';
                         break;
                     case constants::SKIN_123:
+                    case constants::SKIN_SCREEN:
                         $width = '450';
                         $height = '550';
                         break;
