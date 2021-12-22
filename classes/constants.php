@@ -14,6 +14,7 @@ class constants {
     const FILEAREA_QRESOURCE = 'qresource';
     const FILEAREA_GRADERINFO = 'graderinfo';
     const M_COMP = 'qtype_cloudpoodll';
+    const M_URL = 'question/type/cloudpoodll';
     const M_TABLE = 'qtype_cloudpoodll_opts';
     const M_PLUGINSETTINGS = '/admin/settings.php?section=qtypesettingcloudpoodll';
 
