@@ -1,5 +1,8 @@
 Change List
 =========
+Version 1.0.12 (Build 2022033000)
+- Added premature leaving check (for quizzes with time limits) to safe save
+
 Version 1.0.11 (Build 2022030100)
 - forced video rec on iOS to get new code from cloudpoodll
 

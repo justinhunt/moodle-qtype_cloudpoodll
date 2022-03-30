@@ -46,6 +46,8 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                             //if opts safe save
                             if(theconfig.safesave==1) {
                                 theconfig.controls.nextpagebtn.attr('disabled', 'disabled');
+                                //Add a page unload check ..
+                                $(window).on('beforeunload', that.preventPrematureLeaving);
                             }
                         }
                         break;
@@ -66,6 +68,8 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                             //if opts safe save
                             if(theconfig.safesave==1) {
                                 theconfig.controls.nextpagebtn.removeAttr('disabled', 'disabled');
+                                //deactivate premature leaving
+                                $(window).off('beforeunload', that.preventPrematureLeaving);
                             }
                         }
                         theconfig.uploadstate = "posted";
@@ -79,7 +83,11 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
             );//end of cp init
 
         },
-
+        preventPrematureLeaving: function(e){
+            log.debug('preventPrematureLeaving has been called');
+            e.preventDefault();
+            return e.returnValue = "Your recording has not been uploaded. Cancel to stay on this page.";
+        },
 
         register_events: function (config) {
             //nothing here
