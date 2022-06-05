@@ -115,7 +115,7 @@ $string['ms-my'] = 'Malay';
 $string['pt-pt'] = 'Portuguese (PT)';
 $string['ru-ru'] = 'Russian';
 $string['ta-in'] = 'Tamil';
-$string['te-in'] = 'Telegu';
+$string['te-in'] = 'Telugu';
 $string['tr-tr'] = 'Turkish';
 
 $string['awsregion'] = 'AWS Region';

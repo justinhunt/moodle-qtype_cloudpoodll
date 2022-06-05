@@ -1,5 +1,9 @@
 Change List
 =========
+Version 1.0.13 (Build 2022060500)
+- Changed AMD build steps
+- Change free trial jump link
+
 Version 1.0.12 (Build 2022033000)
 - Added premature leaving check (for quizzes with time limits) to safe save
 
@@ -30,7 +34,7 @@ Version 1.0.4(Build 2020101700)
  -settings tweaks
 
 Version 1.0.2(Build 2020021100)
--added languages(arabic, chinese, portuguese, japanese, tamil, telegu, dutch, farsi, wales english, ireland english, scotland english, russian, turkish, malay, indonesian,hebrew, swiss german)
+-added languages(arabic, chinese, portuguese, japanese, tamil, Telugu, dutch, farsi, wales english, ireland english, scotland english, russian, turkish, malay, indonesian,hebrew, swiss german)
 -added user tagging
 
 Version 1.0.1(Build 2019112100)
