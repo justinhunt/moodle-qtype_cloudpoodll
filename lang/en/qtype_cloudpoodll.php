@@ -23,11 +23,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['formateditor'] = 'HTML editor';
+//$string['formateditor'] = 'HTML editor';
 $string['formatvideo'] = 'Video response';
 $string['formataudio'] = 'Audio response';
 $string['graderinfo'] = 'Information for graders';
-$string['nlines'] = '{$a} lines';
+//$string['nlines'] = '{$a} lines';
 $string['cloudpoodll'] = 'Cloud Poodll';
 $string['pluginname'] = 'Cloud Poodll Recording';
 $string['pluginname_help'] =
@@ -38,8 +38,8 @@ $string['pluginnameediting'] = 'Editing a Cloud Poodll question';
 $string['pluginnamesummary'] = 'Allows an audio recording, video recording. This must then be graded manually.';
 $string['responseformat'] = 'Response format';
 $string['qresource'] = 'Question resource';
-$string['norecording'] = 'no recording found';
-$string['currentresponse'] = 'Current Response:<br />';
+//$string['norecording'] = 'no recording found';
+//$string['currentresponse'] = 'Current Response:<br />';
 $string['privacy:metadata'] = 'The Cloud Poodll Question plugin does store personal data.';
 
 $string['pluginname_help'] =
@@ -55,7 +55,7 @@ $string['privacy:metadata'] = 'The Cloud Poodll question type plugin does not st
 // CloudPoodll settings and options
 $string['formataudio'] = "Audio recording";
 $string['formatvideo'] = "Video recording";
-$string['formatupload'] = "Upload media file";
+//$string['formatupload'] = "Upload media file";
 
 $string['recorder'] = 'Recorder type';
 $string['recorderaudio'] = 'Audio recorder';
@@ -119,11 +119,11 @@ $string['te-in'] = 'Telugu';
 $string['tr-tr'] = 'Turkish';
 
 $string['awsregion'] = 'AWS Region';
-$string['region'] = 'AWS Region';
+//$string['region'] = 'AWS Region';
 $string['expiredays'] = 'Days to keep file';
 
 $string['timelimit'] = 'Recording time limit';
-$string['currentsubmission'] = 'Current Submission:';
+//$string['currentsubmission'] = 'Current Submission:';
 
 $string['recordertype'] = 'Cloud Poodll recording type';
 $string['audioskin'] = 'Audio recorder skin';
@@ -184,6 +184,6 @@ $string['safesave_details'] = 'Enable Safe Save - disables next-page/finish butt
 
 $string['freetrial'] = "Get Cloud Poodll API Credentials and a Free Trial";
 $string['freetrial_desc'] = "A dialog should appear that allows you to register for a free trial with Poodll. After registering you should login to the members dashboard to get your API user and secret. And to register your site URL.";
-$string['memberdashboard'] = "Member Dashboard";
-$string['memberdashboard_desc'] = "";
+//$string['memberdashboard'] = "Member Dashboard";
+//$string['memberdashboard_desc'] = "";
 $string['fillcredentials']="Set API user and secret with existing credentials";

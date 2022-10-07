@@ -44,8 +44,9 @@ class utils {
     public static function fetch_options_transcribers() {
         $options = array(constants::TRANSCRIBER_NONE => get_string("transcriber_none", constants::M_COMP),
                 constants::TRANSCRIBER_AMAZONTRANSCRIBE => get_string("transcriber_amazontranscribe", constants::M_COMP),
-                constants::TRANSCRIBER_GOOGLECLOUDSPEECH => get_string("transcriber_googlecloud", constants::M_COMP),
-                constants::TRANSCRIBER_GOOGLECHROME => get_string("transcriber_googlechrome", constants::M_COMP),);
+               // constants::TRANSCRIBER_GOOGLECLOUDSPEECH => get_string("transcriber_googlecloud", constants::M_COMP),
+               // constants::TRANSCRIBER_GOOGLECHROME => get_string("transcriber_googlechrome", constants::M_COMP),
+        );
         return $options;
     }
 
