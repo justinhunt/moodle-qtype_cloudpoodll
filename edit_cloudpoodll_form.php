@@ -126,7 +126,6 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
                 default:
                     $question->{$field} = $question->options->{$field};
             }
-
         }
 
         //Set qresource details, and configure a draft area to accept any uploaded pictures
