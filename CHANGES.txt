@@ -1,5 +1,8 @@
 Change List
 =========
+Version 1.0.16 (Build 2023041500)
+- Added support for RTL in Hebrew / Arabic and Farsi transcripts
+
 Version 1.0.15 (Build 2023022600)
 - fixed oversized video recorder
 

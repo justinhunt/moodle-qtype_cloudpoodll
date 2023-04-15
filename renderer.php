@@ -158,12 +158,23 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
 
         $playerid = html_writer::random_id(CONSTANTS::M_COMP . '_');
 
-
+        //For right to left languages we want to add the RTL direction and right justify.
+        switch($language){
+            case constants::LANG_ARAE:
+            case constants::LANG_ARSA:
+            case constants::LANG_FAIR:
+            case constants::LANG_HEIL:
+                $rtl = constants::M_COMP. '_rtl';
+                break;
+            default:
+                $rtl = '';
+        }
 
         $p_options = new \stdClass();
         $p_options->playerid=$playerid;
         $p_options->mediaurl=$mediaurl;
         $p_options->lang=$language;
+        $p_options->rtl=$rtl;
         $p_options->maxaudiowidth=480;
         $p_options->maxvideowidth=480;
         $p_options->maxvideoheight=360;
