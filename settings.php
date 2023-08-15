@@ -143,4 +143,12 @@ if ($ADMIN->fulltree) {
     $default = constants::FALLBACK_IOSUPLOAD;
     $options = utils::fetch_options_fallback();
     $settings->add(new admin_setting_configselect("$plugin/$name", $label, $details, $default, $options));
+
+    // SafeSave
+    $name = 'safesave';
+    $label = get_string($name, $plugin);
+    $details = get_string($name . '_details', $plugin);
+    $options = array(0 => get_string('no'), 1 => get_string('yes'));
+    $settings->add(new admin_setting_configselect("$plugin/$name", $label, $details, 1, $options));
+
 }

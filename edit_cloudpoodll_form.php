@@ -103,7 +103,7 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
         $label = get_string($name, constants::M_COMP);
         $text = get_string('safesave_details', constants::M_COMP);
         $mform->addElement('advcheckbox', $name, $label, $text);
-        $mform->setDefault($name, 0);
+        $mform->setDefault($name, $config->$name);
 
         // question resource
         $mform->addElement('filemanager', 'qresource', get_string('qresource', constants::M_COMP), null,
