@@ -99,8 +99,25 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             $have_subtitles = false;
         }
 
-        $player_div = $this->fetch_player($mediaurl, $question->language, $have_subtitles);
+        //It's all very well having subtitles or transcript , but we also check if the teacher or student is intended to see them.
+        //are we a person who can grade, ie a teacher
+        $isgrader=false;
+        if(has_capability('mod/quiz:grade',$context)){
+            $isgrader=true;
+        }
+        //if not a teacher and student player is default, then no subtitles
+        if(!$isgrader && $question->studentplayer == constants::PLAYERTYPE_DEFAULT){
+            $have_subtitles=false;
+            $transcript='';
+        //if is a teacher and teacher player is default, then no subtitles
+        }elseif($isgrader && $question->teacherplayer == constants::PLAYERTYPE_DEFAULT){
+            $have_subtitles=false;
+            $transcript='';
+        }
 
+        // fetch the player
+        $player_div = $this->fetch_player($mediaurl, $question->language, $have_subtitles);
+        // if we have subtitles, then add them to the player
         if ($have_subtitles) {
             return $player_div;
         } else if(!empty($transcript) && $transcript != constants::BLANK) {

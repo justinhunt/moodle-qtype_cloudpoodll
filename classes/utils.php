@@ -41,6 +41,12 @@ class utils {
         return $options;
     }
 
+    public static function fetch_options_players(){
+            $options = array( constants::PLAYERTYPE_DEFAULT => get_string("playertypedefault", constants::M_COMP),
+                constants::PLAYERTYPE_INTERACTIVETRANSCRIPT  => get_string("playertypeinteractivetranscript", constants::M_COMP));
+            return $options;
+    }
+
     public static function fetch_options_transcribers() {
         $options = array(constants::TRANSCRIBER_NONE => get_string("transcriber_none", constants::M_COMP),
                 constants::TRANSCRIBER_AMAZONTRANSCRIBE => get_string("transcriber_amazontranscribe", constants::M_COMP),

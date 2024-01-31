@@ -66,5 +66,21 @@ function xmldb_qtype_cloudpoodll_upgrade($oldversion) {
 
     }
 
+    if ($oldversion < 2024013100) {
+
+        $table = new xmldb_table(constants::M_TABLE);
+        $fields=[];
+        $fields[] = new xmldb_field('studentplayer', XMLDB_TYPE_INTEGER, '2', null, XMLDB_TYPE_INTEGER, null, constants::PLAYERTYPE_INTERACTIVETRANSCRIPT);
+        $fields[] = new xmldb_field('teacherplayer', XMLDB_TYPE_INTEGER, '2', null, XMLDB_TYPE_INTEGER, null, constants::PLAYERTYPE_INTERACTIVETRANSCRIPT);
+        foreach($fields as $field){
+            if (!$dbman->field_exists($table, $field)) {
+                $dbman->add_field($table, $field);
+            }
+        }
+
+        // cloudpoodll savepoint reached
+        upgrade_plugin_savepoint(true, 2024013100, 'qtype', 'cloudpoodll');
+    }
+
     return true;
 }
