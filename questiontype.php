@@ -89,6 +89,8 @@ class qtype_cloudpoodll extends question_type {
         $options->audioskin = $formdata->audioskin;
         $options->videoskin = $formdata->videoskin;
         $options->safesave = $formdata->safesave;
+        $options->studentplayer = $formdata->studentplayer;
+        $options->teacherplayer = $formdata->teacherplayer;
 
         $options->responseformat = $formdata->responseformat;
         $options->graderinfo = $this->import_or_save_files($formdata->graderinfo,

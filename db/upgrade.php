@@ -66,7 +66,7 @@ function xmldb_qtype_cloudpoodll_upgrade($oldversion) {
 
     }
 
-    if ($oldversion < 2024013100) {
+    if ($oldversion < 2024013102) {
 
         $table = new xmldb_table(constants::M_TABLE);
         $fields=[];
@@ -79,7 +79,7 @@ function xmldb_qtype_cloudpoodll_upgrade($oldversion) {
         }
 
         // cloudpoodll savepoint reached
-        upgrade_plugin_savepoint(true, 2024013100, 'qtype', 'cloudpoodll');
+        upgrade_plugin_savepoint(true, 2024013102, 'qtype', 'cloudpoodll');
     }
 
     return true;
