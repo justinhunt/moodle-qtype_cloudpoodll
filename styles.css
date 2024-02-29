@@ -189,3 +189,7 @@
     direction: rtl;
     text-align: right;
 }
+.qtype_cloudpoodll_rtl .qtype_cloudpoodll_transcript-text {
+    margin-left: 0px;
+    margin-right: 50px;
+}

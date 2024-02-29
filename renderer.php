@@ -122,6 +122,14 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $options = get_config('qtype_cloudpoodll');
         $recorder = $this->fetch_recorder($options, $question, $fieldname);
 
+        //The recorder status field
+        $templateoptions=[];
+        $templateoptions['laststatus']="filesubmitted";//"recordingstarted" "recordingstopped" "uploadcommenced" "awaitingconversion"
+        $answerstatus= $this->render_from_template(constants::M_COMP . '/answerstatus', $templateoptions);
+        // the elementid of the div in the DOM
+        $answerstatus_container = html_writer::div($answerstatus,'qtype_cloudpoodll_asc',['id'=>$fieldname . '_asc']);
+
+
         //Answer field
         if (!$use_answer = $step->get_qt_var($name)) {
             $use_answer = constants::BLANK;
@@ -147,7 +155,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 'value' => $use_transcript));
 
         // return recorder and associated hidden fields
-        return $recorder . $transcript . $mediaurl . $answer;
+        return $answerstatus_container . $recorder . $transcript . $mediaurl . $answer;
     }
 
     /**
