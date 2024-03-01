@@ -68,6 +68,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         // fetch submitted data
         $mediaurl = $step->get_qt_var($name . 'mediaurl');
         $transcript = $step->get_qt_var($name . 'transcript');
+        $details = $step->get_qt_var($name . 'details');
 
         // assume no subtitles
         $have_subtitles = false;
@@ -115,16 +116,36 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             $transcript='';
         }
 
+        // return html
+        $ret_html = '';
+
         // fetch the player
         $player_div = $this->fetch_player($mediaurl, $question->language, $have_subtitles);
+        $ret_html .= $player_div;
+
         // if we have subtitles, then add them to the player
         if ($have_subtitles) {
-            return $player_div;
+            //do nothing
         } else if(!empty($transcript) && $transcript != constants::BLANK) {
-            return $player_div . html_writer::div($transcript, 'qtype_cloudpoodll_transcriptdiv', array());
+            $ret_html .= html_writer::div($transcript, 'qtype_cloudpoodll_transcriptdiv', array());
         }else{
-            return $player_div;
+            //do nothing
         }
+
+        // get details display
+        //make sure the json and details are properly formed
+        if($isgrader && !empty($details)){
+            $reclog=json_decode($details);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                if(isset($reclog->recevents) && count($reclog->recevents)>0) {
+                    $details_div = $this->fetch_details_display($reclog);
+                    $ret_html .= $details_div;
+                }
+            }
+        }
+
+        //return html
+        return $ret_html;
 
         //Do this for testing fetch and process of transcript via ad hoc task.
         //but we do not do that.
@@ -163,12 +184,30 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 'name' => $fieldname . 'transcript',
                 'value' => $use_transcript));
 
+        // Details field
+        if (!$use_details = $step->get_qt_var($name . 'details')) {
+            $use_details = '';
+        }
+        $details = html_writer::empty_tag('input', array('type' => 'hidden',
+            'name' => $fieldname . 'details',
+            'value' => $use_details));
+
         // return recorder and associated hidden fields
-        return $recorder . $transcript . $mediaurl . $answer;
+        return $recorder . $transcript . $details . $mediaurl . $answer;
+    }
+
+
+    /**
+     * @return string the HTML for the recorder log (details)
+     */
+    protected function fetch_details_display($details){
+        $detailsid = html_writer::random_id(CONSTANTS::M_COMP . '_');
+        $details->id=$detailsid;
+        return $this->render_from_template(constants::M_COMP . '/recorderdetailslog', $details);
     }
 
     /**
-     * @return string the HTML for the textarea.
+     * @return string the HTML for the media player.
      */
     protected function fetch_player($mediaurl, $language, $havesubtitles = false) {
         global $PAGE;
