@@ -89,6 +89,8 @@ class qtype_cloudpoodll extends question_type {
         $options->audioskin = $formdata->audioskin;
         $options->videoskin = $formdata->videoskin;
         $options->safesave = $formdata->safesave;
+        $options->studentplayer = $formdata->studentplayer;
+        $options->teacherplayer = $formdata->teacherplayer;
 
         $options->responseformat = $formdata->responseformat;
         $options->graderinfo = $this->import_or_save_files($formdata->graderinfo,
@@ -222,6 +224,10 @@ class qtype_cloudpoodll extends question_type {
                 array('#', 'expiredays', 0, '#'), 365);
         $qo->transcriber = $format->getpath($q,
                 array('#', 'transcriber', 0, '#'), constants::TRANSCRIBER_AMAZONTRANSCRIBE);
+        $qo->studentplayer = $format->getpath($q,
+            array('#', 'studentplayer', 0, '#'), constants::PLAYERTYPE_INTERACTIVETRANSCRIPT);
+        $qo->teacherplayer = $format->getpath($q,
+            array('#', 'teacherplayer', 0, '#'), constants::PLAYERTYPE_INTERACTIVETRANSCRIPT);
         $qo->transcode = $format->getpath($q,
                 array('#', 'transcode', 0, '#'), 1);
         $qo->audioskin = $format->getpath($q,

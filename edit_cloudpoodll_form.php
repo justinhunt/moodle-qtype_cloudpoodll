@@ -84,6 +84,19 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
         $mform->addElement('select', $name, $label, $options);
         $mform->setDefault($name, $config->$name);
 
+        // transcriber
+        $name = 'studentplayer';
+        $label = get_string($name, constants::M_COMP);
+        $options = utils::fetch_options_players();
+        $mform->addElement('select', $name, $label, $options);
+        $mform->setDefault($name, $config->$name);
+
+        $name = 'teacherplayer';
+        $label = get_string($name, constants::M_COMP);
+        $options = utils::fetch_options_players();
+        $mform->addElement('select', $name, $label, $options);
+        $mform->setDefault($name, $config->$name);
+
         // transcode
         $name = 'transcode';
         $label = get_string($name, constants::M_COMP);

@@ -22,6 +22,7 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                 nextpagebtn: $(".submitbtns .mod_quiz-next-nav"),
                 mediaurl: $("input[name=" + name + "mediaurl]"),
                 transcript: $("input[name=" + name + "transcript]"),
+                details: $("input[name=" + name + "details]"),
                 answer: $("input[name=" + name + "]"),
             };
             this.configs[config.data_id] = config;
@@ -34,6 +35,8 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                 var theconfig=that.configs[evt.id];
                 //we need to only do our event (not another recorder on this page)
                 if (!theconfig){return;}
+                //log the details on this event
+                that.logDetails(theconfig.controls.details,evt);
 
                 switch (evt.type) {
                     case "recording":
@@ -91,6 +94,55 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
 
         register_events: function (config) {
             //nothing here
-        }
+        },
+
+        logDetails: function(details,theevent){
+          //make sure we have a details control to work with
+          if(details.length>0){
+              //get new, or existing details
+              var detailsobj={recevents: []};
+              var json_string=details.val();
+              if(json_string!==null && json_string!==''){
+                  try {
+                      detailsobj = JSON.parse(json_string);
+                  } catch (error) {
+                      log.debug('not valid details string')
+                  }
+              }
+              //we don't want to log everything, so just do the main data
+              var logdata={}
+              logdata.type=theevent.type;
+              switch(theevent.type){
+                  case "recording":
+                      logdata.action=theevent.action;
+                      break;
+
+                  case "awaitingprocessing":
+                      logdata.targetfile = theevent.mediaurl;
+                      break;
+
+                  case "error":
+                      logdata.code=theevent.code;
+                      logdata.message=theevent.message;
+                      break;
+
+                  case "filesubmitted":
+                      logdata.finalfile = theevent.mediaurl;
+                      break;
+
+                  case "uploadcommenced":
+                      logdata.srcfile = theevent.sourcefilename;
+                      logdata.mimetype = theevent.sourcemimetype;
+                      break;
+
+                  default:
+                      //just the type I guess
+
+              }
+              //add the new event details
+              detailsobj.recevents.push(logdata)
+              details.val(JSON.stringify(detailsobj));
+          }
+        },
     };//end of return object
 });

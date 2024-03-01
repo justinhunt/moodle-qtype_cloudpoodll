@@ -101,6 +101,8 @@ class restore_qtype_cloudpoodll_plugin extends restore_qtype_plugin {
             $defaultoptions->transcode = 1;
             $defaultoptions->timelimit = 0;
             $defaultoptions->expiredays = 365;
+            $defaultoptions->studentplayer = constants::PLAYERTYPE_INTERACTIVETRANSCRIPT;
+            $defaultoptions->teacherplayer = constants::PLAYERTYPE_INTERACTIVETRANSCRIPT;
             $defaultoptions->language = constants::LANG_ENUS;
             $defaultoptions->audioskin =  constants::SKIN_123;
             $defaultoptions->videoskin = constants::SKIN_123;

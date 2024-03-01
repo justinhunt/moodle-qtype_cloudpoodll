@@ -68,6 +68,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         // fetch submitted data
         $mediaurl = $step->get_qt_var($name . 'mediaurl');
         $transcript = $step->get_qt_var($name . 'transcript');
+        $details = $step->get_qt_var($name . 'details');
 
         // assume no subtitles
         $have_subtitles = false;
@@ -99,15 +100,52 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             $have_subtitles = false;
         }
 
-        $player_div = $this->fetch_player($mediaurl, $question->language, $have_subtitles);
-
-        if ($have_subtitles) {
-            return $player_div;
-        } else if(!empty($transcript) && $transcript != constants::BLANK) {
-            return $player_div . html_writer::div($transcript, 'qtype_cloudpoodll_transcriptdiv', array());
-        }else{
-            return $player_div;
+        //It's all very well having subtitles or transcript , but we also check if the teacher or student is intended to see them.
+        //are we a person who can grade, ie a teacher
+        $isgrader=false;
+        if(has_capability('mod/quiz:grade',$context)){
+            $isgrader=true;
         }
+        //if not a teacher and student player is default, then no subtitles
+        if(!$isgrader && $question->studentplayer == constants::PLAYERTYPE_DEFAULT){
+            $have_subtitles=false;
+            $transcript='';
+        //if is a teacher and teacher player is default, then no subtitles
+        }elseif($isgrader && $question->teacherplayer == constants::PLAYERTYPE_DEFAULT){
+            $have_subtitles=false;
+            $transcript='';
+        }
+
+        // return html
+        $ret_html = '';
+
+        // fetch the player
+        $player_div = $this->fetch_player($mediaurl, $question->language, $have_subtitles);
+        $ret_html .= $player_div;
+
+        // if we have subtitles, then add them to the player
+        if ($have_subtitles) {
+            //do nothing
+        } else if(!empty($transcript) && $transcript != constants::BLANK) {
+            $ret_html .= html_writer::div($transcript, 'qtype_cloudpoodll_transcriptdiv', array());
+        }else{
+            //do nothing
+        }
+
+        // get details display
+        //make sure the json and details are properly formed
+        if($isgrader && !empty($details)){
+            $reclog=json_decode($details);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                if(isset($reclog->recevents) && count($reclog->recevents)>0) {
+                    $details_div = $this->fetch_details_display($reclog);
+                    $ret_html .= $details_div;
+                }
+            }
+        }
+
+        //return html
+        return $ret_html;
 
         //Do this for testing fetch and process of transcript via ad hoc task.
         //but we do not do that.
@@ -123,12 +161,23 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $recorder = $this->fetch_recorder($options, $question, $fieldname);
 
         //The recorder status field
+        $details = $step->get_qt_var($name . 'details');
+        $lastevent=false;
         $templateoptions=[];
-        $templateoptions['laststatus']="filesubmitted";//"recordingstarted" "recordingstopped" "uploadcommenced" "awaitingconversion"
+        if($details) {
+            $reclog = json_decode($details);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                if (isset($reclog->recevents) && count($reclog->recevents) > 0) {
+                    $lastevent=$reclog->recevents[array_key_last($reclog->recevents)];
+                    $templateoptions['lastevent']=$lastevent;
+                    $templateoptions[$lastevent->type]=1;//"filesubmitted" "recordingstarted" "recordingstopped" "uploadcommenced" "awaitingconversion"
+                }
+            }
+        }
         $answerstatus= $this->render_from_template(constants::M_COMP . '/answerstatus', $templateoptions);
+
         // the elementid of the div in the DOM
         $answerstatus_container = html_writer::div($answerstatus,'qtype_cloudpoodll_asc',['id'=>$fieldname . '_asc']);
-
 
         //Answer field
         if (!$use_answer = $step->get_qt_var($name)) {
@@ -154,12 +203,30 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 'name' => $fieldname . 'transcript',
                 'value' => $use_transcript));
 
+        // Details field
+        if (!$use_details = $step->get_qt_var($name . 'details')) {
+            $use_details = '';
+        }
+        $details = html_writer::empty_tag('input', array('type' => 'hidden',
+            'name' => $fieldname . 'details',
+            'value' => $use_details));
+
         // return recorder and associated hidden fields
-        return $answerstatus_container . $recorder . $transcript . $mediaurl . $answer;
+        return $answerstatus_container . $recorder . $transcript . $details . $mediaurl . $answer;
+    }
+
+
+    /**
+     * @return string the HTML for the recorder log (details)
+     */
+    protected function fetch_details_display($details){
+        $detailsid = html_writer::random_id(CONSTANTS::M_COMP . '_');
+        $details->id=$detailsid;
+        return $this->render_from_template(constants::M_COMP . '/recorderdetailslog', $details);
     }
 
     /**
-     * @return string the HTML for the textarea.
+     * @return string the HTML for the media player.
      */
     protected function fetch_player($mediaurl, $language, $havesubtitles = false) {
         global $PAGE;

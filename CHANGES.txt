@@ -1,5 +1,8 @@
 Change List
 =========
+Version 1.0.18 (Build 2024013102)
+- Added the ability to show or hide a transcript from teacher or student
+
 Version 1.0.17 (Build 2023081500)
 - Added a default setting for SafeSave
 

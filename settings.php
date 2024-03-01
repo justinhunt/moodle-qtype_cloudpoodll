@@ -129,6 +129,19 @@ if ($ADMIN->fulltree) {
     $options = utils::fetch_options_transcribers();
     $settings->add(new admin_setting_configselect("$plugin/$name", $label, $details, $default, $options));
 
+    // Student Player options
+    $name = 'studentplayer';
+    $label = get_string($name, $plugin);
+    $details = get_string($name . '_details', $plugin);
+    $default = constants::PLAYERTYPE_INTERACTIVETRANSCRIPT;
+    $options = utils::fetch_options_players();
+    $settings->add(new admin_setting_configselect("$plugin/$name", $label, $details, $default, $options));
+
+    // Teacher Player options
+    $name = 'teacherplayer';
+    $label = get_string($name, $plugin);
+    $settings->add(new admin_setting_configselect("$plugin/$name", $label, $details, $default, $options));
+
     // Transcode audio/video
     $name = 'transcode';
     $label = get_string($name, $plugin);

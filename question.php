@@ -59,6 +59,7 @@ class qtype_cloudpoodll_question extends question_with_responses {
         $expecteddata = array('answer' => PARAM_URL);
         $expecteddata['answermediaurl'] = PARAM_URL;
         $expecteddata['answertranscript'] = PARAM_TEXT;
+        $expecteddata['answerdetails'] = PARAM_RAW;
         return $expecteddata;
     }
 

@@ -52,6 +52,10 @@ $string['pluginnamesummary'] =
 
 $string['privacy:metadata'] = 'The Cloud Poodll question type plugin does not store any personal data.';
 
+$string['playertypedefault']='No transcript.';
+$string['playertypeinteractivetranscript']='Interactive transcript';
+$string['playertypestandardtranscript']='Static transcript';
+
 // CloudPoodll settings and options
 $string['formataudio'] = "Audio recording";
 $string['formatvideo'] = "Video recording";
@@ -187,3 +191,8 @@ $string['freetrial_desc'] = "A dialog should appear that allows you to register 
 //$string['memberdashboard'] = "Member Dashboard";
 //$string['memberdashboard_desc'] = "";
 $string['fillcredentials']="Set API user and secret with existing credentials";
+
+$string['studentplayer'] = 'Media Player (student)';
+$string['studentplayer_details'] = 'Normal player, or player with transcript';
+$string['teacherplayer'] = 'Media Player (teacher)';
+$string['teacherplayer_details'] = 'Normal player, or player with transcript';

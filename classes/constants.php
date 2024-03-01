@@ -38,6 +38,10 @@ class constants {
     const PROCESSING = 'processing';
     const BLANK = 'empty';
 
+    const PLAYERTYPE_DEFAULT=0;
+    const PLAYERTYPE_INTERACTIVETRANSCRIPT=1;
+    const PLAYERTYPE_STANDARDTRANSCRIPT=2;
+
     const CLASS_REC_CONTAINER = 'qtype_cloudpoodll_rec_cont';
     const CLASS_REC_OUTER = 'qtype_cloudpoodll_rec_outer';
     const CLASS_AUDIOREC_IFRAME ='qtype_cloudpoodll_audiorec_iframe';
@@ -106,5 +110,5 @@ class constants {
     const REFRESH_URL = '/question/type/cloudpoodll/cloudpoodll/refreshtoken.php';
 
     const extra_fields = ['responseformat', 'graderinfo', 'graderinfoformat', 'qresource', 'language', 'expiredays',
-            'transcriber', 'transcode', 'audioskin', 'videoskin', 'timelimit','safesave'];
+            'transcriber', 'studentplayer', 'teacherplayer', 'transcode', 'audioskin', 'videoskin', 'timelimit','safesave'];
 }
