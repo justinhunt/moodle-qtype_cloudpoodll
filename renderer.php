@@ -138,6 +138,9 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             $reclog=json_decode($details);
             if (json_last_error() === JSON_ERROR_NONE) {
                 if(isset($reclog->recevents) && count($reclog->recevents)>0) {
+                    foreach($reclog->recevents as $recevent){
+                        $recevent->{$recevent->type}=1;
+                    }
                     $details_div = $this->fetch_details_display($reclog);
                     $ret_html .= $details_div;
                 }
@@ -162,7 +165,6 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
 
         //The recorder status field
         $details = $step->get_qt_var($name . 'details');
-        $lastevent=false;
         $templateoptions=[];
         if($details) {
             $reclog = json_decode($details);
@@ -170,6 +172,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 if (isset($reclog->recevents) && count($reclog->recevents) > 0) {
                     $lastevent=$reclog->recevents[array_key_last($reclog->recevents)];
                     $templateoptions['lastevent']=$lastevent;
+                    $templateoptions['insession']=false;
                     $templateoptions[$lastevent->type]=1;//"filesubmitted" "recordingstarted" "recordingstopped" "uploadcommenced" "awaitingconversion"
                 }
             }

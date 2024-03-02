@@ -1,4 +1,4 @@
-define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function ($, log, cloudpoodll) {
+define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader", "core/templates"], function ($, log, cloudpoodll, templates) {
     "use strict"; // jshint ;_;
 
     log.debug("cloudpoodll helper: initialising");
@@ -24,6 +24,7 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                 transcript: $("input[name=" + name + "transcript]"),
                 details: $("input[name=" + name + "details]"),
                 answer: $("input[name=" + name + "]"),
+                answerstatus: $("div#" + name + "_asc"),
             };
             this.configs[config.data_id] = config;
             var that=this;
@@ -36,7 +37,9 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
                 //we need to only do our event (not another recorder on this page)
                 if (!theconfig){return;}
                 //log the details on this event
-                that.logDetails(theconfig.controls.details,evt);
+                that.logDetails(theconfig.controls.details,
+                    theconfig.controls.answerstatus,
+                    evt);
 
                 switch (evt.type) {
                     case "recording":
@@ -96,7 +99,7 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
             //nothing here
         },
 
-        logDetails: function(details,theevent){
+        logDetails: function(details,answerstatus,theevent){
           //make sure we have a details control to work with
           if(details.length>0){
               //get new, or existing details
@@ -142,6 +145,16 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader"], function (
               //add the new event details
               detailsobj.recevents.push(logdata)
               details.val(JSON.stringify(detailsobj));
+
+              //update our question display so its clear what happened
+              logdata.insession=true;
+              logdata[logdata.type]=true;
+              templates.render('qtype_cloudpoodll/answerstatus',logdata).then(
+                  function(html,js){
+                      answerstatus.html(html);
+                  }
+              );
+
           }
         },
     };//end of return object

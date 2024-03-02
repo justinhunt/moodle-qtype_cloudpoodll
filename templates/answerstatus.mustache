@@ -1,9 +1,16 @@
 
 <div class="qtype_cloudpoodll_as">
-    {{#alreadysubmitted}}You have answered this question.{{/alreadysubmitted}}
-    {{#filesubmitted}}You have answered this question.{{/filesubmitted}}
-    {{#awaitingconversion}}You have answered this question.{{/awaitingconversion}}
-    {{#recordingstarted}}Not UPLOADED. Do not leave the page yet.{{/recordingstarted}}
-    {{#recordingstopped}}Not UPLOADED. Do not leave the page yet.{{/recordingstopped}}
-    {{#uploadcommenced}}Not UPLOADED. Do not leave the page yet.{{/uploadcommenced}}
+    {{^insession}}
+        {{#filesubmitted}}{{#str}}questionanswered, qtype_cloudpoodll{{/str}}{{/filesubmitted}}
+        {{#awaitingprocessing}}{{#str}}questionanswered, qtype_cloudpoodll{{/str}}{{/awaitingprocessing}}
+        {{#recording}}{{#str}}questionnotanswered, qtype_cloudpoodll{{/str}}{{/recording}}
+        {{#uploadcommenced}}{{#str}}questionnotanswered, qtype_cloudpoodll{{/str}}{{/uploadcommenced}}
+    {{/insession}}
+    {{#insession}}
+        {{#filesubmitted}}{{#str}}answersaved, qtype_cloudpoodll{{/str}}{{/filesubmitted}}
+        {{#awaitingprocessing}}{{#str}}answersaved, qtype_cloudpoodll{{/str}}{{/awaitingprocessing}}
+        {{#recording}}{{#str}}answernotsaved, qtype_cloudpoodll{{/str}}{{/recording}}
+        {{#uploadcommenced}}{{#str}}answernotsaved, qtype_cloudpoodll{{/str}}{{/uploadcommenced}}
+    {{/insession}}
+
 </div>

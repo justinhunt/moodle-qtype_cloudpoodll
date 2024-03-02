@@ -196,3 +196,8 @@ $string['studentplayer'] = 'Media Player (student)';
 $string['studentplayer_details'] = 'Normal player, or player with transcript';
 $string['teacherplayer'] = 'Media Player (teacher)';
 $string['teacherplayer_details'] = 'Normal player, or player with transcript';
+
+$string['answernotsaved']='Your answer has NOT been saved yet.';
+$string['answersaved']='Your answer has been saved.';
+$string['questionnotanswered']='You have NOT answered this question.';
+$string['questionanswered']='You have answered this question.';

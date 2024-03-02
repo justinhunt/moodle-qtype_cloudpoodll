@@ -1,6 +1,15 @@
-
-<div class="qtype_cloudpoodll_rec_details_log" id="{{id}}">
+<div class="qtype_cloudpoodll_rec_details_log" id="{{id}}" style="display: block">
+    <table>
     {{#recevents}}
-        {{type}}<br />
+        <tr>
+            <td>{{type}}</td>
+            {{#recording}}<td>{{action}}</td>{{/recording}}
+            {{#uploadcommenced}}<td>{{srcfile}} {{mimetype}}</td>{{/uploadcommenced}}
+            {{#awaitingprocessing}}<td>{{targetfile}}</td>{{/awaitingprocessing}}
+            {{#filesubmitted}}<td>{{finalfile}}</td>{{/filesubmitted}}
+            {{#error}}<td>{{code}} {{message}}</td>{{/error}}
+        </tr>
     {{/recevents}}
+    </table>
 </div>
+
