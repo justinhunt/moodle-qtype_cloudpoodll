@@ -64,12 +64,14 @@ class qtype_cloudpoodll_question extends question_with_responses {
     }
 
     public function summarise_response(array $response) {
-        if (isset($response['answertranscript']) &&
-                !empty($response['answertranscript']) &&
+        if (isset($response['answer']) && !empty($response['answer']) && $response['answer']!==constants::BLANK) {
+            return pathinfo($response['answermediaurl'], PATHINFO_BASENAME);
+        }else if (isset($response['answertranscript']) &&
+                !empty($response['answertranscript'] && $response['answertranscript']!==constants::BLANK) &&
                 strpos($response['answertranscript'], 'http') !== 0
         ) {
             return $response['answertranscript'];
-        } else if ((isset($response['answermediaurl']) && !empty($response['answermediaurl']))) {
+        } else if ((isset($response['answermediaurl']) && !empty($response['answermediaurl']) && $response['answermediaurl']!==constants::BLANK)) {
             return $response['answermediaurl'];
         } else {
             return null;
