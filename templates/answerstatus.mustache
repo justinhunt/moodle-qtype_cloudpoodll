@@ -1,14 +1,14 @@
 
 <div class="qtype_cloudpoodll_as">
     {{^insession}}
-        {{#filesubmitted}}{{#str}}questionanswered, qtype_cloudpoodll{{/str}}{{/filesubmitted}}
-        {{#awaitingprocessing}}{{#str}}questionanswered, qtype_cloudpoodll{{/str}}{{/awaitingprocessing}}
+        {{#filesubmitted}}{{#str}}questionanswered, qtype_cloudpoodll{{/str}} <i>{{lastevent.time}}</i>{{/filesubmitted}}
+    {{#awaitingprocessing}}{{#str}}questionanswered, qtype_cloudpoodll{{/str}} <i>{{lastevent.time}}</i>{{/awaitingprocessing}}
         {{#recording}}{{#str}}questionnotanswered, qtype_cloudpoodll{{/str}}{{/recording}}
         {{#uploadcommenced}}{{#str}}questionnotanswered, qtype_cloudpoodll{{/str}}{{/uploadcommenced}}
     {{/insession}}
     {{#insession}}
-        {{#filesubmitted}}{{#str}}answersaved, qtype_cloudpoodll{{/str}}{{/filesubmitted}}
-        {{#awaitingprocessing}}{{#str}}answersaved, qtype_cloudpoodll{{/str}}{{/awaitingprocessing}}
+        {{#filesubmitted}}{{#str}}answersaved, qtype_cloudpoodll{{/str}}<i class="fa fa-check"></i>{{/filesubmitted}}
+        {{#awaitingprocessing}}{{#str}}answersaved, qtype_cloudpoodll{{/str}}<i class="fa fa-check"></i>{{/awaitingprocessing}}
         {{#recording}}{{#str}}answernotsaved, qtype_cloudpoodll{{/str}}{{/recording}}
         {{#uploadcommenced}}{{#str}}answernotsaved, qtype_cloudpoodll{{/str}}{{/uploadcommenced}}
     {{/insession}}

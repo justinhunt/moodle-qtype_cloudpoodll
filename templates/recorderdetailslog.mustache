@@ -1,4 +1,4 @@
-<div class="qtype_cloudpoodll_rec_details_log" id="{{id}}" style="display: none">
+<div class="qtype_cloudpoodll_rec_details_log" id="{{uniqid}}_logs" style="display: none">
     <div class="qtype_cloudpoodll_rec_details_log_title">
         <h5>{{#str}}rec_details_log, qtype_cloudpoodll{{/str}}</h5>
     </div>
@@ -18,14 +18,14 @@
     {{/recevents}}
     </table>
 </div>
-<a href="#" id="{{uniqid}}">{{#str}}rec_details_log_toggle, qtype_cloudpoodll{{/str}}</a>
+<a href="#" id="{{uniqid}}_togglelogs">{{#str}}rec_details_log_toggle, qtype_cloudpoodll{{/str}}</a>
 
 {{^element.frozen}}
  {{#js}} //<script>
     require(['jquery'],function($) {
-       $('#{{uniqid}}').click(function(e){
+       $('#{{uniqid}}_togglelogs').click(function(e){
            e.preventDefault();
-           $('#{{id}}').toggle();
+           $('#{{uniqid}}_logs').toggle();
        });
     });
   {{/js}}

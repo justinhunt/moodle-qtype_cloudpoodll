@@ -207,3 +207,9 @@
 .qtype_cloudpoodll_rec_details_log tr:nth-child(odd){
     background-color: #ffffff;
 }
+.qtype_cloudpoodll_as .fa-check {
+    color: blue;
+}
+.qtype_cloudpoodll_as {
+    font-size: smaller;
+}

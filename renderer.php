@@ -277,7 +277,16 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             $reclog = json_decode($details);
             if (json_last_error() === JSON_ERROR_NONE) {
                 if (isset($reclog->recevents) && count($reclog->recevents) > 0) {
+                    //we get the last event.
                     $lastevent=$reclog->recevents[array_key_last($reclog->recevents)];
+                    //but we want the last event, that saved a recording if we have one
+                    for( $i=count($reclog->recevents)-1; $i >=0; $i--) {
+                        $recevent = $reclog->recevents[$i];
+                        if ($recevent->type == 'awaitingconversion' || $recevent->type == 'filesubmitted') {
+                            $lastevent =$recevent;
+                            break;
+                        }
+                    }
                     $templateoptions['lastevent']=$lastevent;
                     $templateoptions['insession']=false;
                     $templateoptions[$lastevent->type]=1;//"filesubmitted" "recordingstarted" "recordingstopped" "uploadcommenced" "awaitingconversion"
