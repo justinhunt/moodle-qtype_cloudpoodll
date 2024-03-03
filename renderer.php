@@ -62,6 +62,96 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         return 'qtype_cloudpoodll_';
     }
 
+    protected function replace_url_filext($url, $ext){
+        $url = preg_replace('/\.[^.]+$/', '.' . $ext, $url);
+        return $url;
+    }
+
+    protected function fetch_fileext_from_mimetype($mimetype){
+            $ext = "";
+
+            // a little sanity check first
+            if(empty($mimetype)){return $ext;}
+
+            //in the case of a string like this:
+            // "audio/webm;codecs=opus" we do not want the codecs
+            if(strpos($mimetype, ';')!==false){
+                $mimetype = explode(';', $mimetype)[0];
+            }
+
+            //search on mimetype and add the corresponding file extension
+            switch ($mimetype) {
+                case "image/jpeg":
+                    $ext = "jpg";
+                    break;
+                case "image/png":
+                    $ext = "png";
+                    break;
+                case "audio/wav":
+                    $ext = "wav";
+                    break;
+                case "audio/ogg":
+                    $ext = "ogg";
+                    break;
+                case "audio/mpeg3":
+                    $ext = "mp3";
+                    break;
+                case "audio/mp3":
+                    $ext = "mp3";
+                    break;
+                case "audio/webm":
+                    $ext = "webm";
+                    break;
+                case "audio/wma":
+                    $ext = "wma";
+                    break;
+                case "audio/x-mpeg-3":
+                    $ext = "mp3";
+                    break;
+                case "audio/mp4":
+                case "audio/m4a":
+                case "audio/x-m4a":
+                    $ext = "m4a";
+                    break;
+                case "audio/3gpp":
+                    $ext = "3gpp";
+                    break;
+                case "video/mpeg3":
+                    $ext = "3gpp";
+                    break;
+                case "video/m4v":
+                    $ext = "m4v";
+                    break;
+                case "video/mp4":
+                    $ext = "mp4";
+                    break;
+                case "video/mov":
+                case "video/quicktime":
+                    $ext = "mov";
+                    break;
+                case "video/x-matroska":
+                case "video/webm":
+                    $ext = "webm";
+                    break;
+                case "video/wmv":
+                    $ext = "wmv";
+                    break;
+                case "video/ogg":
+                    $ext = "ogg";
+                    break;
+            }
+            //if we get here we have an unknown mime type, just guess based on the mediatype
+            if($ext===""){
+                if(strpos($mimetype, 'video')!==false){
+                    $ext = "mp4";
+                }else{
+                    $ext = "mp3";
+                }
+            }
+            return $ext;
+
+    }
+
     public function response_area_read_only($name, $qa, $step, $lines, $context) {
         $question = $qa->get_question();
 
@@ -138,8 +228,25 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             $reclog=json_decode($details);
             if (json_last_error() === JSON_ERROR_NONE) {
                 if(isset($reclog->recevents) && count($reclog->recevents)>0) {
+                    $lastmimetype= '';
                     foreach($reclog->recevents as $recevent){
+                        //this is a hack that allows mustache to show the output specific to the event
                         $recevent->{$recevent->type}=1;
+                        //we store the mime type from the upload commenced event
+                        if($recevent->type == 'uploadcommenced'){
+                            $lastmimetype = $recevent->mimetype;
+                        }
+                        if($recevent->type == 'awaitingprocessing'){
+                            $ext = $this->fetch_fileext_from_mimetype($lastmimetype);
+                            if(!empty($ext) && !empty($recevent->targetfile)) {
+                                $recevent->srcfile = $this->replace_url_filext($recevent->targetfile, $ext);
+                                $recevent->srcfilename = pathinfo($recevent->srcfile, PATHINFO_BASENAME);
+                                $recevent->targetfilename= pathinfo($recevent->targetfile, PATHINFO_BASENAME);
+                            }
+                        }
+                        if($recevent->type == 'filesubmitted'){
+                            $recevent->finalfilename= pathinfo($recevent->finalfile, PATHINFO_BASENAME);
+                        }
                     }
                     $details_div = $this->fetch_details_display($reclog);
                     $ret_html .= $details_div;
@@ -371,7 +478,6 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
 
             default:
                 $transcriber = constants::TRANSCRIBER_NONE;
-
         }
 
         // transcode
@@ -442,7 +548,6 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             $t_options->iframeclass=constants::CLASS_VIDEOREC_IFRAME;
             $recorderhtml = $this->render_from_template(constants::M_COMP . '/videorecordercontainer', $t_options);
         }
-
 
         // set up the AMD for the recorder
         $opts = array(

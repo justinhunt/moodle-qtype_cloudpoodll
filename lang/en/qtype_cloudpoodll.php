@@ -201,3 +201,5 @@ $string['answernotsaved']='Your answer has NOT been saved yet.';
 $string['answersaved']='Your answer has been saved.';
 $string['questionnotanswered']='You have NOT answered this question.';
 $string['questionanswered']='You have answered this question.';
+$string['rec_details_log']= "Attempt recording log";
+$string['rec_details_log_toggle']= "Attempt recording log (show/hide)";

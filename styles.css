@@ -193,3 +193,17 @@
     margin-left: 0px;
     margin-right: 50px;
 }
+.qtype_cloudpoodll_rec_details_log table{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.qtype_cloudpoodll_rec_details_log td{
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+.qtype_cloudpoodll_rec_details_log tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+.qtype_cloudpoodll_rec_details_log tr:nth-child(odd){
+    background-color: #ffffff;
+}

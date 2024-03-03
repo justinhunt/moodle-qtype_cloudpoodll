@@ -1,15 +1,32 @@
-<div class="qtype_cloudpoodll_rec_details_log" id="{{id}}" style="display: block">
+<div class="qtype_cloudpoodll_rec_details_log" id="{{id}}" style="display: none">
+    <div class="qtype_cloudpoodll_rec_details_log_title">
+        <h5>{{#str}}rec_details_log, qtype_cloudpoodll{{/str}}</h5>
+    </div>
     <table>
     {{#recevents}}
         <tr>
+            <td>{{time}}</td>
             <td>{{type}}</td>
             {{#recording}}<td>{{action}}</td>{{/recording}}
-            {{#uploadcommenced}}<td>{{srcfile}} {{mimetype}}</td>{{/uploadcommenced}}
-            {{#awaitingprocessing}}<td>{{targetfile}}</td>{{/awaitingprocessing}}
-            {{#filesubmitted}}<td>{{finalfile}}</td>{{/filesubmitted}}
+            {{#uploadcommenced}}<td>{{srcfile}}<br />{{mimetype}}</td>{{/uploadcommenced}}
+            {{#awaitingprocessing}}<td>{{#srcfilename}}From: <a href="{{{srcfile}}}" class="nopoodll nomediaplugin">{{srcfilename}}</a>{{/srcfilename}} <br />
+            {{#targetfilename}}To: <a href="{{{targetfile}}}" class="nopoodll nomediaplugin">{{targetfilename}}</a>{{/targetfilename}} </td>
+            {{/awaitingprocessing}}
+            {{#filesubmitted}}<td>{{#finalfilename}}Final file: <a href="{{{finalfile}}}" class="nopoodll nomediaplugin">{{finalfilename}}</a>{{/finalfilename}} </td>{{/filesubmitted}}
             {{#error}}<td>{{code}} {{message}}</td>{{/error}}
         </tr>
     {{/recevents}}
     </table>
 </div>
+<a href="#" id="{{uniqid}}">{{#str}}rec_details_log_toggle, qtype_cloudpoodll{{/str}}</a>
 
+{{^element.frozen}}
+ {{#js}} //<script>
+    require(['jquery'],function($) {
+       $('#{{uniqid}}').click(function(e){
+           e.preventDefault();
+           $('#{{id}}').toggle();
+       });
+    });
+  {{/js}}
+{{/element.frozen}}

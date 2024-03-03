@@ -115,6 +115,7 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader", "core/templ
               //we don't want to log everything, so just do the main data
               var logdata={}
               logdata.type=theevent.type;
+              logdata.time = new Date().toLocaleString('en-us') ;
               switch(theevent.type){
                   case "recording":
                       logdata.action=theevent.action;
