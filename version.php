@@ -25,9 +25,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2024030300;
+$plugin->version = 2024032400;
 $plugin->requires = 2016052300;//moodle 3.1.0
 $plugin->component = 'qtype_cloudpoodll';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.0.19 (Build 2024030300)';
+$plugin->release = '1.0.20 (Build 2024032400)';
 

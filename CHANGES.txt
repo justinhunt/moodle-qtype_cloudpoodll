@@ -1,5 +1,8 @@
 Change List
 =========
+Version 1.0.20 (Build 2024032400)
+- Added more transcription languages
+
 Version 1.0.19 (Build 2024030300)
 - Added a recording log and an indication that upload has been completed
 
