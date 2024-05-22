@@ -29,5 +29,4 @@ $plugin->version = 2024052200;
 $plugin->requires = 2016052300;//moodle 3.1.0
 $plugin->component = 'qtype_cloudpoodll';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.0.20 (Build 2024052200)';
-
+$plugin->release = '1.0.21 (Build 2024052200)';
