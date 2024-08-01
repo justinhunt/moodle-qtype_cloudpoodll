@@ -22,8 +22,8 @@
                 <FIELD NAME="audioskin" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" DEFAULT="onetwothree" COMMENT="audio recorder skin"/>
                 <FIELD NAME="videoskin" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" DEFAULT="onetwothree" COMMENT="video recorder skin"/>
                 <FIELD NAME="safesave" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="if true disable submit button till uploaded "/>
-                <FIELD NAME="studentplayer" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Student Player"/>
-                <FIELD NAME="teacherplayer" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Teacher Player"/>
+                <FIELD NAME="studentplayer" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Student Player"/>
+                <FIELD NAME="teacherplayer" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Teacher Player"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="questionid"/>
