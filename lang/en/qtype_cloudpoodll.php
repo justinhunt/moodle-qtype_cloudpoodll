@@ -149,6 +149,7 @@ $string['sl-si'] = 'Slovenian'; // Slovenian
 $string['is-is'] = 'Icelandic'; // Icelandic
 $string['mk-mk'] = 'Macedonian'; // Macedonian
 $string['sr-rs'] = 'Serbian'; // Serbian
+$string['vi-vn'] = 'Vietnamese'; // Vietnamese
 
 $string['awsregion'] = 'AWS Region';
 //$string['region'] = 'AWS Region';

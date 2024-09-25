@@ -181,7 +181,8 @@ class utils {
             constants::LANG_TEIN => get_string('te-in', constants::M_COMP),
             constants::LANG_TRTR => get_string('tr-tr', constants::M_COMP),
             constants::LANG_NONO => get_string('no-no', constants::M_COMP),
-            constants::LANG_UKUA => get_string('uk-ua',constants::M_COMP)
+            constants::LANG_UKUA => get_string('uk-ua',constants::M_COMP),
+            constants::LANG_VIVN => get_string('vi-vn',constants::M_COMP),
         );
     }
 
