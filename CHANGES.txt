@@ -1,5 +1,7 @@
 Change List
 =========
+Version 1.0.22 (Build 2024092500)
+Added Vietnamese
 
 Version 1.0.21 (Build 2024052200)
 Fix for issue when giving a comment/grade if grader info has been set in question settings (fails on M4.4)
