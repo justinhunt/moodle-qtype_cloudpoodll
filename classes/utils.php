@@ -29,74 +29,74 @@ defined('MOODLE_INTERNAL') || die();
 class utils {
 
     public static function fetch_options_recorders() {
-        $rec_options = array(constants::REC_AUDIO => get_string("recorderaudio", constants::M_COMP),
-                constants::REC_VIDEO => get_string("recordervideo", constants::M_COMP));
-        return $rec_options;
+        $recoptions = [constants::REC_AUDIO => get_string("recorderaudio", constants::M_COMP),
+                constants::REC_VIDEO => get_string("recordervideo", constants::M_COMP)];
+        return $recoptions;
     }
 
     public static function fetch_options_fallback() {
-        $options = array(constants::FALLBACK_UPLOAD => get_string("fallbackupload", constants::M_COMP),
+        $options = [constants::FALLBACK_UPLOAD => get_string("fallbackupload", constants::M_COMP),
                 constants::FALLBACK_IOSUPLOAD => get_string("fallbackiosupload", constants::M_COMP),
-                constants::FALLBACK_WARNING => get_string("fallbackwarning", constants::M_COMP));
+                constants::FALLBACK_WARNING => get_string("fallbackwarning", constants::M_COMP)];
         return $options;
     }
 
-    public static function fetch_options_players(){
-            $options = array( constants::PLAYERTYPE_DEFAULT => get_string("playertypedefault", constants::M_COMP),
-                constants::PLAYERTYPE_INTERACTIVETRANSCRIPT  => get_string("playertypeinteractivetranscript", constants::M_COMP));
+    public static function fetch_options_players() {
+            $options = [ constants::PLAYERTYPE_DEFAULT => get_string("playertypedefault", constants::M_COMP),
+                constants::PLAYERTYPE_INTERACTIVETRANSCRIPT  => get_string("playertypeinteractivetranscript", constants::M_COMP)];
             return $options;
     }
 
     public static function fetch_options_transcribers() {
-        $options = array(constants::TRANSCRIBER_NONE => get_string("transcriber_none", constants::M_COMP),
+        $options = [constants::TRANSCRIBER_NONE => get_string("transcriber_none", constants::M_COMP),
                 constants::TRANSCRIBER_AMAZONTRANSCRIBE => get_string("transcriber_amazontranscribe", constants::M_COMP),
                // constants::TRANSCRIBER_GOOGLECLOUDSPEECH => get_string("transcriber_googlecloud", constants::M_COMP),
                // constants::TRANSCRIBER_GOOGLECHROME => get_string("transcriber_googlechrome", constants::M_COMP),
-        );
+        ];
         return $options;
     }
 
     public static function get_timelimit_options() {
-        $opts = array(
+        $opts = [
                 0 => get_string("notimelimit", constants::M_COMP),
                 30 => get_string("xsecs", constants::M_COMP, '30'),
                 45 => get_string("xsecs", constants::M_COMP, '45'),
                 60 => get_string("onemin", constants::M_COMP),
                 90 => get_string("oneminxsecs", constants::M_COMP, '30'),
-        );
-        for($x=2;$x<=30;$x++){
-            $opts[$x*60]=get_string("xmins", constants::M_COMP, $x);
-            $opts[($x*60)+30]=get_string("xminsecs", constants::M_COMP, array('minutes' => $x, 'seconds' => 30));
+        ];
+        for($x = 2; $x <= 30; $x++){
+            $opts[$x * 60] = get_string("xmins", constants::M_COMP, $x);
+            $opts[($x * 60) + 30] = get_string("xminsecs", constants::M_COMP, ['minutes' => $x, 'seconds' => 30]);
         }
         return $opts;
     }
 
     public static function fetch_options_skins($rectype = constants::REC_VIDEO) {
-        $rec_options = array();
+        $recoptions = [];
         switch ($rectype) {
             case constants::REC_AUDIO:
-                $rec_options[constants::SKIN_PLAIN] = get_string("skinplain", constants::M_COMP);
-                $rec_options[constants::SKIN_BMR] = get_string("skinbmr", constants::M_COMP);
-                $rec_options[constants::SKIN_123] = get_string("skin123", constants::M_COMP);
-                $rec_options[constants::SKIN_FRESH] = get_string("skinfresh", constants::M_COMP);
-                $rec_options[constants::SKIN_ONCE] = get_string("skinonce", constants::M_COMP);
-                $rec_options[constants::SKIN_UPLOAD] = get_string("skinupload", constants::M_COMP);
-                $rec_options[constants::SKIN_PUSH] = get_string("skinpush", constants::M_COMP);
+                $recoptions[constants::SKIN_PLAIN] = get_string("skinplain", constants::M_COMP);
+                $recoptions[constants::SKIN_BMR] = get_string("skinbmr", constants::M_COMP);
+                $recoptions[constants::SKIN_123] = get_string("skin123", constants::M_COMP);
+                $recoptions[constants::SKIN_FRESH] = get_string("skinfresh", constants::M_COMP);
+                $recoptions[constants::SKIN_ONCE] = get_string("skinonce", constants::M_COMP);
+                $recoptions[constants::SKIN_UPLOAD] = get_string("skinupload", constants::M_COMP);
+                $recoptions[constants::SKIN_PUSH] = get_string("skinpush", constants::M_COMP);
                 break;
             case constants::REC_VIDEO:
             default:
-                $rec_options[constants::SKIN_PLAIN] = get_string("skinplain", constants::M_COMP);
-                $rec_options[constants::SKIN_BMR] = get_string("skinbmr", constants::M_COMP);
-                $rec_options[constants::SKIN_123] = get_string("skin123", constants::M_COMP);
-                $rec_options[constants::SKIN_ONCE] = get_string("skinonce", constants::M_COMP);
-                $rec_options[constants::SKIN_UPLOAD] = get_string("skinupload", constants::M_COMP);
+                $recoptions[constants::SKIN_PLAIN] = get_string("skinplain", constants::M_COMP);
+                $recoptions[constants::SKIN_BMR] = get_string("skinbmr", constants::M_COMP);
+                $recoptions[constants::SKIN_123] = get_string("skin123", constants::M_COMP);
+                $recoptions[constants::SKIN_ONCE] = get_string("skinonce", constants::M_COMP);
+                $recoptions[constants::SKIN_UPLOAD] = get_string("skinupload", constants::M_COMP);
 
         }
-        return $rec_options;
+        return $recoptions;
     }
 
     public static function get_region_options() {
-        return array(
+        return [
                 constants::REGION_USEAST1 => get_string("useast1", constants::M_COMP),
                 constants::REGION_TOKYO => get_string("tokyo", constants::M_COMP),
                 constants::REGION_SYDNEY => get_string("sydney", constants::M_COMP),
@@ -105,15 +105,15 @@ class utils {
                 constants::REGION_FRANKFURT => get_string("frankfurt", constants::M_COMP),
                 constants::REGION_LONDON => get_string("london", constants::M_COMP),
                 constants::REGION_SAOPAULO => get_string("saopaulo", constants::M_COMP),
-                constants::REGION_SINGAPORE => get_string("singapore",constants::M_COMP),
-                constants::REGION_MUMBAI => get_string("mumbai",constants::M_COMP),
-                constants::REGION_CAPETOWN => get_string("capetown",constants::M_COMP),
-                constants::REGION_BAHRAIN => get_string("bahrain",constants::M_COMP)
-        );
+                constants::REGION_SINGAPORE => get_string("singapore", constants::M_COMP),
+                constants::REGION_MUMBAI => get_string("mumbai", constants::M_COMP),
+                constants::REGION_CAPETOWN => get_string("capetown", constants::M_COMP),
+                constants::REGION_BAHRAIN => get_string("bahrain", constants::M_COMP),
+        ];
     }
 
     public static function get_expiredays_options() {
-        return array(
+        return [
                 "1" => "1",
                 "3" => "3",
                 "7" => "7",
@@ -122,17 +122,16 @@ class utils {
                 "180" => "180",
                 "365" => "365",
                 "730" => "730",
-                "9999" => get_string('forever', constants::M_COMP)
-        );
+                "9999" => get_string('forever', constants::M_COMP),
+        ];
     }
 
 
-    public static function get_lang_options()
-    {
-        return array(
+    public static function get_lang_options() {
+        return [
             constants::LANG_ARAE => get_string('ar-ae', constants::M_COMP),
             constants::LANG_ARSA => get_string('ar-sa', constants::M_COMP),
-            constants::LANG_EUES => get_string('eu-es',constants::M_COMP),
+            constants::LANG_EUES => get_string('eu-es', constants::M_COMP),
             constants::LANG_BGBG => get_string('bg-bg', constants::M_COMP),
             constants::LANG_HRHR => get_string('hr-hr', constants::M_COMP),
             constants::LANG_ZHCN => get_string('zh-cn', constants::M_COMP),
@@ -147,7 +146,7 @@ class utils {
             constants::LANG_ENWL => get_string('en-wl', constants::M_COMP),
             constants::LANG_ENAB => get_string('en-ab', constants::M_COMP),
             constants::LANG_FAIR => get_string('fa-ir', constants::M_COMP),
-            constants::LANG_FIFI => get_string('fi-fi',constants::M_COMP),
+            constants::LANG_FIFI => get_string('fi-fi', constants::M_COMP),
             constants::LANG_FRCA => get_string('fr-ca', constants::M_COMP),
             constants::LANG_FRFR => get_string('fr-fr', constants::M_COMP),
             constants::LANG_DEDE => get_string('de-de', constants::M_COMP),
@@ -155,7 +154,7 @@ class utils {
             constants::LANG_ELGR => get_string('el-gr', constants::M_COMP),
             constants::LANG_HIIN => get_string('hi-in', constants::M_COMP),
             constants::LANG_HEIL => get_string('he-il', constants::M_COMP),
-            constants::LANG_HUHU => get_string('hu-hu',constants::M_COMP),
+            constants::LANG_HUHU => get_string('hu-hu', constants::M_COMP),
             constants::LANG_ISIS => get_string('is-is', constants::M_COMP),
             constants::LANG_IDID => get_string('id-id', constants::M_COMP),
             constants::LANG_ITIT => get_string('it-it', constants::M_COMP),
@@ -181,19 +180,19 @@ class utils {
             constants::LANG_TEIN => get_string('te-in', constants::M_COMP),
             constants::LANG_TRTR => get_string('tr-tr', constants::M_COMP),
             constants::LANG_NONO => get_string('no-no', constants::M_COMP),
-            constants::LANG_UKUA => get_string('uk-ua',constants::M_COMP),
-            constants::LANG_VIVN => get_string('vi-vn',constants::M_COMP),
-        );
+            constants::LANG_UKUA => get_string('uk-ua', constants::M_COMP),
+            constants::LANG_VIVN => get_string('vi-vn', constants::M_COMP),
+        ];
     }
 
-    //are we willing and able to transcribe submissions?
+    // are we willing and able to transcribe submissions?
     public static function can_transcribe($instance) {
 
-        //we default to true
-        //but it only takes one no ....
+        // we default to true
+        // but it only takes one no ....
         $ret = true;
 
-        //The regions that can transcribe
+        // The regions that can transcribe
         switch($instance->awsregion){
             default:
                 $ret = true;
@@ -202,8 +201,8 @@ class utils {
         return $ret;
     }
 
-    //we use curl to fetch transcripts from AWS and Tokens from cloudpoodll
-    //this is our helper
+    // we use curl to fetch transcripts from AWS and Tokens from cloudpoodll
+    // this is our helper
     public static function curl_fetch($url, $postdata = false) {
         global $CFG;
 
@@ -214,14 +213,14 @@ class utils {
         return $result;
     }
 
-    //This is called from the settings page and we do not want to make calls out to cloud.poodll.com on settings
-    //page load, for performance and stability issues. So if the cache is empty and/or no token, we just show a
-    //"refresh token" links
+    // This is called from the settings page and we do not want to make calls out to cloud.poodll.com on settings
+    // page load, for performance and stability issues. So if the cache is empty and/or no token, we just show a
+    // "refresh token" links
     public static function fetch_token_for_display($apiuser, $apisecret) {
         global $CFG;
 
-        //First check that we have an API id and secret
-        //refresh token
+        // First check that we have an API id and secret
+        // refresh token
         $refresh = \html_writer::link($CFG->wwwroot . constants::REFRESH_URL,
                         get_string('refreshtoken', constants::M_COMP)) . '<br>';
 
@@ -239,17 +238,17 @@ class utils {
             return $refresh . $message;
         }
 
-        //Fetch from cache and process the results and display
+        // Fetch from cache and process the results and display
         $cache = \cache::make_from_params(\cache_store::MODE_APPLICATION, constants::M_COMP, 'token');
         $tokenobject = $cache->get('recentpoodlltoken');
 
-        //if we have no token object the creds were wrong ... or something
+        // if we have no token object the creds were wrong ... or something
         if (!($tokenobject)) {
             $message = get_string('notokenincache', constants::M_COMP);
-            //if we have an object but its no good, creds werer wrong ..or something
+            // if we have an object but its no good, creds werer wrong ..or something
         } else if (!property_exists($tokenobject, 'token') || empty($tokenobject->token)) {
             $message = get_string('credentialsinvalid', constants::M_COMP);
-            //if we do not have subs, then we are on a very old token or something is wrong, just get out of here.
+            // if we do not have subs, then we are on a very old token or something is wrong, just get out of here.
         } else if (!property_exists($tokenobject, 'subs')) {
             $message = 'No subscriptions found at all';
         }
@@ -257,12 +256,12 @@ class utils {
             return $refresh . $message;
         }
 
-        //we have enough info to display a report. Lets go.
+        // we have enough info to display a report. Lets go.
         foreach ($tokenobject->subs as $sub) {
             $sub->expiredate = date('d/m/Y', $sub->expiredate);
             $message .= get_string('displaysubs', constants::M_COMP, $sub) . '<br>';
         }
-        //Is app authorised
+        // Is app authorised
         if (in_array(constants::M_COMP, $tokenobject->apps)) {
             $message .= get_string('appauthorised', constants::M_COMP) . '<br>';
         } else {
@@ -273,7 +272,7 @@ class utils {
 
     }
 
-    //We need a Poodll token to make this happen
+    // We need a Poodll token to make this happen
     public static function fetch_token($apiuser, $apisecret, $force = false) {
 
         $cache = \cache::make_from_params(\cache_store::MODE_APPLICATION, constants::M_COMP, 'token');
@@ -282,7 +281,7 @@ class utils {
         $apiuser = trim($apiuser);
         $apisecret = trim($apisecret);
 
-        //if we got a token and its less than expiry time
+        // if we got a token and its less than expiry time
         // use the cached one
         if ($tokenobject && $tokenuser && $tokenuser == $apiuser && !$force) {
             if ($tokenobject->validuntil == 0 || $tokenobject->validuntil > time()) {
@@ -291,49 +290,49 @@ class utils {
         }
 
         // Send the request & save response to $resp
-        $token_url = "https://cloud.poodll.com/local/cpapi/poodlltoken.php";
-        $postdata = array(
+        $tokenurl = "https://cloud.poodll.com/local/cpapi/poodlltoken.php";
+        $postdata = [
                 'username' => $apiuser,
                 'password' => $apisecret,
-                'service' => 'cloud_poodll'
-        );
-        $token_response = self::curl_fetch($token_url, $postdata);
-        if ($token_response) {
-            $resp_object = json_decode($token_response);
-            if ($resp_object && property_exists($resp_object, 'token')) {
-                $token = $resp_object->token;
-                //store the expiry timestamp and adjust it for diffs between our server times
-                if ($resp_object->validuntil) {
-                    $validuntil = $resp_object->validuntil - ($resp_object->poodlltime - time());
-                    //we refresh one hour out, to prevent any overlap
+                'service' => 'cloud_poodll',
+        ];
+        $tokenresponse = self::curl_fetch($tokenurl, $postdata);
+        if ($tokenresponse) {
+            $respobject = json_decode($tokenresponse);
+            if ($respobject && property_exists($respobject, 'token')) {
+                $token = $respobject->token;
+                // store the expiry timestamp and adjust it for diffs between our server times
+                if ($respobject->validuntil) {
+                    $validuntil = $respobject->validuntil - ($respobject->poodlltime - time());
+                    // we refresh one hour out, to prevent any overlap
                     $validuntil = $validuntil - (1 * HOURSECS);
                 } else {
                     $validuntil = 0;
                 }
 
-                //cache the token
+                // cache the token
                 $tokenobject = new \stdClass();
                 $tokenobject->token = $token;
                 $tokenobject->validuntil = $validuntil;
                 $tokenobject->subs = false;
                 $tokenobject->apps = false;
                 $tokenobject->sites = false;
-                if (property_exists($resp_object, 'subs')) {
-                    $tokenobject->subs = $resp_object->subs;
+                if (property_exists($respobject, 'subs')) {
+                    $tokenobject->subs = $respobject->subs;
                 }
-                if (property_exists($resp_object, 'apps')) {
-                    $tokenobject->apps = $resp_object->apps;
+                if (property_exists($respobject, 'apps')) {
+                    $tokenobject->apps = $respobject->apps;
                 }
-                if (property_exists($resp_object, 'sites')) {
-                    $tokenobject->sites = $resp_object->sites;
+                if (property_exists($respobject, 'sites')) {
+                    $tokenobject->sites = $respobject->sites;
                 }
                 $cache->set('recentpoodlltoken', $tokenobject);
                 $cache->set('recentpoodlluser', $apiuser);
 
             } else {
                 $token = '';
-                if ($resp_object && property_exists($resp_object, 'error')) {
-                    //ERROR = $resp_object->error
+                if ($respobject && property_exists($respobject, 'error')) {
+                    // ERROR = $resp_object->error
                 }
             }
         } else {
@@ -342,12 +341,12 @@ class utils {
         return $token;
     }
 
-    //check token and tokenobject(from cache)
-    //return error message or blank if its all ok
-    public static function fetch_token_error($token){
+    // check token and tokenobject(from cache)
+    // return error message or blank if its all ok
+    public static function fetch_token_error($token) {
         global $CFG;
 
-        //check token authenticated
+        // check token authenticated
         if(empty($token)) {
             $message = get_string('novalidcredentials', constants::M_COMP,
                     $CFG->wwwroot . constants::M_PLUGINSETTINGS);
@@ -358,13 +357,13 @@ class utils {
         $cache = \cache::make_from_params(\cache_store::MODE_APPLICATION, constants::M_COMP, 'token');
         $tokenobject = $cache->get('recentpoodlltoken');
 
-        //we should not get here if there is no token, but lets gracefully die, [v unlikely]
+        // we should not get here if there is no token, but lets gracefully die, [v unlikely]
         if (!($tokenobject)) {
             $message = get_string('notokenincache', constants::M_COMP);
             return $message;
         }
 
-        //We have an object but its no good, creds were wrong ..or something. [v unlikely]
+        // We have an object but its no good, creds were wrong ..or something. [v unlikely]
         if (!property_exists($tokenobject, 'token') || empty($tokenobject->token)) {
             $message = get_string('credentialsinvalid', constants::M_COMP);
             return $message;
@@ -380,11 +379,11 @@ class utils {
             return $message;
         }
 
-        //just return empty if there is no error.
+        // just return empty if there is no error.
         return '';
     }
 
-    //transcripts become ready in their own time, fetch them here
+    // transcripts become ready in their own time, fetch them here
     public static function fetch_transcript($mediaurl) {
         $url = $mediaurl . '.txt';
         $transcript = self::curl_fetch($url);
@@ -394,7 +393,7 @@ class utils {
         return $transcript;
     }
 
-    //vtt data becomes ready in its own time, fetch them here
+    // vtt data becomes ready in its own time, fetch them here
     public static function fetch_vtt($mediaurl) {
         $url = $mediaurl . '.vtt';
         $vtt = self::curl_fetch($url);

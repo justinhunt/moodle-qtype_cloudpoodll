@@ -27,7 +27,7 @@ require_once($CFG->libdir . '/adminlib.php');
  */
 class apicredshelper extends \admin_setting {
 
-	  /** @var mixed int index of template*/
+    /** @var mixed int index of template*/
     public $templateindex;
     /** @var array template data for spec index */
     public $presetdata;
@@ -42,10 +42,10 @@ class apicredshelper extends \admin_setting {
      * @param string $heading heading
      * @param string $information text in box
      */
-    public function __construct($name, $visiblename, $information,$default) {
+    public function __construct($name, $visiblename, $information, $default) {
         $this->nosave = true;
-        $this->visiblename=$visiblename;
-        $this->information=$information;
+        $this->visiblename = $visiblename;
+        $this->information = $information;
         parent::__construct($name, $visiblename, $information, $default);
     }
 
@@ -70,7 +70,7 @@ class apicredshelper extends \admin_setting {
      * @return string Always returns an empty string
      */
     public function write_setting($data) {
-    // do not write any setting
+        // do not write any setting
         return '';
     }//write_setting
 
@@ -81,62 +81,62 @@ class apicredshelper extends \admin_setting {
     public function output_html($data, $query='') {
         global $PAGE;
 
-       $launchbutton =  \html_writer::tag('button', 'Open Me', array('id' => 'id_s_qtype_cloudpoodll_apihelperbutton', 'type' => 'button'));
-       return $launchbutton;
-/*
-		$presetscontrol = \html_writer::tag('input', '', array('id' => 'id_s_filter_poodll_presetdata_' . $this->templateindex, 'type' => 'hidden', 'value' => $presetsjson));
+        $launchbutton = \html_writer::tag('button', 'Open Me', ['id' => 'id_s_qtype_cloudpoodll_apihelperbutton', 'type' => 'button']);
+        return $launchbutton;
+        /*
+        $presetscontrol = \html_writer::tag('input', '', array('id' => 'id_s_filter_poodll_presetdata_' . $this->templateindex, 'type' => 'hidden', 'value' => $presetsjson));
 
 
-		//Add javascript handler for presets
-		$PAGE->requires->js_call_amd('filter_poodll/template_presets_amd',
-		  	'init',array(array('templateindex'=>$this->templateindex)));
+        //Add javascript handler for presets
+        $PAGE->requires->js_call_amd('filter_poodll/template_presets_amd',
+        'init',array(array('templateindex'=>$this->templateindex)));
 
-		$select = \html_writer::select($usearray,'filter_poodll/presets','','--custom--');
-		
-		$dragdropsquare = \html_writer::tag('div',get_string('bundle','filter_poodll'),array('id' => 'id_s_filter_poodll_dragdropsquare_' . $this->templateindex,
-			'class' => 'filter_poodll_dragdropsquare'));
-		
-		return format_admin_setting($this, $this->visiblename,
-			$dragdropsquare .'<div class="form-text defaultsnext">'. $presetscontrol . $select .  '</div>',
-			$this->information, true, '','', $query);
-*/
-	}//end of output html
+        $select = \html_writer::select($usearray,'filter_poodll/presets','','--custom--');
 
-		public static function set_preset_to_config($preset, $templateindex){
+        $dragdropsquare = \html_writer::tag('div',get_string('bundle','filter_poodll'),array('id' => 'id_s_filter_poodll_dragdropsquare_' . $this->templateindex,
+        'class' => 'filter_poodll_dragdropsquare'));
 
-/*
-			$fields = array();
-			$fields['name']='templatename';
-			$fields['key']='templatekey';
-			$fields['version']='templateversion';
-			$fields['instructions']='templateinstructions';
-			$fields['body']='template';
-			$fields['bodyend']='templateend';
-			$fields['showatto']='template_showatto';
-			$fields['showplayers']='template_showplayers';
-			$fields['requirecss']='templaterequire_css';
-			$fields['requirejs']='templaterequire_js';
-			$fields['shim']='templaterequire_js_shim';
-			$fields['defaults']='templatedefaults';
-			$fields['amd']='template_amd';
-			$fields['script']='templatescript';
-			$fields['style']='templatestyle';
-			$fields['dataset']='dataset';
-			$fields['datavars']='datavars';
+        return format_admin_setting($this, $this->visiblename,
+        $dragdropsquare .'<div class="form-text defaultsnext">'. $presetscontrol . $select .  '</div>',
+        $this->information, true, '','', $query);
+        */
+    }//end of output html
+
+    public static function set_preset_to_config($preset, $templateindex) {
+
+        /*
+        $fields = array();
+        $fields['name']='templatename';
+        $fields['key']='templatekey';
+        $fields['version']='templateversion';
+        $fields['instructions']='templateinstructions';
+        $fields['body']='template';
+        $fields['bodyend']='templateend';
+        $fields['showatto']='template_showatto';
+        $fields['showplayers']='template_showplayers';
+        $fields['requirecss']='templaterequire_css';
+        $fields['requirejs']='templaterequire_js';
+        $fields['shim']='templaterequire_js_shim';
+        $fields['defaults']='templatedefaults';
+        $fields['amd']='template_amd';
+        $fields['script']='templatescript';
+        $fields['style']='templatestyle';
+        $fields['dataset']='dataset';
+        $fields['datavars']='datavars';
 
 
             //If we are setting the template, then lets do that.
-			foreach($fields as $fieldkey=>$fieldname){
-				if(array_key_exists($fieldkey,$preset)){
-					$fieldvalue=$preset[$fieldkey];
-				}else{
-					$fieldvalue='';
-				}
-				set_config($fieldname . '_' . $templateindex, $fieldvalue, 'filter_poodll');
+        foreach($fields as $fieldkey=>$fieldname){
+        if(array_key_exists($fieldkey,$preset)){
+        $fieldvalue=$preset[$fieldkey];
+        }else{
+        $fieldvalue='';
+        }
+        set_config($fieldname . '_' . $templateindex, $fieldvalue, 'filter_poodll');
 
-			}
-*/
-		}//End of set_preset_to_config
+        }
+        */
+    }//End of set_preset_to_config
 
 
 }//end of class

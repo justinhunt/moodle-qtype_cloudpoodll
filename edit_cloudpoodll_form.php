@@ -41,7 +41,7 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
         $config = get_config(constants::M_COMP);
 
         $mform->addElement('editor', 'graderinfo', get_string('graderinfo', constants::M_COMP),
-                array('rows' => 10), $this->editoroptions);
+                ['rows' => 10], $this->editoroptions);
 
         $mform->addElement('select', 'responseformat',
             get_string('responseformat', constants::M_COMP), $qtype->response_formats());
@@ -120,7 +120,7 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
 
         // question resource
         $mform->addElement('filemanager', 'qresource', get_string('qresource', constants::M_COMP), null,
-                array('subdirs' => 0, 'maxbytes' => 0, 'maxfiles' => 1));
+                ['subdirs' => 0, 'maxbytes' => 0, 'maxfiles' => 1]);
 
     }
 
@@ -141,22 +141,22 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
             }
         }
 
-        //Set qresource details, and configure a draft area to accept any uploaded pictures
-        //all this and this whole method does, is to load existing files into a filearea
-        //so it is not called when creating a new question, only when editing an existing one
+        // Set qresource details, and configure a draft area to accept any uploaded pictures
+        // all this and this whole method does, is to load existing files into a filearea
+        // so it is not called when creating a new question, only when editing an existing one
 
-        //best to use file_get_submitted_draft_itemid - because copying questions gets weird otherwise
-        //$draftitemid =$question->options->qresource;
+        // best to use file_get_submitted_draft_itemid - because copying questions gets weird otherwise
+        // $draftitemid =$question->options->qresource;
         $draftitemid = file_get_submitted_draft_itemid(\qtype_cloudpoodll\constants::FILEAREA_QRESOURCE);
 
         file_prepare_draft_area($draftitemid, $this->context->id, constants::M_COMP,
                 \qtype_cloudpoodll\constants::FILEAREA_QRESOURCE,
                 !empty($question->id) ? (int) $question->id : null,
-                array('subdirs' => 0, 'maxbytes' => 0, 'maxfiles' => 1));
+                ['subdirs' => 0, 'maxbytes' => 0, 'maxfiles' => 1]);
         $question->qresource = $draftitemid;
 
         $draftid = file_get_submitted_draft_itemid(\qtype_cloudpoodll\constants::FILEAREA_GRADERINFO);
-        $question->graderinfo = array();
+        $question->graderinfo = [];
         $question->graderinfo['text'] = file_prepare_draft_area(
                 $draftid,           // draftid
                 $this->context->id, // context

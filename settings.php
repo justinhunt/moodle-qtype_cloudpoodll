@@ -35,50 +35,50 @@ if ($ADMIN->fulltree) {
     $details = get_string('apiuser_details', $plugin);
     $settings->add(new admin_setting_configtext("$plugin/$name", $label, $details, '', PARAM_TEXT));
 
-    $cloudpoodll_apiuser=get_config(constants::M_COMP,'apiuser');
-    $cloudpoodll_apisecret=get_config(constants::M_COMP,'apisecret');
-    $show_below_apisecret='';
-//if we have an API user and secret we fetch token
-    if(!empty($cloudpoodll_apiuser) && !empty($cloudpoodll_apisecret)) {
-        $tokeninfo = utils::fetch_token_for_display($cloudpoodll_apiuser, $cloudpoodll_apisecret);
-        $show_below_apisecret=$tokeninfo;
-//if we have no API user and secret we show a "fetch from elsewhere on site" or "take a free trial" link
+    $cloudpoodllapiuser = get_config(constants::M_COMP, 'apiuser');
+    $cloudpoodllapisecret = get_config(constants::M_COMP, 'apisecret');
+    $showbelowapisecret = '';
+    // if we have an API user and secret we fetch token
+    if(!empty($cloudpoodllapiuser) && !empty($cloudpoodllapisecret)) {
+        $tokeninfo = utils::fetch_token_for_display($cloudpoodllapiuser, $cloudpoodllapisecret);
+        $showbelowapisecret = $tokeninfo;
+        // if we have no API user and secret we show a "fetch from elsewhere on site" or "take a free trial" link
     }else{
-        $amddata=['apppath'=>$CFG->wwwroot . '/' .constants::M_URL];
-        $cp_components=['filter_poodll','mod_readaloud','mod_wordcards','mod_solo','mod_minilesson','mod_englishcentral','mod_pchat',
-            'atto_cloudpoodll','tinymce_cloudpoodll', 'assignfeedback_cloudpoodll', 'assignsubmission_cloudpoodll'];
-        foreach($cp_components as $cp_component){
-            switch($cp_component){
+        $amddata = ['apppath' => $CFG->wwwroot . '/' .constants::M_URL];
+        $cpcomponents = ['filter_poodll', 'mod_readaloud', 'mod_wordcards', 'mod_solo', 'mod_minilesson', 'mod_englishcentral', 'mod_pchat',
+            'atto_cloudpoodll', 'tinymce_cloudpoodll', 'assignfeedback_cloudpoodll', 'assignsubmission_cloudpoodll'];
+        foreach($cpcomponents as $cpcomponent){
+            switch($cpcomponent){
                 case 'filter_poodll':
-                    $apiusersetting='cpapiuser';
-                    $apisecretsetting='cpapisecret';
+                    $apiusersetting = 'cpapiuser';
+                    $apisecretsetting = 'cpapisecret';
                     break;
                 case 'mod_englishcentral':
-                    $apiusersetting='poodllapiuser';
-                    $apisecretsetting='poodllapisecret';
+                    $apiusersetting = 'poodllapiuser';
+                    $apisecretsetting = 'poodllapisecret';
                     break;
                 default:
-                    $apiusersetting='apiuser';
-                    $apisecretsetting='apisecret';
+                    $apiusersetting = 'apiuser';
+                    $apisecretsetting = 'apisecret';
             }
-            $cloudpoodll_apiuser=get_config($cp_component,$apiusersetting);
-            if(!empty($cloudpoodll_apiuser)){
-                $cloudpoodll_apisecret=get_config($cp_component,$apisecretsetting);
-                if(!empty($cloudpoodll_apisecret)){
-                    $amddata['apiuser']=$cloudpoodll_apiuser;
-                    $amddata['apisecret']=$cloudpoodll_apisecret;
+            $cloudpoodllapiuser = get_config($cpcomponent, $apiusersetting);
+            if(!empty($cloudpoodllapiuser)){
+                $cloudpoodllapisecret = get_config($cpcomponent, $apisecretsetting);
+                if(!empty($cloudpoodllapisecret)){
+                    $amddata['apiuser'] = $cloudpoodllapiuser;
+                    $amddata['apisecret'] = $cloudpoodllapisecret;
                     break;
                 }
             }
         }
-        $show_below_apisecret=$OUTPUT->render_from_template( constants::M_COMP . '/managecreds',$amddata);
+        $showbelowapisecret = $OUTPUT->render_from_template( constants::M_COMP . '/managecreds', $amddata);
     }
 
     $name = 'apisecret';
     $label = get_string($name, $plugin);
-    $settings->add(new admin_setting_configtext("$plugin/$name", $label, $show_below_apisecret, '', PARAM_TEXT));
+    $settings->add(new admin_setting_configtext("$plugin/$name", $label, $showbelowapisecret, '', PARAM_TEXT));
 
-    //apicredshelper
+    // apicredshelper
     /*
     $name = 'apicredshelper';
     $label = get_string($name, $plugin);
@@ -146,7 +146,7 @@ if ($ADMIN->fulltree) {
     $name = 'transcode';
     $label = get_string($name, $plugin);
     $details = get_string($name . '_details', $plugin);
-    $options = array(0 => get_string('no'), 1 => get_string('yes'));
+    $options = [0 => get_string('no'), 1 => get_string('yes')];
     $settings->add(new admin_setting_configselect("$plugin/$name", $label, $details, 1, $options));
 
     // Default html5 fallback
@@ -161,7 +161,7 @@ if ($ADMIN->fulltree) {
     $name = 'safesave';
     $label = get_string($name, $plugin);
     $details = get_string($name . '_details', $plugin);
-    $options = array(0 => get_string('no'), 1 => get_string('yes'));
+    $options = [0 => get_string('no'), 1 => get_string('yes')];
     $settings->add(new admin_setting_configselect("$plugin/$name", $label, $details, 1, $options));
 
 }

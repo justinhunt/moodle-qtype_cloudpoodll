@@ -40,13 +40,13 @@ class qtype_cloudpoodll extends question_type {
     }
 
     public function response_file_areas() {
-        return array('answer');
+        return ['answer'];
     }
 
     public function get_question_options($question) {
         global $DB;
         $question->options = $DB->get_record(constants::M_TABLE,
-                array('questionid' => $question->id), '*', MUST_EXIST);
+                ['questionid' => $question->id], '*', MUST_EXIST);
         parent::get_question_options($question);
     }
 
@@ -54,34 +54,34 @@ class qtype_cloudpoodll extends question_type {
         global $DB;
         $context = $formdata->context;
 
-        $options = $DB->get_record(constants::M_TABLE, array('questionid' => $formdata->id));
+        $options = $DB->get_record(constants::M_TABLE, ['questionid' => $formdata->id]);
         if (!$options) {
             $options = new stdClass();
             $options->questionid = $formdata->id;
             $options->id = $DB->insert_record(constants::M_TABLE, $options);
         }
 
-        //"import_or_save_files" won't work, because it expects output from an editor which is an array with member itemid
-        //the filemanager doesn't produce this, so need to use file save draft area directly
+        // "import_or_save_files" won't work, because it expects output from an editor which is an array with member itemid
+        // the filemanager doesn't produce this, so need to use file save draft area directly
         if (isset($formdata->qresource)) {
             file_save_draft_area_files($formdata->qresource, $context->id, constants::M_COMP,
                     \qtype_cloudpoodll\constants::FILEAREA_QRESOURCE, $formdata->id,
-                    array('subdirs' => 0, 'maxbytes' => 0, 'maxfiles' => 1));
+                    ['subdirs' => 0, 'maxbytes' => 0, 'maxfiles' => 1]);
 
-            //save the itemid of the qresource filearea
+            // save the itemid of the qresource filearea
             $options->qresource = $formdata->qresource;
         } else {
             $options->qresource = null;
         }
 
-        //if we have a recording time limit
+        // if we have a recording time limit
         if (isset($formdata->timelimit)) {
             $options->timelimit = $formdata->timelimit;
         } else {
             $options->timelimit = 0;
         }
 
-        //other options
+        // other options
         $options->language = $formdata->language;
         $options->expiredays = $formdata->expiredays;
         $options->transcriber = $formdata->transcriber;
@@ -112,10 +112,10 @@ class qtype_cloudpoodll extends question_type {
      * internal name => human-readable name.
      */
     public function response_formats() {
-        return array(
+        return [
                 'audio' => get_string('formataudio', constants::M_COMP),
-                'video' => get_string('formatvideo', constants::M_COMP)
-        );
+                'video' => get_string('formatvideo', constants::M_COMP),
+        ];
     }
 
     public function move_files($questionid, $oldcontextid, $newcontextid) {
@@ -147,7 +147,7 @@ class qtype_cloudpoodll extends question_type {
      * @return mixed array as above, or null to tell the base class to do nothing.
      */
     public function extra_question_fields() {
-        $tableinfo = array(constants::M_TABLE);
+        $tableinfo = [constants::M_TABLE];
         foreach (constants::extra_fields as $field) {
             $tableinfo[] = $field;
         }
@@ -162,7 +162,7 @@ class qtype_cloudpoodll extends question_type {
      */
     public function export_to_xml($question, qformat_xml $format, $extra = null) {
 
-        //get file storage
+        // get file storage
         $fs = get_file_storage();
         $expout = "";
 
@@ -196,48 +196,48 @@ class qtype_cloudpoodll extends question_type {
     }
 
     /*
- * Imports question from the Moodle XML format
- *
- * Imports question using information from extra_question_fields function
- * If some of you fields contains id's you'll need to reimplement this
- */
+    * Imports question from the Moodle XML format
+    *
+    * Imports question using information from extra_question_fields function
+    * If some of you fields contains id's you'll need to reimplement this
+    */
     public function import_from_xml($data, $question, qformat_xml $format, $extra = null) {
         global $CFG;
 
-        $question_type = "cloudpoodll";
+        $questiontype = "cloudpoodll";
 
-        //omit table name
+        // omit table name
         $qo = $format->import_headers($data);
-        $qo->qtype = $question_type;
+        $qo->qtype = $questiontype;
         $q = $data;
 
         $qo->responseformat = $format->getpath($q,
-                array('#', 'responseformat', 0, '#'), \qtype_cloudpoodll\constants::RESPONSEFORMAT_AUDIO);
-        $qo->graderinfo = $format->import_text_with_files($q, array('#', \qtype_cloudpoodll\constants::FILEAREA_GRADERINFO, 0), '',
+                ['#', 'responseformat', 0, '#'], \qtype_cloudpoodll\constants::RESPONSEFORMAT_AUDIO);
+        $qo->graderinfo = $format->import_text_with_files($q, ['#', \qtype_cloudpoodll\constants::FILEAREA_GRADERINFO, 0], '',
                 $qo->questiontextformat);
         $qo->qresource = $format->import_files_as_draft($format->getpath($q,
-                array('#', \qtype_cloudpoodll\constants::FILEAREA_QRESOURCE, '0', '#', 'file'), array()));
+                ['#', \qtype_cloudpoodll\constants::FILEAREA_QRESOURCE, '0', '#', 'file'], []));
 
         $qo->language = $format->getpath($q,
-                array('#', 'language', 0, '#'), constants::LANG_ENUS);
+                ['#', 'language', 0, '#'], constants::LANG_ENUS);
         $qo->expiredays = $format->getpath($q,
-                array('#', 'expiredays', 0, '#'), 365);
+                ['#', 'expiredays', 0, '#'], 365);
         $qo->transcriber = $format->getpath($q,
-                array('#', 'transcriber', 0, '#'), constants::TRANSCRIBER_AMAZONTRANSCRIBE);
+                ['#', 'transcriber', 0, '#'], constants::TRANSCRIBER_AMAZONTRANSCRIBE);
         $qo->studentplayer = $format->getpath($q,
-            array('#', 'studentplayer', 0, '#'), constants::PLAYERTYPE_INTERACTIVETRANSCRIPT);
+            ['#', 'studentplayer', 0, '#'], constants::PLAYERTYPE_INTERACTIVETRANSCRIPT);
         $qo->teacherplayer = $format->getpath($q,
-            array('#', 'teacherplayer', 0, '#'), constants::PLAYERTYPE_INTERACTIVETRANSCRIPT);
+            ['#', 'teacherplayer', 0, '#'], constants::PLAYERTYPE_INTERACTIVETRANSCRIPT);
         $qo->transcode = $format->getpath($q,
-                array('#', 'transcode', 0, '#'), 1);
+                ['#', 'transcode', 0, '#'], 1);
         $qo->audioskin = $format->getpath($q,
-                array('#', 'audioskin', 0, '#'), constants::SKIN_123);
+                ['#', 'audioskin', 0, '#'], constants::SKIN_123);
         $qo->videoskin = $format->getpath($q,
-                array('#', 'videoskin', 0, '#'), constants::SKIN_123);
+                ['#', 'videoskin', 0, '#'], constants::SKIN_123);
         $qo->timelimit = $format->getpath($q,
-                array('#', 'timelimit', 0, '#'), 0);
+                ['#', 'timelimit', 0, '#'], 0);
         $qo->safesave = $format->getpath($q,
-                array('#', 'safesave', 0, '#'), 0);
+                ['#', 'safesave', 0, '#'], 0);
 
         return $qo;
 

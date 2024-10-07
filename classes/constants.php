@@ -1,4 +1,18 @@
 <?php
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace qtype_cloudpoodll;
 
@@ -38,14 +52,14 @@ class constants {
     const PROCESSING = 'processing';
     const BLANK = 'empty';
 
-    const PLAYERTYPE_DEFAULT=0;
-    const PLAYERTYPE_INTERACTIVETRANSCRIPT=1;
-    const PLAYERTYPE_STANDARDTRANSCRIPT=2;
+    const PLAYERTYPE_DEFAULT = 0;
+    const PLAYERTYPE_INTERACTIVETRANSCRIPT = 1;
+    const PLAYERTYPE_STANDARDTRANSCRIPT = 2;
 
     const CLASS_REC_CONTAINER = 'qtype_cloudpoodll_rec_cont';
     const CLASS_REC_OUTER = 'qtype_cloudpoodll_rec_outer';
-    const CLASS_AUDIOREC_IFRAME ='qtype_cloudpoodll_audiorec_iframe';
-    const CLASS_VIDEOREC_IFRAME ='qtype_cloudpoodll_videorec_iframe';
+    const CLASS_AUDIOREC_IFRAME = 'qtype_cloudpoodll_audiorec_iframe';
+    const CLASS_VIDEOREC_IFRAME = 'qtype_cloudpoodll_videorec_iframe';
     const ID_REC = 'qtype_cloudpoodll_therecorder';
     const ID_UPDATE_CONTROL = 'qtype_cloudpoodll_updatecontrol';
     const NAME_UPDATE_CONTROL = 'filename';
@@ -80,35 +94,35 @@ class constants {
 
     const LANG_KOKR = 'ko-KR';
     const LANG_HIIN = 'hi-IN';
-    const LANG_ARAE ='ar-AE';
-    const LANG_ARSA ='ar-SA';
-    const LANG_ZHCN ='zh-CN';
-    const LANG_NLNL ='nl-NL';
-    const LANG_ENIE ='en-IE';
-    const LANG_ENWL ='en-WL';
-    const LANG_ENAB ='en-AB';
-    const LANG_FAIR ='fa-IR';
-    const LANG_DECH ='de-CH';
-    const LANG_HEIL ='he-IL';
-    const LANG_IDID ='id-ID';
-    const LANG_JAJP ='ja-JP';
-    const LANG_MSMY ='ms-MY';
-    const LANG_PTPT ='pt-PT';
-    const LANG_RURU ='ru-RU';
-    const LANG_TAIN ='ta-IN';
-    const LANG_TEIN ='te-IN';
-    const LANG_TRTR ='tr-TR';
-    const LANG_NONO ='no-NO';
-    const LANG_NBNO ='nb-NO';
-    const LANG_NNNO ='nn-NO';
-    const LANG_PLPL ='pl-PL';
-    const LANG_RORO ='ro-RO';
-    const LANG_SVSE ='sv-SE';
-    const LANG_UKUA ='uk-UA';
-    const LANG_EUES ='eu-ES';
-    const LANG_FIFI ='fi-FI';
-    const LANG_HUHU ='hu-HU';
-    const LANG_MINZ ='mi-NZ';
+    const LANG_ARAE = 'ar-AE';
+    const LANG_ARSA = 'ar-SA';
+    const LANG_ZHCN = 'zh-CN';
+    const LANG_NLNL = 'nl-NL';
+    const LANG_ENIE = 'en-IE';
+    const LANG_ENWL = 'en-WL';
+    const LANG_ENAB = 'en-AB';
+    const LANG_FAIR = 'fa-IR';
+    const LANG_DECH = 'de-CH';
+    const LANG_HEIL = 'he-IL';
+    const LANG_IDID = 'id-ID';
+    const LANG_JAJP = 'ja-JP';
+    const LANG_MSMY = 'ms-MY';
+    const LANG_PTPT = 'pt-PT';
+    const LANG_RURU = 'ru-RU';
+    const LANG_TAIN = 'ta-IN';
+    const LANG_TEIN = 'te-IN';
+    const LANG_TRTR = 'tr-TR';
+    const LANG_NONO = 'no-NO';
+    const LANG_NBNO = 'nb-NO';
+    const LANG_NNNO = 'nn-NO';
+    const LANG_PLPL = 'pl-PL';
+    const LANG_RORO = 'ro-RO';
+    const LANG_SVSE = 'sv-SE';
+    const LANG_UKUA = 'uk-UA';
+    const LANG_EUES = 'eu-ES';
+    const LANG_FIFI = 'fi-FI';
+    const LANG_HUHU = 'hu-HU';
+    const LANG_MINZ = 'mi-NZ';
     const LANG_BGBG = 'bg-BG';
     const LANG_CSCZ = 'cs-CZ';
     const LANG_ELGR = 'el-GR';
@@ -134,5 +148,5 @@ class constants {
     const REFRESH_URL = '/question/type/cloudpoodll/cloudpoodll/refreshtoken.php';
 
     const extra_fields = ['responseformat', 'graderinfo', 'graderinfoformat', 'qresource', 'language', 'expiredays',
-            'transcriber', 'studentplayer', 'teacherplayer', 'transcode', 'audioskin', 'videoskin', 'timelimit','safesave'];
+            'transcriber', 'studentplayer', 'teacherplayer', 'transcode', 'audioskin', 'videoskin', 'timelimit', 'safesave'];
 }

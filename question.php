@@ -37,6 +37,17 @@ class qtype_cloudpoodll_question extends question_with_responses {
     public $responseformat;
     public $graderinfo;
     public $graderinfoformat;
+    public $qresource;
+    public $language;
+    public $expiredays;
+    public $transcriber;
+    public $studentplayer;
+    public $teacherplayer;
+    public $transcode;
+    public $audioskin;
+    public $videoskin;
+    public $timelimit;
+    public $safesave;
 
     public function make_behaviour(question_attempt $qa, $preferredbehaviour) {
         question_engine::load_behaviour_class('manualgraded');
@@ -56,7 +67,7 @@ class qtype_cloudpoodll_question extends question_with_responses {
      *   to look for uploaded file URLs in the answer field
      */
     public function get_expected_data() {
-        $expecteddata = array('answer' => PARAM_URL);
+        $expecteddata = ['answer' => PARAM_URL];
         $expecteddata['answermediaurl'] = PARAM_URL;
         $expecteddata['answertranscript'] = PARAM_TEXT;
         $expecteddata['answerdetails'] = PARAM_RAW;
@@ -64,14 +75,14 @@ class qtype_cloudpoodll_question extends question_with_responses {
     }
 
     public function summarise_response(array $response) {
-        if (isset($response['answer']) && !empty($response['answer']) && $response['answer']!==constants::BLANK) {
+        if (isset($response['answer']) && !empty($response['answer']) && $response['answer'] !== constants::BLANK) {
             return pathinfo($response['answermediaurl'], PATHINFO_BASENAME);
         }else if (isset($response['answertranscript']) &&
-                !empty($response['answertranscript'] && $response['answertranscript']!==constants::BLANK) &&
+                !empty($response['answertranscript'] && $response['answertranscript'] !== constants::BLANK) &&
                 strpos($response['answertranscript'], 'http') !== 0
         ) {
             return $response['answertranscript'];
-        } else if ((isset($response['answermediaurl']) && !empty($response['answermediaurl']) && $response['answermediaurl']!==constants::BLANK)) {
+        } else if ((isset($response['answermediaurl']) && !empty($response['answermediaurl']) && $response['answermediaurl'] !== constants::BLANK)) {
             return $response['answermediaurl'];
         } else {
             return null;
@@ -92,12 +103,12 @@ class qtype_cloudpoodll_question extends question_with_responses {
     }
 
     public function check_file_access($qa, $options, $component, $filearea, $args, $forcedownload) {
-        //print_object($qa);
+        // print_object($qa);
         if ($component == 'question' && $filearea == 'response_answer') {
-            //since we will put files in respnse_answer, this is likely to be always true.
+            // since we will put files in respnse_answer, this is likely to be always true.
             return true;
 
-            //if we are using a qresource, there is no need to restrict here
+            // if we are using a qresource, there is no need to restrict here
         } else if ($component == constants::M_COMP && $filearea == \qtype_cloudpoodll\constants::FILEAREA_QRESOURCE) {
             return true;
 
