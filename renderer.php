@@ -530,6 +530,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $toptions->parent = $CFG->wwwroot;
         $toptions->owner = hash('md5', $USER->username);
         $toptions->localloader = constants::LOADER_URL;
+        $toptions->cloudpoodllurl = utils::get_cloud_poodll_server();
         $toptions->recordertype = $recordertype;
         $toptions->appid = constants::APPID;
         $toptions->recorderskin = $recorderskin;

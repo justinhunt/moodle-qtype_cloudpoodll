@@ -28,6 +28,15 @@ defined('MOODLE_INTERNAL') || die();
 
 class utils {
 
+    public static function get_cloud_poodll_server() {
+        $conf = get_config(constants::M_COMP);
+        if (isset($conf->cloudpoodllserver) && !empty($conf->cloudpoodllserver)) {
+            return 'https://' . $conf->cloudpoodllserver;
+        } else {
+            return 'https://' . constants::M_DEFAULT_CLOUDPOODLL;
+        }
+    }
+
     public static function fetch_options_recorders() {
         $recoptions = [constants::REC_AUDIO => get_string("recorderaudio", constants::M_COMP),
                 constants::REC_VIDEO => get_string("recordervideo", constants::M_COMP)];
@@ -109,6 +118,8 @@ class utils {
                 constants::REGION_MUMBAI => get_string("mumbai", constants::M_COMP),
                 constants::REGION_CAPETOWN => get_string("capetown", constants::M_COMP),
                 constants::REGION_BAHRAIN => get_string("bahrain", constants::M_COMP),
+                constants::REGION_NINGXIA => get_string("ningxia",constants::M_COMP),
+
         ];
     }
 
@@ -290,7 +301,7 @@ class utils {
         }
 
         // Send the request & save response to $resp
-        $tokenurl = "https://cloud.poodll.com/local/cpapi/poodlltoken.php";
+        $tokenurl =self::get_cloud_poodll_server() . "/local/cpapi/poodlltoken.php";
         $postdata = [
                 'username' => $apiuser,
                 'password' => $apisecret,

@@ -78,13 +78,12 @@ if ($ADMIN->fulltree) {
     $label = get_string($name, $plugin);
     $settings->add(new admin_setting_configtext("$plugin/$name", $label, $showbelowapisecret, '', PARAM_TEXT));
 
-    // apicredshelper
-    /*
-    $name = 'apicredshelper';
-    $label = get_string($name, $plugin);
-    $details = get_string('apicredshelper_details', $plugin);
-    $settings->add(new qtype_cloudpoodll\setting\apicredshelper("$plugin/$name", $label, $details,''));
-    */
+    // Cloud Poodll Server.
+    $settings->add(new admin_setting_configtext(constants::M_COMP .  '/cloudpoodllserver',
+        get_string('cloudpoodllserver', constants::M_COMP),
+        get_string('cloudpoodllserver_details', constants::M_COMP),
+        constants::M_DEFAULT_CLOUDPOODLL, PARAM_URL));
+
 
 
     $name = 'awsregion';

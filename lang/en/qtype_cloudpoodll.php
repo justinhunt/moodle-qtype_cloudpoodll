@@ -86,6 +86,7 @@ $string['mumbai'] = 'Mumbai, India';
 $string['singapore'] = 'Singapore';
 $string['capetown'] = 'Capetown, South Africa';
 $string['bahrain'] = 'Bahrain';
+$string['ningxia'] = 'Ningxia, China';
 $string['forever'] = 'Never expire';
 
 $string['en-us'] = 'English (US)';
@@ -232,3 +233,5 @@ $string['questionnotanswered']='You have NOT answered this question.';
 $string['questionanswered']='You have answered this question.';
 $string['rec_details_log']= "Attempt recording log";
 $string['rec_details_log_toggle']= "Attempt recording log (show/hide)";
+$string['cloudpoodllserver'] = 'Cloud Poodll Server';
+$string['cloudpoodllserver_details'] = 'The server to use for Cloud Poodll. Only change this if Poodll has provided a different one.';

@@ -28,6 +28,7 @@ class constants {
     const FILEAREA_QRESOURCE = 'qresource';
     const FILEAREA_GRADERINFO = 'graderinfo';
     const M_COMP = 'qtype_cloudpoodll';
+    const M_DEFAULT_CLOUDPOODLL = "cloud.poodll.com";
     const M_URL = 'question/type/cloudpoodll';
     const M_TABLE = 'qtype_cloudpoodll_opts';
     const M_PLUGINSETTINGS = '/admin/settings.php?section=qtypesettingcloudpoodll';
@@ -77,6 +78,7 @@ class constants {
     const REGION_MUMBAI = 'mumbai';
     const REGION_CAPETOWN = 'capetown';
     const REGION_BAHRAIN = 'bahrain';
+    const REGION_NINGXIA = 'ningxia';
 
     const LANG_ENUS = 'en-US';
     const LANG_ENGB = 'en-GB';
@@ -144,7 +146,7 @@ class constants {
     const TRANSCRIBER_GOOGLECHROME = 3;
 
 
-    const LOADER_URL = '/question/type/cloudpoodll/cloudpoodll/cloudpoodllloader.html';
+    const LOADER_URL = '/question/type/cloudpoodll/cloudpoodll/poodlllocalloader.php';
     const REFRESH_URL = '/question/type/cloudpoodll/cloudpoodll/refreshtoken.php';
 
     const extra_fields = ['responseformat', 'graderinfo', 'graderinfoformat', 'qresource', 'language', 'expiredays',
