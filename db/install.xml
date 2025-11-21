@@ -24,6 +24,7 @@
                 <FIELD NAME="safesave" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="if true disable submit button till uploaded "/>
                 <FIELD NAME="studentplayer" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Student Player"/>
                 <FIELD NAME="teacherplayer" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Teacher Player"/>
+                <FIELD NAME="noaudiofilters" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Disable noise suppression"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="questionid"/>

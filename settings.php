@@ -162,5 +162,12 @@ if ($ADMIN->fulltree) {
     $details = get_string($name . '_details', $plugin);
     $options = [0 => get_string('no'), 1 => get_string('yes')];
     $settings->add(new admin_setting_configselect("$plugin/$name", $label, $details, 1, $options));
+    
+    // No Audio Filters
+    $name = 'noaudiofilters';
+    $label = get_string($name, $plugin);
+    $details = get_string($name . '_details', $plugin);
+    $options = [0 => get_string('no'), 1 => get_string('yes')];
+    $settings->add(new admin_setting_configselect("$plugin/$name", $label, $details, 0, $options));
 
 }

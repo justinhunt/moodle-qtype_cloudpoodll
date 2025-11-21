@@ -215,6 +215,9 @@ $string['apicredshelper_details']="--";
 
 $string['safesave'] = 'SafeSave';
 $string['safesave_details'] = 'Enable Safe Save - disables next-page/finish button until Cloud Poodll upload is complete.';
+$string['noaudiofilters'] = 'No Audio Filters';
+$string['noaudiofilters_desc'] = 'Disable noise suppression and echo cancellation. Useful for music.';
+$string['noaudiofilters_details'] = 'Disable noise suppression and echo cancellation. Useful for music.';
 
 $string['freetrial'] = "Get Cloud Poodll API Credentials and a Free Trial";
 $string['freetrial_desc'] = "A dialog should appear that allows you to register for a free trial with Poodll. After registering you should login to the members dashboard to get your API user and secret. And to register your site URL.";

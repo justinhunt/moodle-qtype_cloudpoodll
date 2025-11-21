@@ -91,6 +91,7 @@ class qtype_cloudpoodll extends question_type {
         $options->safesave = $formdata->safesave;
         $options->studentplayer = $formdata->studentplayer;
         $options->teacherplayer = $formdata->teacherplayer;
+        $options->noaudiofilters = $formdata->noaudiofilters;
 
         $options->responseformat = $formdata->responseformat;
         $options->graderinfo = $this->import_or_save_files($formdata->graderinfo,
@@ -238,6 +239,8 @@ class qtype_cloudpoodll extends question_type {
                 ['#', 'timelimit', 0, '#'], 0);
         $qo->safesave = $format->getpath($q,
                 ['#', 'safesave', 0, '#'], 0);
+        $qo->noaudiofilters = $format->getpath($q,
+                ['#', 'noaudiofilters', 0, '#'], 0);
 
         return $qo;
 

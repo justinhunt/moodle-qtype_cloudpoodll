@@ -1,5 +1,8 @@
 Change List
 =========
+Version 1.0.25 (Build 2025112100)
+- Support for shadowing/no-noise-filters
+
 Version 1.0.24 (Build 2025042100)
 - Support Moodle 5 and PHP 8.4
 - Support for custom Cloud Poodll server

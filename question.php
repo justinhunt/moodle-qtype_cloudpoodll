@@ -48,6 +48,7 @@ class qtype_cloudpoodll_question extends question_with_responses {
     public $videoskin;
     public $timelimit;
     public $safesave;
+    public $noaudiofilters;
 
     public function make_behaviour(question_attempt $qa, $preferredbehaviour) {
         question_engine::load_behaviour_class('manualgraded');

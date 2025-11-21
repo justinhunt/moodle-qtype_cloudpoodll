@@ -118,6 +118,15 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
         $mform->addElement('advcheckbox', $name, $label, $text);
         $mform->setDefault($name, $config->$name);
 
+        // noaudiofilters
+        $name = 'noaudiofilters';
+        $label = get_string($name, constants::M_COMP);
+        $text = get_string('noaudiofilters_desc', constants::M_COMP);
+        $mform->addElement('advcheckbox', $name, $label, $text);
+
+        $default = isset($config->$name) ? $config->$name : 0;
+        $mform->setDefault($name, $default);
+
         // question resource
         $mform->addElement('filemanager', 'qresource', get_string('qresource', constants::M_COMP), null,
                 ['subdirs' => 0, 'maxbytes' => 0, 'maxfiles' => 1]);

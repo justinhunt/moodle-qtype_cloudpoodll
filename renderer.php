@@ -454,6 +454,9 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $subtitle = "0";
         $hints->encoder = 'auto';
 
+        //shadowing
+        $hints->shadowing = $question->noaudiofilters ? 1 : 0;
+
         // branch based on which transcriber we are using
         switch($question->transcriber) {
             // amazon transcribe
@@ -548,6 +551,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $toptions->fallback = $roptions->fallback;
         $toptions->string_hints = $stringhints;
         $toptions->token = $token;
+     
 
         if($recordertype == constants::REC_AUDIO) {
             $toptions->iframeclass = constants::CLASS_AUDIOREC_IFRAME;
