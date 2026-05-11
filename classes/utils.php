@@ -217,8 +217,20 @@ class utils {
     public static function curl_fetch($url, $postdata = false) {
         global $CFG;
 
+        if (empty($url) || $url === '.txt' || $url === '.vtt') {
+            return false;
+        }
+
+        if (class_exists('\core\files\curl_security_helper')) {
+            $helper = new \core\files\curl_security_helper();
+            if ($helper->url_is_blocked($url)) {
+                return false;
+            }
+        }
+
         require_once($CFG->libdir . '/filelib.php');
         $curl = new \curl();
+        $curl->setopt(array('CURLOPT_CONNECTTIMEOUT' => 2, 'CURLOPT_TIMEOUT' => 5));
 
         $result = $curl->get($url, $postdata);
         return $result;
@@ -396,9 +408,12 @@ class utils {
 
     // transcripts become ready in their own time, fetch them here
     public static function fetch_transcript($mediaurl) {
+        if (empty($mediaurl) || $mediaurl === constants::BLANK) {
+            return false;
+        }
         $url = $mediaurl . '.txt';
         $transcript = self::curl_fetch($url);
-        if (strpos($transcript, "<Error><Code>AccessDenied</Code>") > 0) {
+        if ($transcript && is_string($transcript) && strpos($transcript, "<Error><Code>AccessDenied</Code>") !== false) {
             return false;
         }
         return $transcript;
@@ -406,9 +421,12 @@ class utils {
 
     // vtt data becomes ready in its own time, fetch them here
     public static function fetch_vtt($mediaurl) {
+        if (empty($mediaurl) || $mediaurl === constants::BLANK) {
+            return false;
+        }
         $url = $mediaurl . '.vtt';
         $vtt = self::curl_fetch($url);
-        if (strpos($vtt, "<Error><Code>AccessDenied</Code>") > 0) {
+        if ($vtt && is_string($vtt) && strpos($vtt, "<Error><Code>AccessDenied</Code>") !== false) {
             return false;
         }
         return $vtt;

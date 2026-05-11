@@ -165,18 +165,21 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $havesubtitles = false;
 
         // if Amazon transcribe OR Google Cloud Speech then we have subtitles
-        switch($question->transcriber){
-            case constants::TRANSCRIBER_AMAZONTRANSCRIBE:
-                $transcript = utils::fetch_transcript($mediaurl);
-                if ($transcript) {
-                    $havesubtitles = true;
-                }
-                break;
-            case constants::TRANSCRIBER_GOOGLECLOUDSPEECH:
-                $transcript = utils::fetch_transcript($mediaurl);
-                if ($transcript) {
-                    $havesubtitles = true;
-                }
+        if (!empty($mediaurl) && $mediaurl !== constants::BLANK) {
+            switch ($question->transcriber) {
+                case constants::TRANSCRIBER_AMAZONTRANSCRIBE:
+                    $transcript = utils::fetch_transcript($mediaurl);
+                    if ($transcript) {
+                        $havesubtitles = true;
+                    }
+                    break;
+                case constants::TRANSCRIBER_GOOGLECLOUDSPEECH:
+                    $transcript = utils::fetch_transcript($mediaurl);
+                    if ($transcript) {
+                        $havesubtitles = true;
+                    }
+                    break;
+            }
         }
 
         // transcript could be a url, or a block of text or empty
@@ -210,8 +213,13 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $rethtml = '';
 
         // fetch the player
-        $playerdiv = $this->fetch_player($mediaurl, $question->language, $havesubtitles);
-        $rethtml .= $playerdiv;
+        if (!empty($mediaurl) && $mediaurl !== constants::BLANK) {
+            $playerdiv = $this->fetch_player($mediaurl, $question->language, $havesubtitles);
+            $rethtml .= $playerdiv;
+        } else {
+            $rethtml .= html_writer::div(get_string('norecordreceived', constants::M_COMP),
+                    'qtype_cloudpoodll_norecordreceived');
+        }
 
         // if we have subtitles, then add them to the player
         if ($havesubtitles) {

@@ -94,8 +94,53 @@ class qtype_cloudpoodll_question extends question_with_responses {
         return null;
     }
 
+    /**
+     * Is the response complete?
+     *
+     * @param array $response the response to check.
+     * @return bool true if the response is complete.
+     */
     public function is_complete_response(array $response) {
-        return !empty($response['answer']);
+        return $this->is_answered($response);
+    }
+
+    /**
+     * Is the response gradable?
+     *
+     * @param array $response the response to check.
+     * @return bool true if the response is gradable.
+     */
+    public function is_gradable_response(array $response) {
+        return $this->is_answered($response);
+    }
+
+    /**
+     * Check if the question has been answered.
+     * We check the answer field, but also the mediaurl and the details field.
+     * The details field is checked for successful upload events to ensure we match the status message
+     * shown above the recorder in the question display.
+     * We don't check for transcript because it may not be configured or arrive in time.
+     */
+    protected function is_answered(array $response) {
+        if (!empty($response['answer']) && $response['answer'] !== constants::BLANK) {
+            return true;
+        }
+        if (!empty($response['answermediaurl']) && $response['answermediaurl'] !== constants::BLANK) {
+            return true;
+        }
+        if (!empty($response['answerdetails'])) {
+            $reclog = json_decode($response['answerdetails']);
+            if (json_last_error() === JSON_ERROR_NONE && isset($reclog->recevents)) {
+                foreach ($reclog->recevents as $recevent) {
+                    if ($recevent->type === 'awaitingconversion' ||
+                        $recevent->type === 'awaitingprocessing' ||
+                        $recevent->type === 'filesubmitted') {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public function is_same_response(array $prevresponse, array $newresponse) {

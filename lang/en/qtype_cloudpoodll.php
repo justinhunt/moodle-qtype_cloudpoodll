@@ -238,3 +238,4 @@ $string['rec_details_log']= "Attempt recording log";
 $string['rec_details_log_toggle']= "Attempt recording log (show/hide)";
 $string['cloudpoodllserver'] = 'Cloud Poodll Server';
 $string['cloudpoodllserver_details'] = 'The server to use for Cloud Poodll. Only change this if Poodll has provided a different one.';
+$string['norecordreceived'] = 'No recording was received';
