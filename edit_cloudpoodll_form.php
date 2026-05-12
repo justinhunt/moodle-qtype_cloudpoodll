@@ -127,6 +127,15 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
         $default = isset($config->$name) ? $config->$name : 0;
         $mform->setDefault($name, $default);
 
+        // Whiteboard size
+        $mform->addElement('text', 'whiteboardwidth', get_string('whiteboardwidth', constants::M_COMP));
+        $mform->setType('whiteboardwidth', PARAM_INT);
+        $mform->setDefault('whiteboardwidth', 800);
+
+        $mform->addElement('text', 'whiteboardheight', get_string('whiteboardheight', constants::M_COMP));
+        $mform->setType('whiteboardheight', PARAM_INT);
+        $mform->setDefault('whiteboardheight', 600);
+
         // question resource
         $mform->addElement('filemanager', 'qresource', get_string('qresource', constants::M_COMP), null,
                 ['subdirs' => 0, 'maxbytes' => 0, 'maxfiles' => 1]);

@@ -49,6 +49,8 @@ class qtype_cloudpoodll_question extends question_with_responses {
     public $timelimit;
     public $safesave;
     public $noaudiofilters;
+    public $whiteboardwidth;
+    public $whiteboardheight;
 
     public function make_behaviour(question_attempt $qa, $preferredbehaviour) {
         question_engine::load_behaviour_class('manualgraded');
@@ -68,17 +70,27 @@ class qtype_cloudpoodll_question extends question_with_responses {
      *   to look for uploaded file URLs in the answer field
      */
     public function get_expected_data() {
-        $expecteddata = ['answer' => PARAM_URL];
+        if ($this->responseformat === 'whiteboard') {
+            $expecteddata = ['answer' => question_attempt::PARAM_RAW_FILES];
+        } else {
+            $expecteddata = ['answer' => PARAM_RAW];
+        }
         $expecteddata['answermediaurl'] = PARAM_URL;
         $expecteddata['answertranscript'] = PARAM_TEXT;
         $expecteddata['answerdetails'] = PARAM_RAW;
+        $expecteddata['answervector'] = PARAM_RAW;
+        $expecteddata['answer_draftid'] = PARAM_INT;
         return $expecteddata;
     }
 
+
     public function summarise_response(array $response) {
+        if ($this->responseformat === 'whiteboard') {
+            return (string) ($response['answer'] ?? '');
+        }
         if (isset($response['answer']) && !empty($response['answer']) && $response['answer'] !== constants::BLANK) {
-            return pathinfo($response['answermediaurl'], PATHINFO_BASENAME);
-        }else if (isset($response['answertranscript']) &&
+            return pathinfo($response['answermediaurl'] ?? $response['answer'], PATHINFO_BASENAME);
+        } else if (isset($response['answertranscript']) &&
                 !empty($response['answertranscript'] && $response['answertranscript'] !== constants::BLANK) &&
                 strpos($response['answertranscript'], 'http') !== 0
         ) {
@@ -122,7 +134,11 @@ class qtype_cloudpoodll_question extends question_with_responses {
      * We don't check for transcript because it may not be configured or arrive in time.
      */
     protected function is_answered(array $response) {
-        if (!empty($response['answer']) && $response['answer'] !== constants::BLANK) {
+        $answer = (string) ($response['answer'] ?? '');
+        if (!empty($answer) && $answer !== constants::BLANK) {
+            return true;
+        }
+        if (!empty($response['answervector']) && $response['answervector'] !== constants::BLANK) {
             return true;
         }
         if (!empty($response['answermediaurl']) && $response['answermediaurl'] !== constants::BLANK) {
@@ -144,8 +160,25 @@ class qtype_cloudpoodll_question extends question_with_responses {
     }
 
     public function is_same_response(array $prevresponse, array $newresponse) {
-        return question_utils::arrays_same_at_key_missing_is_blank(
+        $anssame = question_utils::arrays_same_at_key_missing_is_blank(
                 $prevresponse, $newresponse, 'answer');
+
+        $vec1 = $prevresponse['answervector'] ?? '';
+        $vec2 = $newresponse['answervector'] ?? '';
+
+        // Handle question_file_loader objects by casting to string.
+        $vec1 = (string) $vec1;
+        $vec2 = (string) $vec2;
+
+        // Treat empty string and empty JSON array as the same.
+        if ($vec1 === '[]') {
+            $vec1 = '';
+        }
+        if ($vec2 === '[]') {
+            $vec2 = '';
+        }
+
+        return $anssame && ($vec1 === $vec2);
     }
 
     public function check_file_access($qa, $options, $component, $filearea, $args, $forcedownload) {

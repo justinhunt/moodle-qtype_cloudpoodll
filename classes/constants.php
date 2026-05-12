@@ -25,6 +25,7 @@ namespace qtype_cloudpoodll;
 class constants {
     const RESPONSEFORMAT_AUDIO = 'audio';
     const RESPONSEFORMAT_VIDEO = 'video';
+    const RESPONSEFORMAT_WHITEBOARD = 'whiteboard';
     const FILEAREA_QRESOURCE = 'qresource';
     const FILEAREA_GRADERINFO = 'graderinfo';
     const M_COMP = 'qtype_cloudpoodll';
@@ -150,5 +151,6 @@ class constants {
     const REFRESH_URL = '/question/type/cloudpoodll/cloudpoodll/refreshtoken.php';
 
     const extra_fields = ['responseformat', 'graderinfo', 'graderinfoformat', 'qresource', 'language', 'expiredays',
-            'transcriber', 'studentplayer', 'teacherplayer', 'transcode', 'audioskin', 'videoskin', 'timelimit', 'safesave', 'noaudiofilters'];
+            'transcriber', 'studentplayer', 'teacherplayer', 'transcode', 'audioskin', 'videoskin', 'timelimit', 'safesave', 'noaudiofilters',
+            'whiteboardwidth', 'whiteboardheight'];
 }

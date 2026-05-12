@@ -43,6 +43,17 @@ class qtype_cloudpoodll extends question_type {
         return ['answer'];
     }
 
+    public function get_expected_data() {
+        return [
+            'answer' => PARAM_RAW,
+            'answermediaurl' => PARAM_URL,
+            'answertranscript' => PARAM_TEXT,
+            'answerdetails' => PARAM_RAW,
+            'answervector' => PARAM_RAW,
+            'answer_draftid' => PARAM_INT
+        ];
+    }
+
     public function get_question_options($question) {
         global $DB;
         $question->options = $DB->get_record(constants::M_TABLE,
@@ -92,6 +103,8 @@ class qtype_cloudpoodll extends question_type {
         $options->studentplayer = $formdata->studentplayer;
         $options->teacherplayer = $formdata->teacherplayer;
         $options->noaudiofilters = $formdata->noaudiofilters;
+        $options->whiteboardwidth = $formdata->whiteboardwidth;
+        $options->whiteboardheight = $formdata->whiteboardheight;
 
         $options->responseformat = $formdata->responseformat;
         $options->graderinfo = $this->import_or_save_files($formdata->graderinfo,
@@ -116,6 +129,7 @@ class qtype_cloudpoodll extends question_type {
         return [
                 'audio' => get_string('formataudio', constants::M_COMP),
                 'video' => get_string('formatvideo', constants::M_COMP),
+                'whiteboard' => get_string('formatwhiteboard', constants::M_COMP),
         ];
     }
 
@@ -241,6 +255,10 @@ class qtype_cloudpoodll extends question_type {
                 ['#', 'safesave', 0, '#'], 0);
         $qo->noaudiofilters = $format->getpath($q,
                 ['#', 'noaudiofilters', 0, '#'], 0);
+        $qo->whiteboardwidth = $format->getpath($q,
+                ['#', 'whiteboardwidth', 0, '#'], 800);
+        $qo->whiteboardheight = $format->getpath($q,
+                ['#', 'whiteboardheight', 0, '#'], 600);
 
         return $qo;
 

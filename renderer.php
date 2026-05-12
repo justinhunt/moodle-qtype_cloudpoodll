@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * cloudpoodll question renderer class.
+ * Cloudpoodll question renderer class.
  *
  * @package    qtype
  * @subpackage cloudpoodll
@@ -59,7 +59,16 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
     }
 
     protected function class_name() {
-        return 'qtype_cloudpoodll_';
+        return 'qtype_cloudpoodll';
+    }
+
+    /**
+     * Get the draft ID suffix for the question type.
+     *
+     * @return string The suffix for the draft id field.
+     */
+    protected function get_draft_id_suffix() {
+        return '_draftid';
     }
 
     protected function replace_url_filext($url, $ext) {
@@ -70,17 +79,18 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
     protected function fetch_fileext_from_mimetype($mimetype) {
             $ext = "";
 
-            // a little sanity check first
-        if(empty($mimetype)){return $ext;
+            // A little sanity check first.
+        if (empty($mimetype)) {
+            return $ext;
         }
 
-            // in the case of a string like this:
-            // "audio/webm;codecs=opus" we do not want the codecs
+            // In the case of a string like this:
+            // "audio/webm;codecs=opus" we do not want the codecs.
         if(strpos($mimetype, ';') !== false){
             $mimetype = explode(';', $mimetype)[0];
         }
 
-            // search on mimetype and add the corresponding file extension
+            // Search on mimetype and add the corresponding file extension.
         switch ($mimetype) {
             case "image/jpeg":
                 $ext = "jpg";
@@ -141,7 +151,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 $ext = "ogg";
                 break;
         }
-            // if we get here we have an unknown mime type, just guess based on the mediatype
+            // If we get here we have an unknown mime type, just guess based on the mediatype.
         if($ext === ""){
             if(strpos($mimetype, 'video') !== false){
                 $ext = "mp4";
@@ -153,18 +163,21 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
 
     }
 
-    public function response_area_read_only($name, $qa, $step, $lines, $context) {
+    public function response_area_read_only($name, $qa, $step, $lines, $context, $mediaurl = null) {
         $question = $qa->get_question();
 
-        // fetch submitted data
-        $mediaurl = $step->get_qt_var($name . 'mediaurl');
+        // Fetch submitted data.
+        if ($mediaurl === null) {
+            $mediaurl = $step->get_qt_var($name . 'mediaurl');
+        }
         $transcript = $step->get_qt_var($name . 'transcript');
         $details = $step->get_qt_var($name . 'details');
 
-        // assume no subtitles
+
+        // Assume no subtitles.
         $havesubtitles = false;
 
-        // if Amazon transcribe OR Google Cloud Speech then we have subtitles
+        // If Amazon transcribe OR Google Cloud Speech then we have subtitles.
         if (!empty($mediaurl) && $mediaurl !== constants::BLANK) {
             switch ($question->transcriber) {
                 case constants::TRANSCRIBER_AMAZONTRANSCRIBE:
@@ -182,10 +195,10 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             }
         }
 
-        // transcript could be a url, or a block of text or empty
-        // here we turn a url into text if we can
+        // Transcript could be a url, or a block of text or empty.
+        // Here we turn a url into text if we can.
         if (empty($transcript)) {
-            if($question->transcriber == constants::TRANSCRIBER_AMAZONTRANSCRIBE ||
+            if ($question->transcriber == constants::TRANSCRIBER_AMAZONTRANSCRIBE ||
                     $question->transcriber == constants::TRANSCRIBER_GOOGLECLOUDSPEECH
             ) {
                 $transcript = get_string('transcriptnotready', CONSTANTS::M_COMP);
@@ -194,53 +207,54 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         }
 
         // It's all very well having subtitles or transcript , but we also check if the teacher or student is intended to see them.
-        // are we a person who can grade, ie a teacher
+        // Are we a person who can grade, ie a teacher?
         $isgrader = false;
-        if(has_capability('mod/quiz:grade', $context)){
+        if (has_capability('mod/quiz:grade', $context)) {
             $isgrader = true;
         }
-        // if not a teacher and student player is default, then no subtitles
-        if(!$isgrader && $question->studentplayer == constants::PLAYERTYPE_DEFAULT){
+
+        // If not a teacher and student player is default, then no subtitles.
+        if (!$isgrader && $question->studentplayer == constants::PLAYERTYPE_DEFAULT) {
             $havesubtitles = false;
             $transcript = '';
-            // if is a teacher and teacher player is default, then no subtitles
-        }else if($isgrader && $question->teacherplayer == constants::PLAYERTYPE_DEFAULT){
+            // If is a teacher and teacher player is default, then no subtitles.
+        } else if ($isgrader && $question->teacherplayer == constants::PLAYERTYPE_DEFAULT) {
             $havesubtitles = false;
             $transcript = '';
         }
 
-        // return html
+        // Return html.
         $rethtml = '';
 
-        // fetch the player
+        // Fetch the player.
         if (!empty($mediaurl) && $mediaurl !== constants::BLANK) {
-            $playerdiv = $this->fetch_player($mediaurl, $question->language, $havesubtitles);
+            $playerdiv = $this->fetch_player($mediaurl, $question->language, $havesubtitles, $question);
             $rethtml .= $playerdiv;
         } else {
             $rethtml .= html_writer::div(get_string('norecordreceived', constants::M_COMP),
                     'qtype_cloudpoodll_norecordreceived');
         }
 
-        // if we have subtitles, then add them to the player
+        // If we have subtitles, then add them to the player.
         if ($havesubtitles) {
-            // do nothing
+            // Do nothing.
         } else if(!empty($transcript) && $transcript != constants::BLANK) {
             $rethtml .= html_writer::div($transcript, 'qtype_cloudpoodll_transcriptdiv', []);
         }else{
             // do nothing
         }
 
-        // get details display
-        // make sure the json and details are properly formed
-        if($isgrader && !empty($details)){
+        // Get details display.
+        // Make sure the json and details are properly formed.
+        if ($isgrader && !empty($details)) {
             $reclog = json_decode($details);
             if (json_last_error() === JSON_ERROR_NONE) {
-                if(isset($reclog->recevents) && count($reclog->recevents) > 0) {
+                if (isset($reclog->recevents) && count($reclog->recevents) > 0) {
                     $lastmimetype = '';
-                    foreach($reclog->recevents as $recevent){
-                        // this is a hack that allows mustache to show the output specific to the event
+                    foreach ($reclog->recevents as $recevent) {
+                        // This is a hack that allows mustache to show the output specific to the event.
                         $recevent->{$recevent->type} = 1;
-                        // we store the mime type from the upload commenced event
+                        // We store the mime type from the upload commenced event.
                         if($recevent->type == 'uploadcommenced'){
                             $lastmimetype = $recevent->mimetype;
                         }
@@ -262,33 +276,37 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             }
         }
 
-        // return html
+        // Return html.
         return $rethtml;
 
         // Do this for testing fetch and process of transcript via ad hoc task.
-        // but we do not do that.
+        // But we do not do that.
         // utils::register_fetch_transcript_task($url,$qa,$step);
     }
 
     public function response_area_input($name, $qa, $step, $lines, $context) {
         $question = $qa->get_question();
-        $fieldname = $qa->get_qt_field_name($name);// $name = "answer"
+        $fieldname = $qa->get_qt_field_name($name);// $name = "answer".
 
-        // setup the recorder DIV
+        // Setup the recorder DIV.
         $options = get_config('qtype_cloudpoodll');
-        $recorder = $this->fetch_recorder($options, $question, $fieldname);
+        $draftid = $step->get_qt_var($name . '_draftid');
+        if (!$draftid) {
+            $draftid = file_get_unused_draft_itemid();
+        }
+        $recorder = $this->fetch_recorder($qa, $step, $options, $question, $fieldname, $draftid);
 
-        // The recorder status field
+        // The recorder status field.
         $details = $step->get_qt_var($name . 'details');
         $templateoptions = [];
-        if($details) {
+        if ($details) {
             $reclog = json_decode($details);
             if (json_last_error() === JSON_ERROR_NONE) {
                 if (isset($reclog->recevents) && count($reclog->recevents) > 0) {
-                    // we get the last event.
+                    // We get the last event.
                     $lastevent = $reclog->recevents[array_key_last($reclog->recevents)];
-                    // but we want the last event, that saved a recording if we have one
-                    for($i = count($reclog->recevents) - 1; $i >= 0; $i--) {
+                    // But we want the last event, that saved a recording if we have one.
+                    for ($i = count($reclog->recevents) - 1; $i >= 0; $i--) {
                         $recevent = $reclog->recevents[$i];
                         if ($recevent->type == 'awaitingconversion' || $recevent->type == 'filesubmitted') {
                             $lastevent = $recevent;
@@ -297,16 +315,16 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                     }
                     $templateoptions['lastevent'] = $lastevent;
                     $templateoptions['insession'] = false;
-                    $templateoptions[$lastevent->type] = 1;// "filesubmitted" "recordingstarted" "recordingstopped" "uploadcommenced" "awaitingconversion"
+                    $templateoptions[$lastevent->type] = 1;// "filesubmitted" "recordingstarted" "recordingstopped" "uploadcommenced" "awaitingconversion".
                 }
             }
         }
         $answerstatus = $this->render_from_template(constants::M_COMP . '/answerstatus', $templateoptions);
 
-        // the elementid of the div in the DOM
+        // The elementid of the div in the DOM.
         $answerstatuscontainer = html_writer::div($answerstatus, 'qtype_cloudpoodll_asc', ['id' => $fieldname . '_asc']);
 
-        // Answer field
+        // Answer field.
         if (!$useanswer = $step->get_qt_var($name)) {
             $useanswer = constants::BLANK;
         }
@@ -314,7 +332,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 'name' => $fieldname,
                 'value' => $useanswer]);
 
-        // Media URL field
+        // Media URL field.
         if (!$usemediaurl = $step->get_qt_var($name . 'mediaurl')) {
             $usemediaurl = '';
         }
@@ -322,7 +340,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 'name' => $fieldname . 'mediaurl',
                 'value' => $usemediaurl]);
 
-        // Transcript field
+        // Transcript field.
         if (!$usetranscript = $step->get_qt_var($name . 'transcript')) {
             $usetranscript = constants::BLANK;
         }
@@ -330,7 +348,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 'name' => $fieldname . 'transcript',
                 'value' => $usetranscript]);
 
-        // Details field
+        // Details field.
         if (!$usedetails = $step->get_qt_var($name . 'details')) {
             $usedetails = '';
         }
@@ -338,13 +356,27 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             'name' => $fieldname . 'details',
             'value' => $usedetails]);
 
-        // return recorder and associated hidden fields
-        return $answerstatuscontainer . $recorder . $transcript . $details . $mediaurl . $answer;
+        // Vector field.
+        if (!$usevector = $step->get_qt_var($name . 'vector')) {
+            $usevector = '';
+        }
+        $vector = html_writer::empty_tag('input', ['type' => 'hidden',
+            'id' => $fieldname . 'vector',
+            'name' => $fieldname . 'vector',
+            'value' => $usevector]);
+
+        // Draft ID field.
+        $draftidfield = html_writer::empty_tag('input', ['type' => 'hidden',
+            'name' => $fieldname . $this->get_draft_id_suffix(),
+            'value' => $draftid]);
+
+        // Return recorder and associated hidden fields.
+        return $answerstatuscontainer . $recorder . $transcript . $details . $mediaurl . $answer . $vector . $draftidfield;
     }
 
 
     /**
-     * @return string the HTML for the recorder log (details)
+     * @return string The HTML for the recorder log (details).
      */
     protected function fetch_details_display($details) {
         $detailsid = html_writer::random_id(CONSTANTS::M_COMP . '_');
@@ -353,9 +385,9 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
     }
 
     /**
-     * @return string the HTML for the media player.
+     * @return string The HTML for the media player.
      */
-    protected function fetch_player($mediaurl, $language, $havesubtitles = false) {
+    protected function fetch_player($mediaurl, $language, $havesubtitles = false, $question = null) {
         global $PAGE;
 
         $playerid = html_writer::random_id(CONSTANTS::M_COMP . '_');
@@ -380,7 +412,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $poptions->maxaudiowidth = 480;
         $poptions->maxvideowidth = 480;
         $poptions->maxvideoheight = 360;
-        // transcript bits
+        // Transcript bits.
         if ($havesubtitles) {
             $poptions->transcripturl = $mediaurl . '.vtt';
             $poptions->component = CONSTANTS::M_COMP;
@@ -403,13 +435,14 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
     }
 
     /**
-     * @return string the HTML for the textarea.
+     * @return string The HTML for the textarea.
      */
-    protected function fetch_recorder($roptions, $question, $inputname) {
+    protected function fetch_recorder($qa, $step, $roptions, $question, $inputname, $draftid = 0) {
         global $CFG, $USER;
 
         $width = '';
         $height = '';
+        $recorderskin = '';
         $hints = new \stdClass();
         switch ($this->class_name()) {
 
@@ -426,7 +459,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                         $height = '190';
                         break;
                     default:
-                        // bmr 123, once, standard
+                        // Bmr 123, once, standard.
                         $width = '360';
                         $height = '240';
                 }
@@ -456,18 +489,18 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 }
         }
 
-        // transcription defaults
+        // Transcription defaults.
         $transcriber = constants::TRANSCRIBER_AMAZONTRANSCRIBE;
         $chrometranscribe = '0';
         $subtitle = "0";
         $hints->encoder = 'auto';
 
-        //shadowing
+        // Shadowing.
         $hints->shadowing = $question->noaudiofilters ? 1 : 0;
 
-        // branch based on which transcriber we are using
+        // Branch based on which transcriber we are using.
         switch($question->transcriber) {
-            // amazon transcribe
+            // Amazon transcribe.
             case constants::TRANSCRIBER_AMAZONTRANSCRIBE:
                 $cantranscribe = utils::can_transcribe($roptions);
                 if ($cantranscribe) {
@@ -478,14 +511,14 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 }
                 break;
 
-            // chrometranscribe
+            // Chrometranscribe.
             case constants::TRANSCRIBER_GOOGLECHROME:
                 $chrometranscribe = '1';
                 break;
 
-                // google cloud speech
+                // Google cloud speech.
             case constants::TRANSCRIBER_GOOGLECLOUDSPEECH:
-                // we can not use google cloud speech for video, so do not even try
+                // We can not use google cloud speech for video, so do not even try.
                 if($recordertype === constants::REC_VIDEO){
                     $transcriber = constants::TRANSCRIBER_AMAZONTRANSCRIBE;
                     $subtitle = "1";
@@ -500,36 +533,36 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                 $transcriber = constants::TRANSCRIBER_NONE;
         }
 
-        // transcode
+        // Transcode.
         $transcode = ($question->transcode ? '1' : '0');
 
-        // time limit
+        // Time limit.
         $timelimit = $question->timelimit;
 
-        // fetch cloudpoodll token
+        // Fetch cloudpoodll token.
         $apiuser = get_config(CONSTANTS::M_COMP, 'apiuser');
         $apisecret = get_config(CONSTANTS::M_COMP, 'apisecret');
 
-        // id user has errors with tokens or cloudpoodll API send those back
-        if(empty($apiuser) || empty($apisecret)){
+        // Id user has errors with tokens or cloudpoodll API send those back.
+        if (empty($apiuser) || empty($apisecret)) {
             $message = get_string('nocredentials', constants::M_COMP,
                     $CFG->wwwroot . constants::M_PLUGINSETTINGS);
             $errormessage = $this->show_problembox($message);
             return $errormessage;
 
-        }else{
-            // fetch token
+        } else {
+            // Fetch token.
             $token = utils::fetch_token($apiuser, $apisecret);
 
-            // check token authenticated and no errors in it
+            // Check token authenticated and no errors in it.
             $errormessage = utils::fetch_token_error($token);
-            if(!empty($errormessage)){
+            if (!empty($errormessage)) {
                 $errormessage = $this->show_problembox($errormessage);
                 return $errormessage;
             }
         }
 
-        // any recorder hints ... get sorted here
+        // Any recorder hints ... get sorted here.
         $stringhints = base64_encode(json_encode($hints));
 
         // the elementid of the div in the DOM
@@ -559,17 +592,17 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $toptions->fallback = $roptions->fallback;
         $toptions->string_hints = $stringhints;
         $toptions->token = $token;
-     
 
-        if($recordertype == constants::REC_AUDIO) {
+
+        if ($recordertype == constants::REC_AUDIO) {
             $toptions->iframeclass = constants::CLASS_AUDIOREC_IFRAME;
             $recorderhtml = $this->render_from_template(constants::M_COMP . '/audiorecordercontainer', $toptions);
-        }else{
+        } else {
             $toptions->iframeclass = constants::CLASS_VIDEOREC_IFRAME;
             $recorderhtml = $this->render_from_template(constants::M_COMP . '/videorecordercontainer', $toptions);
         }
 
-        // set up the AMD for the recorder
+        // Set up the AMD for the recorder.
         $opts = [
                 'component' => CONSTANTS::M_COMP,
                 'data_id' => 'therecorder_' . $domid,
@@ -583,7 +616,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
     }
 
     /**
-     * Return HTML to display message about problem
+     * Return HTML to display message about problem.
      */
     public function show_problembox($msg) {
         $output = '';
@@ -593,6 +626,13 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         return $output;
     }
 
+    /**
+     * Return HTML for the manual comment area.
+     *
+     * @param question_attempt $qa
+     * @param question_display_options $options
+     * @return string
+     */
     public function manual_comment(question_attempt $qa, question_display_options $options) {
         if ($options->manualcomment != question_display_options::EDITABLE) {
             return '';
@@ -627,5 +667,116 @@ class qtype_cloudpoodll_audio_renderer extends qtype_cloudpoodll_renderer {
 class qtype_cloudpoodll_video_renderer extends qtype_cloudpoodll_renderer {
     protected function class_name() {
         return 'qtype_cloudpoodll_video';
+    }
+}
+
+/**
+ * An cloudpoodll format renderer for cloudpoodlls where the student should draw on a whiteboard.
+ *
+ * @copyright  2024Justin Hunt
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class qtype_cloudpoodll_whiteboard_renderer extends qtype_cloudpoodll_renderer {
+    protected function class_name() {
+        return 'qtype_cloudpoodll_whiteboard';
+    }
+
+    protected function get_draft_id_suffix() {
+        return ':itemid';
+    }
+
+    public function response_area_read_only($name, $qa, $step, $lines, $context, $mediaurl = null) {
+        // Fetch file from storage and figure out URL.
+        $storedfiles = $qa->get_last_qt_files($name, $context->id);
+        $thefile = false;
+        foreach ($storedfiles as $sf) {
+            // When we find the file that matches the filename in $step, use that.
+            $usefilename = (string) $step->get_qt_var($name);
+            // Strip any file hash comments (added by Moodle question file loader).
+            $usefilename = preg_replace('/<!--.*-->/', '', $usefilename);
+            $storedfilename = $sf->get_filename();
+            if ($usefilename === $storedfilename) {
+                $thefile = $sf;
+                break;
+            }
+        }
+
+        // Now call the parent to handle player rendering.
+        // We pass the mediaurl from the file if we found one.
+        if ($mediaurl === null) {
+            $mediaurl = '';
+            if ($thefile) {
+                $mediaurl = $qa->get_response_file_url($thefile);
+            }
+        }
+
+        return parent::response_area_read_only($name, $qa, $step, $lines, $context, $mediaurl);
+    }
+
+    protected function fetch_player($mediaurl, $language, $havesubtitles = false, $question = null) {
+        $poptions = new \stdClass();
+        $poptions->mediaurl = $mediaurl;
+        return $this->render_from_template(constants::M_COMP . '/whiteboardplayer', $poptions);
+    }
+
+    protected function fetch_recorder($qa, $step, $roptions, $question, $inputname, $draftid = 0) {
+        global $CFG, $USER;
+
+        $width = !empty($question->whiteboardwidth) ? $question->whiteboardwidth : '800';
+        $height = !empty($question->whiteboardheight) ? $question->whiteboardheight : '600';
+
+        // fetch cloudpoodll token
+        $apiuser = get_config(CONSTANTS::M_COMP, 'apiuser');
+        $apisecret = get_config(CONSTANTS::M_COMP, 'apisecret');
+
+        if(empty($apiuser) || empty($apisecret)){
+             return $this->show_problembox(get_string('nocredentials', constants::M_COMP, $CFG->wwwroot . constants::M_PLUGINSETTINGS));
+        }
+        $token = utils::fetch_token($apiuser, $apisecret);
+        $errormessage = utils::fetch_token_error($token);
+        if(!empty($errormessage)){
+             return $this->show_problembox($errormessage);
+        }
+
+        $domid = html_writer::random_id('');
+        $toptions = new \stdClass();
+        $toptions->recid = 'therecorder_' . $domid;
+        $toptions->dataid = 'therecorder_' . $domid;
+        $toptions->parent = $CFG->wwwroot;
+        $toptions->owner = hash('md5', $USER->username);
+        $toptions->localloader = constants::LOADER_URL;
+        $toptions->cloudpoodllurl = utils::get_cloud_poodll_server();
+        $toptions->recordertype = 'whiteboard';
+        $toptions->appid = constants::APPID;
+        $toptions->width = $width;
+        $toptions->height = $height;
+        $toptions->updatecontrol = $inputname;
+        $toptions->language = $question->language;
+        $toptions->token = $token;
+
+        $toptions->uniqid = $domid;
+        $toptions->vectorcontrol = $inputname . 'vector';
+        $toptions->draftitemid = $draftid;
+
+        // Background image.
+        $toptions->backimage = '';
+        $fs = get_file_storage();
+        $context = \context_system::instance();
+        if (isset($question->contextid)) {
+            $context = \context::instance_by_id($question->contextid);
+        }
+        $files = $fs->get_area_files($context->id, constants::M_COMP, constants::FILEAREA_QRESOURCE, $question->id, 'filename', false);
+        if ($files) {
+            $file = reset($files);
+            $toptions->backimage = $qa->rewrite_pluginfile_urls('@@PLUGINFILE@@/' . $file->get_filename(), $file->get_component(), $file->get_filearea(), $file->get_itemid());
+        }
+
+        // Vector data.
+        $toptions->vdata = $step->get_qt_var('answervector');
+        if (!$toptions->vdata) {
+            $toptions->vdata = '';
+        }
+
+        return $this->render_from_template(constants::M_COMP . '/whiteboardrecorder', $toptions);
     }
 }

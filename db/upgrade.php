@@ -93,5 +93,20 @@ function xmldb_qtype_cloudpoodll_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2025112100, 'qtype', 'cloudpoodll');
     }
 
+    if ($oldversion < 2026051201) {
+        $table = new xmldb_table(constants::M_TABLE);
+        $fields = [];
+        $fields[] = new xmldb_field('whiteboardwidth', XMLDB_TYPE_INTEGER, '10', null, XMLDB_TYPE_INTEGER, null, 800);
+        $fields[] = new xmldb_field('whiteboardheight', XMLDB_TYPE_INTEGER, '10', null, XMLDB_TYPE_INTEGER, null, 600);
+        foreach ($fields as $field) {
+            if (!$dbman->field_exists($table, $field)) {
+                $dbman->add_field($table, $field);
+            }
+        }
+
+        // cloudpoodll savepoint reached
+        upgrade_plugin_savepoint(true, 2026051201, 'qtype', 'cloudpoodll');
+    }
+
     return true;
 }
