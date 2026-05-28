@@ -1,5 +1,9 @@
 Change List
 =========
+
+Version 1.0.27 (Build 2026052800)
+- Added whiteboard "recorder" to CloudPoodll question
+
 Version 1.0.26 (Build 2026051200)
 - Fixed issue where the save status of the students response was always "saved"
 

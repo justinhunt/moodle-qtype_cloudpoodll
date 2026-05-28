@@ -77,90 +77,46 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
     }
 
     protected function fetch_fileext_from_mimetype($mimetype) {
-            $ext = "";
-
-            // A little sanity check first.
         if (empty($mimetype)) {
-            return $ext;
+            return '';
         }
 
-            // In the case of a string like this:
-            // "audio/webm;codecs=opus" we do not want the codecs.
-        if(strpos($mimetype, ';') !== false){
+        // Strip codecs parameter (e.g. "audio/webm;codecs=opus").
+        if (strpos($mimetype, ';') !== false) {
             $mimetype = explode(';', $mimetype)[0];
         }
 
-            // Search on mimetype and add the corresponding file extension.
-        switch ($mimetype) {
-            case "image/jpeg":
-                $ext = "jpg";
-                break;
-            case "image/png":
-                $ext = "png";
-                break;
-            case "audio/wav":
-                $ext = "wav";
-                break;
-            case "audio/ogg":
-                $ext = "ogg";
-                break;
-            case "audio/mpeg3":
-                $ext = "mp3";
-                break;
-            case "audio/mp3":
-                $ext = "mp3";
-                break;
-            case "audio/webm":
-                $ext = "webm";
-                break;
-            case "audio/wma":
-                $ext = "wma";
-                break;
-            case "audio/x-mpeg-3":
-                $ext = "mp3";
-                break;
-            case "audio/mp4":
-            case "audio/m4a":
-            case "audio/x-m4a":
-                $ext = "m4a";
-                break;
-            case "audio/3gpp":
-                $ext = "3gpp";
-                break;
-            case "video/mpeg3":
-                $ext = "3gpp";
-                break;
-            case "video/m4v":
-                $ext = "m4v";
-                break;
-            case "video/mp4":
-                $ext = "mp4";
-                break;
-            case "video/mov":
-            case "video/quicktime":
-                $ext = "mov";
-                break;
-            case "video/x-matroska":
-            case "video/webm":
-                $ext = "webm";
-                break;
-            case "video/wmv":
-                $ext = "wmv";
-                break;
-            case "video/ogg":
-                $ext = "ogg";
-                break;
-        }
-            // If we get here we have an unknown mime type, just guess based on the mediatype.
-        if($ext === ""){
-            if(strpos($mimetype, 'video') !== false){
-                $ext = "mp4";
-            }else{
-                $ext = "mp3";
-            }
-        }
-            return $ext;
+        $mimetypes = [
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'audio/wav' => 'wav',
+            'audio/ogg' => 'ogg',
+            'audio/mpeg3' => 'mp3',
+            'audio/mp3' => 'mp3',
+            'audio/x-mpeg-3' => 'mp3',
+            'audio/webm' => 'webm',
+            'audio/wma' => 'wma',
+            'audio/mp4' => 'm4a',
+            'audio/m4a' => 'm4a',
+            'audio/x-m4a' => 'm4a',
+            'audio/3gpp' => '3gpp',
+            'video/mpeg3' => '3gpp',
+            'video/m4v' => 'm4v',
+            'video/mp4' => 'mp4',
+            'video/mov' => 'mov',
+            'video/quicktime' => 'mov',
+            'video/x-matroska' => 'webm',
+            'video/webm' => 'webm',
+            'video/wmv' => 'wmv',
+            'video/ogg' => 'ogg',
+        ];
 
+        if (isset($mimetypes[$mimetype])) {
+            return $mimetypes[$mimetype];
+        }
+
+        // Unknown mime type, guess based on mediatype.
+        return (strpos($mimetype, 'video') !== false) ? 'mp4' : 'mp3';
     }
 
     public function response_area_read_only($name, $qa, $step, $lines, $context, $mediaurl = null) {
@@ -173,52 +129,33 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $transcript = $step->get_qt_var($name . 'transcript');
         $details = $step->get_qt_var($name . 'details');
 
-
         // Assume no subtitles.
         $havesubtitles = false;
 
         // If Amazon transcribe OR Google Cloud Speech then we have subtitles.
-        if (!empty($mediaurl) && $mediaurl !== constants::BLANK) {
-            switch ($question->transcriber) {
-                case constants::TRANSCRIBER_AMAZONTRANSCRIBE:
-                    $transcript = utils::fetch_transcript($mediaurl);
-                    if ($transcript) {
-                        $havesubtitles = true;
-                    }
-                    break;
-                case constants::TRANSCRIBER_GOOGLECLOUDSPEECH:
-                    $transcript = utils::fetch_transcript($mediaurl);
-                    if ($transcript) {
-                        $havesubtitles = true;
-                    }
-                    break;
-            }
+        if (!empty($mediaurl) && $mediaurl !== constants::BLANK &&
+            ($question->transcriber == constants::TRANSCRIBER_AMAZONTRANSCRIBE ||
+             $question->transcriber == constants::TRANSCRIBER_GOOGLECLOUDSPEECH)) {
+            $transcript = utils::fetch_transcript($mediaurl);
+            $havesubtitles = !empty($transcript);
         }
 
         // Transcript could be a url, or a block of text or empty.
         // Here we turn a url into text if we can.
         if (empty($transcript)) {
             if ($question->transcriber == constants::TRANSCRIBER_AMAZONTRANSCRIBE ||
-                    $question->transcriber == constants::TRANSCRIBER_GOOGLECLOUDSPEECH
-            ) {
-                $transcript = get_string('transcriptnotready', CONSTANTS::M_COMP);
+                $question->transcriber == constants::TRANSCRIBER_GOOGLECLOUDSPEECH) {
+                $transcript = get_string('transcriptnotready', constants::M_COMP);
             }
             $havesubtitles = false;
         }
 
-        // It's all very well having subtitles or transcript , but we also check if the teacher or student is intended to see them.
-        // Are we a person who can grade, ie a teacher?
-        $isgrader = false;
-        if (has_capability('mod/quiz:grade', $context)) {
-            $isgrader = true;
-        }
+        // Check if teacher/grader.
+        $isgrader = has_capability('mod/quiz:grade', $context);
 
-        // If not a teacher and student player is default, then no subtitles.
-        if (!$isgrader && $question->studentplayer == constants::PLAYERTYPE_DEFAULT) {
-            $havesubtitles = false;
-            $transcript = '';
-            // If is a teacher and teacher player is default, then no subtitles.
-        } else if ($isgrader && $question->teacherplayer == constants::PLAYERTYPE_DEFAULT) {
+        // Hide subtitles/transcript if using default player for the user's role.
+        $player = $isgrader ? $question->teacherplayer : $question->studentplayer;
+        if ($player == constants::PLAYERTYPE_DEFAULT) {
             $havesubtitles = false;
             $transcript = '';
         }
@@ -235,65 +172,46 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                     'qtype_cloudpoodll_norecordreceived');
         }
 
-        // If we have subtitles, then add them to the player.
-        if ($havesubtitles) {
-            // Do nothing.
-        } else if(!empty($transcript) && $transcript != constants::BLANK) {
-            $rethtml .= html_writer::div($transcript, 'qtype_cloudpoodll_transcriptdiv', []);
-        }else{
-            // do nothing
+        // If we don't have interactive subtitles in the player, show the transcript text block.
+        if (!$havesubtitles && !empty($transcript) && $transcript !== constants::BLANK) {
+            $rethtml .= html_writer::div($transcript, 'qtype_cloudpoodll_transcriptdiv');
         }
 
         // Get details display.
         // Make sure the json and details are properly formed.
         if ($isgrader && !empty($details)) {
             $reclog = json_decode($details);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                if (isset($reclog->recevents) && count($reclog->recevents) > 0) {
-                    $lastmimetype = '';
-                    foreach ($reclog->recevents as $recevent) {
-                        // This is a hack that allows mustache to show the output specific to the event.
-                        $recevent->{$recevent->type} = 1;
-                        // We store the mime type from the upload commenced event.
-                        if($recevent->type == 'uploadcommenced'){
-                            $lastmimetype = $recevent->mimetype;
+            if (json_last_error() === JSON_ERROR_NONE && !empty($reclog->recevents)) {
+                $lastmimetype = '';
+                foreach ($reclog->recevents as $recevent) {
+                    $recevent->{$recevent->type} = 1; // Hack for mustache templates.
+                    if ($recevent->type === 'uploadcommenced') {
+                        $lastmimetype = $recevent->mimetype;
+                    } else if ($recevent->type === 'awaitingprocessing' && !empty($recevent->targetfile)) {
+                        $ext = $this->fetch_fileext_from_mimetype($lastmimetype);
+                        if (!empty($ext)) {
+                            $recevent->srcfile = $this->replace_url_filext($recevent->targetfile, $ext);
+                            $recevent->srcfilename = pathinfo($recevent->srcfile, PATHINFO_BASENAME);
+                            $recevent->targetfilename = pathinfo($recevent->targetfile, PATHINFO_BASENAME);
                         }
-                        if($recevent->type == 'awaitingprocessing'){
-                            $ext = $this->fetch_fileext_from_mimetype($lastmimetype);
-                            if(!empty($ext) && !empty($recevent->targetfile)) {
-                                $recevent->srcfile = $this->replace_url_filext($recevent->targetfile, $ext);
-                                $recevent->srcfilename = pathinfo($recevent->srcfile, PATHINFO_BASENAME);
-                                $recevent->targetfilename = pathinfo($recevent->targetfile, PATHINFO_BASENAME);
-                            }
-                        }
-                        if($recevent->type == 'filesubmitted'){
-                            $recevent->finalfilename = pathinfo($recevent->finalfile, PATHINFO_BASENAME);
-                        }
+                    } else if ($recevent->type === 'filesubmitted') {
+                        $recevent->finalfilename = pathinfo($recevent->finalfile, PATHINFO_BASENAME);
                     }
-                    $detailsdiv = $this->fetch_details_display($reclog);
-                    $rethtml .= $detailsdiv;
                 }
+                $rethtml .= $this->fetch_details_display($reclog);
             }
         }
 
-        // Return html.
         return $rethtml;
-
-        // Do this for testing fetch and process of transcript via ad hoc task.
-        // But we do not do that.
-        // utils::register_fetch_transcript_task($url,$qa,$step);
     }
 
     public function response_area_input($name, $qa, $step, $lines, $context) {
         $question = $qa->get_question();
-        $fieldname = $qa->get_qt_field_name($name);// $name = "answer".
+        $fieldname = $qa->get_qt_field_name($name); // $name = "answer".
 
         // Setup the recorder DIV.
         $options = get_config('qtype_cloudpoodll');
-        $draftid = $step->get_qt_var($name . '_draftid');
-        if (!$draftid) {
-            $draftid = file_get_unused_draft_itemid();
-        }
+        $draftid = $step->get_qt_var($name . '_draftid') ?: file_get_unused_draft_itemid();
         $recorder = $this->fetch_recorder($qa, $step, $options, $question, $fieldname, $draftid);
 
         // The recorder status field.
@@ -301,22 +219,20 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $templateoptions = [];
         if ($details) {
             $reclog = json_decode($details);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                if (isset($reclog->recevents) && count($reclog->recevents) > 0) {
-                    // We get the last event.
-                    $lastevent = $reclog->recevents[array_key_last($reclog->recevents)];
-                    // But we want the last event, that saved a recording if we have one.
-                    for ($i = count($reclog->recevents) - 1; $i >= 0; $i--) {
-                        $recevent = $reclog->recevents[$i];
-                        if ($recevent->type == 'awaitingconversion' || $recevent->type == 'filesubmitted') {
-                            $lastevent = $recevent;
-                            break;
-                        }
+            if (json_last_error() === JSON_ERROR_NONE && !empty($reclog->recevents)) {
+                // Find the last event that saved a recording (or default to the very last event).
+                $lastevent = end($reclog->recevents);
+                foreach (array_reverse($reclog->recevents) as $recevent) {
+                    if ($recevent->type === 'awaitingconversion' || $recevent->type === 'filesubmitted') {
+                        $lastevent = $recevent;
+                        break;
                     }
-                    $templateoptions['lastevent'] = $lastevent;
-                    $templateoptions['insession'] = false;
-                    $templateoptions[$lastevent->type] = 1;// "filesubmitted" "recordingstarted" "recordingstopped" "uploadcommenced" "awaitingconversion".
                 }
+                $templateoptions = [
+                    'lastevent' => $lastevent,
+                    'insession' => false,
+                    $lastevent->type => 1
+                ];
             }
         }
         $answerstatus = $this->render_from_template(constants::M_COMP . '/answerstatus', $templateoptions);
@@ -324,54 +240,37 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         // The elementid of the div in the DOM.
         $answerstatuscontainer = html_writer::div($answerstatus, 'qtype_cloudpoodll_asc', ['id' => $fieldname . '_asc']);
 
-        // Answer field.
-        if (!$useanswer = $step->get_qt_var($name)) {
-            $useanswer = constants::BLANK;
-        }
-        $answer = html_writer::empty_tag('input', ['type' => 'hidden',
-                'name' => $fieldname,
-                'value' => $useanswer]);
+        // Generate the hidden fields.
+        $fields = [
+            '' => $step->get_qt_var($name) ?: constants::BLANK,
+            'mediaurl' => $step->get_qt_var($name . 'mediaurl') ?: '',
+            'transcript' => $step->get_qt_var($name . 'transcript') ?: constants::BLANK,
+            'details' => $step->get_qt_var($name . 'details') ?: '',
+            'vector' => $step->get_qt_var($name . 'vector') ?: ''
+        ];
 
-        // Media URL field.
-        if (!$usemediaurl = $step->get_qt_var($name . 'mediaurl')) {
-            $usemediaurl = '';
+        $hiddenfields = '';
+        foreach ($fields as $suffix => $value) {
+            $attrs = [
+                'type' => 'hidden',
+                'name' => $fieldname . $suffix,
+                'value' => $value
+            ];
+            if ($suffix === 'vector') {
+                $attrs['id'] = $fieldname . 'vector';
+            }
+            $hiddenfields .= html_writer::empty_tag('input', $attrs);
         }
-        $mediaurl = html_writer::empty_tag('input', ['type' => 'hidden',
-                'name' => $fieldname . 'mediaurl',
-                'value' => $usemediaurl]);
-
-        // Transcript field.
-        if (!$usetranscript = $step->get_qt_var($name . 'transcript')) {
-            $usetranscript = constants::BLANK;
-        }
-        $transcript = html_writer::empty_tag('input', ['type' => 'hidden',
-                'name' => $fieldname . 'transcript',
-                'value' => $usetranscript]);
-
-        // Details field.
-        if (!$usedetails = $step->get_qt_var($name . 'details')) {
-            $usedetails = '';
-        }
-        $details = html_writer::empty_tag('input', ['type' => 'hidden',
-            'name' => $fieldname . 'details',
-            'value' => $usedetails]);
-
-        // Vector field.
-        if (!$usevector = $step->get_qt_var($name . 'vector')) {
-            $usevector = '';
-        }
-        $vector = html_writer::empty_tag('input', ['type' => 'hidden',
-            'id' => $fieldname . 'vector',
-            'name' => $fieldname . 'vector',
-            'value' => $usevector]);
 
         // Draft ID field.
-        $draftidfield = html_writer::empty_tag('input', ['type' => 'hidden',
+        $hiddenfields .= html_writer::empty_tag('input', [
+            'type' => 'hidden',
             'name' => $fieldname . $this->get_draft_id_suffix(),
-            'value' => $draftid]);
+            'value' => $draftid
+        ]);
 
         // Return recorder and associated hidden fields.
-        return $answerstatuscontainer . $recorder . $transcript . $details . $mediaurl . $answer . $vector . $draftidfield;
+        return $answerstatuscontainer . $recorder . $hiddenfields;
     }
 
 
@@ -686,27 +585,14 @@ class qtype_cloudpoodll_whiteboard_renderer extends qtype_cloudpoodll_renderer {
     }
 
     public function response_area_read_only($name, $qa, $step, $lines, $context, $mediaurl = null) {
-        // Fetch file from storage and figure out URL.
-        $storedfiles = $qa->get_last_qt_files($name, $context->id);
-        $thefile = false;
-        foreach ($storedfiles as $sf) {
-            // When we find the file that matches the filename in $step, use that.
-            $usefilename = (string) $step->get_qt_var($name);
-            // Strip any file hash comments (added by Moodle question file loader).
-            $usefilename = preg_replace('/<!--.*-->/', '', $usefilename);
-            $storedfilename = $sf->get_filename();
-            if ($usefilename === $storedfilename) {
-                $thefile = $sf;
-                break;
-            }
-        }
-
-        // Now call the parent to handle player rendering.
-        // We pass the mediaurl from the file if we found one.
         if ($mediaurl === null) {
             $mediaurl = '';
-            if ($thefile) {
-                $mediaurl = $qa->get_response_file_url($thefile);
+            $usefilename = preg_replace('/<!--.*-->/', '', (string) $step->get_qt_var($name));
+            foreach ($qa->get_last_qt_files($name, $context->id) as $sf) {
+                if ($usefilename === $sf->get_filename()) {
+                    $mediaurl = $qa->get_response_file_url($sf);
+                    break;
+                }
             }
         }
 
