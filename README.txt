@@ -1,15 +1,16 @@
-Cloud PoodLL Recording Question
+Cloud Poodll Recording Question
 ========================================
-Thanks for downloading Cloud Poodll question type.
 
-There should be only one folder "cloudpoodll" in the cloudpoodll folder after you unzip the zip file.
-Place this folder into your moodle installation under the [site_root]/question/type folder.
+Cloud Poodll is a native Moodle question type that lets students answer by recording audio,
+video, or (beta) drawing on a whiteboard, directly in a Moodle quiz. Recordings are stored in the
+Poodll cloud, and responses are graded manually, the same way Essay questions are.
 
-Then login to your site as admin and go to your Moodle site's top page. Moodle should then guide you through the installation or upgrade.
+Cloud Poodll requires a Cloud Poodll API username and secret from https://poodll.com
+See here: https://support.poodll.com/support/solutions/articles/19000083076-cloud-poodll-api-secret
 
-You will need a Cloud Poodll API user and secret. Get those from Poodll.com. See https://poodll.com/plugin-cloudpoodll-recording-question/
+See README.md in this folder for the full documentation: features, installation, site settings,
+response formats and grading.
 
-
-Good luck.
 
 Justin Hunt
+poodllsupport@gmail.com
