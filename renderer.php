@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use qtype_cloudpoodll\constants;
 use qtype_cloudpoodll\utils;
+use qtype_cloudpoodll\cbcredentials;
 
 class qtype_cloudpoodll_renderer extends qtype_renderer {
 
@@ -442,24 +443,16 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $apiuser = get_config(CONSTANTS::M_COMP, 'apiuser');
         $apisecret = get_config(CONSTANTS::M_COMP, 'apisecret');
 
-        // Id user has errors with tokens or cloudpoodll API send those back.
-        if (empty($apiuser) || empty($apisecret)) {
-            $message = get_string('nocredentials', constants::M_COMP,
-                    $CFG->wwwroot . constants::M_PLUGINSETTINGS);
-            $errormessage = $this->show_problembox($message);
-            return $errormessage;
-
-        } else {
-            // Fetch token.
-            $token = utils::fetch_token($apiuser, $apisecret);
-
-            // Check token authenticated and no errors in it.
-            $errormessage = utils::fetch_token_error($token);
-            if (!empty($errormessage)) {
-                $errormessage = $this->show_problembox($errormessage);
-                return $errormessage;
-            }
+        // If the credentials are missing, or cloudpoodll rejects them, send that back. Administrators
+        // are pointed at the settings page and the free trial, everybody else is told who to ask.
+        // A question always renders inside the attempt form, so this must not contain a form.
+        $errormessage = cbcredentials::credentials_error();
+        if (!empty($errormessage)) {
+            return $this->show_cbcredentials_notice($errormessage);
         }
+
+        // Fetch token.
+        $token = utils::fetch_token($apiuser, $apisecret);
 
         // Any recorder hints ... get sorted here.
         $stringhints = base64_encode(json_encode($hints));
@@ -523,6 +516,57 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         $output .= $this->notification($msg, 'warning');
         $output .= $this->output->box_end();
         return $output;
+    }
+
+    /**
+     * Return HTML to let an administrator sort out the Poodll API credentials without leaving the page.
+     *
+     * This contains a form, so it can only be used somewhere that is not already inside one. A
+     * question is always rendered inside the attempt form, so use show_cbcredentials_notice() there.
+     *
+     * @param \moodle_url|string $returnurl where to send the administrator after saving
+     * @param string $errormessage what is currently wrong with the credentials, if anything
+     * @return string HTML
+     */
+    public function show_cbcredentials_setup($returnurl, $errormessage = '') {
+        if (cbcredentials::can_manage()) {
+            return $this->render_from_template(
+                constants::M_COMP . '/cbcredentialspanel',
+                cbcredentials::export_panel_data($returnurl, $errormessage)
+            );
+        }
+        // Users who cannot fix it get no technical detail, just who to ask.
+        return $this->show_problembox(get_string('cbaskadmin', constants::M_COMP));
+    }
+
+    /**
+     * Return HTML explaining that the Poodll credentials need attention, safe to place inside
+     * another form. Administrators are pointed at the settings page, and at the free trial when
+     * there are no credentials to be found anywhere on this site.
+     *
+     * @param string $errormessage what is currently wrong with the credentials
+     * @return string HTML
+     */
+    public function show_cbcredentials_notice($errormessage) {
+        global $CFG;
+
+        if (!cbcredentials::can_manage()) {
+            // Users who cannot fix it get no technical detail, just who to ask.
+            return $this->show_problembox(get_string('cbaskadmin', constants::M_COMP));
+        }
+
+        $links = html_writer::link(
+            $CFG->wwwroot . constants::M_PLUGINSETTINGS,
+            get_string('cbgotosettings', constants::M_COMP)
+        );
+        if (!cbcredentials::find_elsewhere()) {
+            $links .= ' | ' . html_writer::link(
+                $CFG->wwwroot . constants::M_URL . '/fetchcbpage.php',
+                get_string('freetrial', constants::M_COMP),
+                ['target' => '_blank', 'rel' => 'noopener']
+            );
+        }
+        return $this->show_problembox($errormessage . '<br>' . $links);
     }
 
     /**
@@ -615,14 +659,12 @@ class qtype_cloudpoodll_whiteboard_renderer extends qtype_cloudpoodll_renderer {
         $apiuser = get_config(CONSTANTS::M_COMP, 'apiuser');
         $apisecret = get_config(CONSTANTS::M_COMP, 'apisecret');
 
-        if(empty($apiuser) || empty($apisecret)){
-             return $this->show_problembox(get_string('nocredentials', constants::M_COMP, $CFG->wwwroot . constants::M_PLUGINSETTINGS));
+        // Same credentials check as fetch_recorder_html above, and same reason it must not be a form.
+        $errormessage = cbcredentials::credentials_error();
+        if (!empty($errormessage)) {
+            return $this->show_cbcredentials_notice($errormessage);
         }
         $token = utils::fetch_token($apiuser, $apisecret);
-        $errormessage = utils::fetch_token_error($token);
-        if(!empty($errormessage)){
-             return $this->show_problembox($errormessage);
-        }
 
         $domid = html_writer::random_id('');
         $toptions = new \stdClass();

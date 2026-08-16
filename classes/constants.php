@@ -29,10 +29,17 @@ class constants {
     const FILEAREA_QRESOURCE = 'qresource';
     const FILEAREA_GRADERINFO = 'graderinfo';
     const M_COMP = 'qtype_cloudpoodll';
+    // Same as M_COMP, under the name every other Poodll plugin uses for it.
+    const M_COMPONENT = 'qtype_cloudpoodll';
     const M_DEFAULT_CLOUDPOODLL = "cloud.poodll.com";
-    const M_URL = 'question/type/cloudpoodll';
+    // Leading slash so this can be appended to $CFG->wwwroot like every other Poodll plugin.
+    const M_URL = '/question/type/cloudpoodll';
     const M_TABLE = 'qtype_cloudpoodll_opts';
     const M_PLUGINSETTINGS = '/admin/settings.php?section=qtypesettingcloudpoodll';
+
+    // Chargebee details for the in-app free trial (see fetchcbpage.php).
+    const M_CB_SITE = 'poodllcom';
+    const M_CB_TRIAL_PRICEID = 'Poodll-Free-Trial-USD-Daily';
 
     const APPID = 'qtype_cloudpoodll';
 

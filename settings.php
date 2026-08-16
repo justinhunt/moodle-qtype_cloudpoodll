@@ -44,34 +44,11 @@ if ($ADMIN->fulltree) {
         $showbelowapisecret = $tokeninfo;
         // if we have no API user and secret we show a "fetch from elsewhere on site" or "take a free trial" link
     }else{
-        $amddata = ['apppath' => $CFG->wwwroot . '/' .constants::M_URL];
-        $cpcomponents = ['filter_poodll', 'mod_readaloud', 'mod_wordcards', 'mod_solo', 'mod_minilesson', 'mod_englishcentral', 'mod_pchat',
-            'atto_cloudpoodll', 'tinymce_cloudpoodll', 'assignfeedback_cloudpoodll', 'assignsubmission_cloudpoodll'];
-        foreach($cpcomponents as $cpcomponent){
-            switch($cpcomponent){
-                case 'filter_poodll':
-                    $apiusersetting = 'cpapiuser';
-                    $apisecretsetting = 'cpapisecret';
-                    break;
-                case 'mod_englishcentral':
-                    $apiusersetting = 'poodllapiuser';
-                    $apisecretsetting = 'poodllapisecret';
-                    break;
-                default:
-                    $apiusersetting = 'apiuser';
-                    $apisecretsetting = 'apisecret';
-            }
-            $cloudpoodllapiuser = get_config($cpcomponent, $apiusersetting);
-            if(!empty($cloudpoodllapiuser)){
-                $cloudpoodllapisecret = get_config($cpcomponent, $apisecretsetting);
-                if(!empty($cloudpoodllapisecret)){
-                    $amddata['apiuser'] = $cloudpoodllapiuser;
-                    $amddata['apisecret'] = $cloudpoodllapisecret;
-                    break;
-                }
-            }
-        }
-        $showbelowapisecret = $OUTPUT->render_from_template( constants::M_COMP . '/managecreds', $amddata);
+        $amddata = \qtype_cloudpoodll\cbcredentials::export_buttons_data(
+            '#id_s_qtype_cloudpoodll_apiuser',
+            '#id_s_qtype_cloudpoodll_apisecret'
+        );
+        $showbelowapisecret = $OUTPUT->render_from_template(constants::M_COMP . '/cbmanagecreds', $amddata);
     }
 
     $name = 'apisecret';
