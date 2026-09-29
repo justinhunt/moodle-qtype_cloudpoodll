@@ -22,6 +22,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace qtype_cloudpoodll;
+
+use question_bank;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -33,21 +37,25 @@ require_once($CFG->dirroot . '/question/type/cloudpoodll/questiontype.php');
  *
  * @copyright  2025 Antigravity
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers     \qtype_cloudpoodll
  */
-class qtype_cloudpoodll_test extends advanced_testcase {
+final class question_test extends \advanced_testcase {
     /**
      * Test saving and loading the noaudiofilters option.
      */
-    public function test_save_and_load_noaudiofilters() {
+    public function test_save_and_load_noaudiofilters(): void {
         $this->resetAfterTest();
         $this->setAdminUser();
 
-        $questiongenerator = $this->getDataGenerator()->get_plugin_generator('qtype_cloudpoodll');
+        $questiongenerator = $this->getDataGenerator()->get_plugin_generator('core_question');
         $cat = $questiongenerator->create_question_category();
 
         // Create a question with noaudiofilters = 1.
-        $questiondata = $questiongenerator->create_question('cloudpoodll', 'cloudpoodll',
-                ['category' => $cat->id, 'noaudiofilters' => 1]);
+        $questiondata = $questiongenerator->create_question(
+            'cloudpoodll',
+            'audio',
+            ['category' => $cat->id, 'noaudiofilters' => 1]
+        );
 
         // Load the question.
         $question = question_bank::load_question($questiondata->id);
@@ -56,8 +64,11 @@ class qtype_cloudpoodll_test extends advanced_testcase {
         $this->assertEquals(1, $question->noaudiofilters);
 
         // Create a question with noaudiofilters = 0.
-        $questiondata2 = $questiongenerator->create_question('cloudpoodll', 'cloudpoodll',
-                ['category' => $cat->id, 'noaudiofilters' => 0]);
+        $questiondata2 = $questiongenerator->create_question(
+            'cloudpoodll',
+            'audio',
+            ['category' => $cat->id, 'noaudiofilters' => 0]
+        );
 
         // Load the question.
         $question2 = question_bank::load_question($questiondata2->id);
