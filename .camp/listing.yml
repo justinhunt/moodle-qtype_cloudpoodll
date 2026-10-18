@@ -1,0 +1,24 @@
+# camp listing manifest — the descriptive content for this plugin's page on
+# camp-registry.org. Edit and commit as normal; camp ingests and hash-pins it
+# at each tagged release. Schema: https://camp-registry.org/schema/listing.schema.json
+name: Cloud Poodll Recording Question
+summary: A question type where students answer by recording audio or video, or drawing on a whiteboard.
+description: |
+  Cloud Poodll adds a question type to the Moodle question bank, so it works in quizzes anywhere a
+  standard question would. Students record their response directly in the browser, and the
+  recording is stored in the Cloud Poodll cloud rather than on the Moodle server.
+
+  Like an Essay question, responses are graded manually by a teacher, with the recording and,
+  optionally, its transcript shown alongside for grading.
+
+  **Requires a Cloud Poodll account.** Recording, conversion and storage run through the Cloud
+  Poodll service, so the plugin needs an API user and secret from https://poodll.com to function.
+labels:
+  - paid-service
+  - external-account
+  - commercial-support-available
+category: question-type
+links:
+  docs: https://support.poodll.com
+  issues: https://github.com/justinhunt/moodle-qtype_cloudpoodll/issues
+  changelog: https://github.com/justinhunt/moodle-qtype_cloudpoodll/blob/master/CHANGES.txt

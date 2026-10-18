@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->version = 2026101800;
 $plugin->requires = 2023100900; // Requires Moodle 4.3.
+$plugin->supported = [403, 502]; // Moodle 4.3 to 5.2.
 $plugin->component = 'qtype_cloudpoodll';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = '1.0.30 (Build 2026101800)';
