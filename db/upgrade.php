@@ -108,5 +108,17 @@ function xmldb_qtype_cloudpoodll_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026051201, 'qtype', 'cloudpoodll');
     }
 
+    if ($oldversion < 2026112501) {
+        // The local recorders can show a Pause button. It is off unless the question turns it on.
+        $table = new xmldb_table(constants::M_TABLE);
+        $field = new xmldb_field('allowpause', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0', 'whiteboardheight');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Cloud Poodll savepoint reached.
+        upgrade_plugin_savepoint(true, 2026112501, 'qtype', 'cloudpoodll');
+    }
+
     return true;
 }

@@ -81,11 +81,16 @@ if ($ADMIN->fulltree) {
     $options = utils::get_lang_options();
     $settings->add(new admin_setting_configselect("$plugin/$name", $label, '', $default, $options));
 
+    // The local recorders replace the Cloud Poodll iframe recorders. This goes back to the old ones.
+    $name = 'uselegacyrecorders';
+    $settings->add(new admin_setting_configcheckbox("$plugin/$name", get_string($name, $plugin),
+        get_string($name . '_details', $plugin), 0));
+
     // Audio record skin
     $name = 'audioskin';
     $label = get_string($name, $plugin);
     $details = get_string($name, $plugin);
-    $default = constants::SKIN_123;
+    $default = utils::effective_skin(constants::SKIN_123);
     $options = utils::fetch_options_skins(constants::REC_AUDIO);
     $settings->add(new admin_setting_configselect("$plugin/$name", $label, $details, $default, $options));
 
@@ -95,7 +100,7 @@ if ($ADMIN->fulltree) {
     $details = get_string($name, $plugin);
     $options = utils::fetch_options_skins(constants::REC_VIDEO);
     $settings->add(new admin_setting_configselect("$plugin/$name", $label,
-            $details, constants::SKIN_123, $options));
+            $details, utils::effective_skin(constants::SKIN_123), $options));
 
     // Transcriber options
     $name = 'transcriber';

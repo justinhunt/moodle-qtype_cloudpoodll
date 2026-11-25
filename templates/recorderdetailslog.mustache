@@ -9,10 +9,10 @@
             <td>{{type}}</td>
             {{#recording}}<td>{{action}}</td>{{/recording}}
             {{#uploadcommenced}}<td>{{srcfile}}<br />{{mimetype}}</td>{{/uploadcommenced}}
-            {{#awaitingprocessing}}<td>{{#srcfilename}}From: <a href="{{{srcfile}}}" class="nopoodll nomediaplugin">{{srcfilename}}</a>{{/srcfilename}} <br />
-            {{#targetfilename}}To: <a href="{{{targetfile}}}" class="nopoodll nomediaplugin">{{targetfilename}}</a>{{/targetfilename}} </td>
+            {{#awaitingprocessing}}<td>{{#srcfilename}}From: <a href="{{srcfile}}" class="nopoodll nomediaplugin">{{srcfilename}}</a>{{/srcfilename}} <br />
+            {{#targetfilename}}To: <a href="{{targetfile}}" class="nopoodll nomediaplugin">{{targetfilename}}</a>{{/targetfilename}} </td>
             {{/awaitingprocessing}}
-            {{#filesubmitted}}<td>{{#finalfilename}}Final file: <a href="{{{finalfile}}}" class="nopoodll nomediaplugin">{{finalfilename}}</a>{{/finalfilename}} </td>{{/filesubmitted}}
+            {{#filesubmitted}}<td>{{#finalfilename}}Final file: <a href="{{finalfile}}" class="nopoodll nomediaplugin">{{finalfilename}}</a>{{/finalfilename}} </td>{{/filesubmitted}}
             {{#error}}<td>{{code}} {{message}}</td>{{/error}}
         </tr>
     {{/recevents}}

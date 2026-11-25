@@ -54,6 +54,9 @@ class constants {
     const SKIN_UPLOAD = 'upload';
     const SKIN_PUSH = 'push';
     const SKIN_SCREEN = 'screen';
+    // The local recorders, which run in the plugin instead of a Cloud Poodll iframe.
+    const SKIN_LOCAL123 = 'local123';
+    const SKIN_LOCALONCE = 'localonce';
 
     const FALLBACK_UPLOAD = 'upload';
     const FALLBACK_IOSUPLOAD = 'iosupload';
@@ -159,5 +162,5 @@ class constants {
 
     const extra_fields = ['responseformat', 'graderinfo', 'graderinfoformat', 'qresource', 'language', 'expiredays',
             'transcriber', 'studentplayer', 'teacherplayer', 'transcode', 'audioskin', 'videoskin', 'timelimit', 'safesave', 'noaudiofilters',
-            'whiteboardwidth', 'whiteboardheight'];
+            'whiteboardwidth', 'whiteboardheight', 'allowpause'];
 }

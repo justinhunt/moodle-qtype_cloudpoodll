@@ -27,6 +27,7 @@
                 <FIELD NAME="noaudiofilters" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Disable noise suppression"/>
                 <FIELD NAME="whiteboardwidth" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="800" SEQUENCE="false"/>
                 <FIELD NAME="whiteboardheight" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="600" SEQUENCE="false"/>
+                <FIELD NAME="allowpause" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Show a Pause button in the local recorders"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="questionid"/>

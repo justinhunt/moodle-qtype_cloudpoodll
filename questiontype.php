@@ -103,6 +103,7 @@ class qtype_cloudpoodll extends question_type {
         $options->studentplayer = $formdata->studentplayer;
         $options->teacherplayer = $formdata->teacherplayer;
         $options->noaudiofilters = $formdata->noaudiofilters;
+        $options->allowpause = empty($formdata->allowpause) ? 0 : 1;
         $options->whiteboardwidth = $formdata->whiteboardwidth;
         $options->whiteboardheight = $formdata->whiteboardheight;
 
@@ -255,6 +256,8 @@ class qtype_cloudpoodll extends question_type {
                 ['#', 'safesave', 0, '#'], 0);
         $qo->noaudiofilters = $format->getpath($q,
                 ['#', 'noaudiofilters', 0, '#'], 0);
+        $qo->allowpause = $format->getpath($q,
+                ['#', 'allowpause', 0, '#'], 0);
         $qo->whiteboardwidth = $format->getpath($q,
                 ['#', 'whiteboardwidth', 0, '#'], 800);
         $qo->whiteboardheight = $format->getpath($q,

@@ -49,6 +49,7 @@ class qtype_cloudpoodll_question extends question_with_responses {
     public $timelimit;
     public $safesave;
     public $noaudiofilters;
+    public $allowpause;
     public $whiteboardwidth;
     public $whiteboardheight;
 

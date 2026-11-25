@@ -51,7 +51,8 @@ class backup_qtype_cloudpoodll_plugin extends backup_qtype_plugin {
         $cloudpoodll = new backup_nested_element('cloudpoodll', array('id'), array(
                 'responseformat','timelimit','language','expiredays','transcode','transcriber',
                 'studentplayer','teacherplayer','audioskin','videoskin',
-                'graderinfo', 'graderinfoformat', 'qresource','safesave'));
+                'graderinfo', 'graderinfoformat', 'qresource','safesave',
+                'noaudiofilters', 'whiteboardwidth', 'whiteboardheight', 'allowpause'));
 
         // Now the own qtype tree
         $pluginwrapper->add_child($cloudpoodll);

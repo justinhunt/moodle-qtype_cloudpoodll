@@ -81,6 +81,14 @@ class utils {
     }
 
     public static function fetch_options_skins($rectype = constants::REC_VIDEO) {
+        if (!self::use_legacy_recorders()) {
+            // These have no local version yet, so they still come from Cloud Poodll.
+            return [
+                constants::SKIN_LOCAL123 => get_string("skinlocal123", constants::M_COMP),
+                constants::SKIN_LOCALONCE => get_string("skinlocalonce", constants::M_COMP),
+                constants::SKIN_UPLOAD => get_string("skinupload", constants::M_COMP),
+            ];
+        }
         $recoptions = [];
         switch ($rectype) {
             case constants::REC_AUDIO:
@@ -102,6 +110,86 @@ class utils {
 
         }
         return $recoptions;
+    }
+
+    /**
+     * Has the site gone back to the old recorders, which load in an iframe from Cloud Poodll?
+     *
+     * @return bool
+     */
+    public static function use_legacy_recorders() {
+        return !empty(get_config(constants::M_COMP, 'uselegacyrecorders'));
+    }
+
+    /**
+     * The skin to show, given the skin a question was saved with.
+     *
+     * The local recorders replace the old skins, so questions made before them get the local
+     * recorder closest to their old skin: once uploads straight after Stop, the rest become One Two
+     * Three. If the site uses the old recorders, old skins stay as they were and the local skins go
+     * back the other way. The saved setting is never changed, so turning the old recorders on or off
+     * loses nothing.
+     *
+     * @param string|false|null $skin the saved audioskin or videoskin, or empty if there is none
+     * @return string the skin to show
+     */
+    public static function effective_skin($skin) {
+        $legacy = self::use_legacy_recorders();
+        if ($legacy && !empty($skin) && !self::is_local_skin($skin)) {
+            return $skin;
+        }
+        switch ($skin) {
+            case constants::SKIN_UPLOAD:
+            case constants::SKIN_SCREEN:
+                return $skin;
+            case constants::SKIN_ONCE:
+            case constants::SKIN_LOCALONCE:
+                return $legacy ? constants::SKIN_ONCE : constants::SKIN_LOCALONCE;
+            default:
+                return $legacy ? constants::SKIN_123 : constants::SKIN_LOCAL123;
+        }
+    }
+
+    /**
+     * Is this skin one of the local recorders, which run in the plugin instead of a Cloud Poodll iframe?
+     *
+     * @param string $skin the skin
+     * @return bool
+     */
+    public static function is_local_skin($skin) {
+        return $skin === constants::SKIN_LOCAL123 || $skin === constants::SKIN_LOCALONCE;
+    }
+
+    /**
+     * Could this be the URL of a recording stored by Cloud Poodll?
+     *
+     * The recorder writes the URL into a hidden form field, so a student could post any URL instead.
+     * Cloud Poodll keeps recordings in its own S3 buckets, all named poodll-..., in the global and
+     * China partitions of AWS. Both path style (s3.region.amazonaws.com/bucket/key) and virtual
+     * host style (bucket.s3.region.amazonaws.com/key) URLs are accepted.
+     *
+     * @param string $url the URL to check
+     * @return bool
+     */
+    public static function is_cloudpoodll_media_url($url) {
+        if (!is_string($url) || clean_param($url, PARAM_URL) !== $url) {
+            return false;
+        }
+        $parts = parse_url($url);
+        if (
+            ($parts['scheme'] ?? '') !== 'https' || empty($parts['host']) || empty($parts['path']) ||
+            isset($parts['user']) || isset($parts['port'])
+        ) {
+            return false;
+        }
+        $host = strtolower($parts['host']);
+        if (!preg_match('/^([a-z0-9.-]+\.)?amazonaws\.com(\.cn)?$/', $host)) {
+            return false;
+        }
+        if (strpos($host, 'poodll-') === 0) {
+            return true;
+        }
+        return (bool)preg_match('#^/poodll-[a-z0-9.-]+/.+#', $parts['path']);
     }
 
     public static function get_region_options() {

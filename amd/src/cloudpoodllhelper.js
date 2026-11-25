@@ -89,6 +89,56 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader", "core/templ
             );//end of cp init
 
         },
+        // The local recorder runs in the page and reports with a "localrecorder" event on its root.
+        initlocal: function (opts) {
+            var that = this;
+            var name = CSS.escape(opts.inputname);
+            var controls = {
+                nextpagebtn: $(".submitbtns .mod_quiz-next-nav"),
+                mediaurl: $("input[name=" + name + "mediaurl]"),
+                details: $("input[name=" + name + "details]"),
+                answer: $("input[name=" + name + "]"),
+                answerstatus: $("div#" + name + "_asc"),
+            };
+            var root = document.getElementById(opts.rootid);
+            if (!root) {
+                return;
+            }
+            var safesave = function (on) {
+                if (opts.safesave != 1) {
+                    return;
+                }
+                if (on) {
+                    controls.nextpagebtn.attr('disabled', 'disabled');
+                    $(window).on('beforeunload', that.preventPrematureLeaving);
+                } else {
+                    controls.nextpagebtn.removeAttr('disabled');
+                    $(window).off('beforeunload', that.preventPrematureLeaving);
+                }
+            };
+            root.addEventListener('localrecorder', function (e) {
+                var evt = e.detail || {};
+                switch (evt.type) {
+                    case "recording":
+                        that.logDetails(controls.details, controls.answerstatus, evt);
+                        document.dispatchEvent(new CustomEvent("cpquestionStarted", {details: evt}));
+                        safesave(true);
+                        break;
+                    case "awaitingprocessing":
+                        // Unlike the iframe recorders, a second recording replaces the first.
+                        controls.mediaurl.val(evt.mediaurl);
+                        controls.answer.val(evt.mediaurl);
+                        that.logDetails(controls.details, controls.answerstatus, evt);
+                        document.dispatchEvent(new CustomEvent("cpquestionUploaded", {details: evt}));
+                        safesave(false);
+                        break;
+                    case "idle":
+                        safesave(false);
+                        break;
+                }
+            });
+        },
+
         preventPrematureLeaving: function(e){
             log.debug('preventPrematureLeaving has been called');
             e.preventDefault();

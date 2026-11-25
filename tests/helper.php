@@ -106,6 +106,7 @@ class qtype_cloudpoodll_test_helper extends question_test_helper {
             'timelimit' => 0,
             'safesave' => 0,
             'noaudiofilters' => 0,
+            'allowpause' => 0,
             'whiteboardwidth' => 800,
             'whiteboardheight' => 600,
         ];

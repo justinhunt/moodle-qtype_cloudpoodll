@@ -126,6 +126,10 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
         // Fetch submitted data.
         if ($mediaurl === null) {
             $mediaurl = $step->get_qt_var($name . 'mediaurl');
+            // The recorder writes this into a hidden field, so a student could post any URL instead.
+            if (!empty($mediaurl) && $mediaurl !== constants::BLANK && !utils::is_cloudpoodll_media_url($mediaurl)) {
+                $mediaurl = '';
+            }
         }
         $transcript = $step->get_qt_var($name . 'transcript');
         $details = $step->get_qt_var($name . 'details');
@@ -185,6 +189,15 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             if (json_last_error() === JSON_ERROR_NONE && !empty($reclog->recevents)) {
                 $lastmimetype = '';
                 foreach ($reclog->recevents as $recevent) {
+                    // The log comes from the browser, so only link to recordings Cloud Poodll could have made.
+                    foreach (['targetfile', 'finalfile'] as $urlfield) {
+                        if (isset($recevent->$urlfield) && !utils::is_cloudpoodll_media_url($recevent->$urlfield)) {
+                            unset($recevent->$urlfield);
+                        }
+                    }
+                    if (!isset($recevent->type) || !is_string($recevent->type)) {
+                        continue;
+                    }
                     $recevent->{$recevent->type} = 1; // Hack for mustache templates.
                     if ($recevent->type === 'uploadcommenced') {
                         $lastmimetype = $recevent->mimetype;
@@ -195,7 +208,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
                             $recevent->srcfilename = pathinfo($recevent->srcfile, PATHINFO_BASENAME);
                             $recevent->targetfilename = pathinfo($recevent->targetfile, PATHINFO_BASENAME);
                         }
-                    } else if ($recevent->type === 'filesubmitted') {
+                    } else if ($recevent->type === 'filesubmitted' && !empty($recevent->finalfile)) {
                         $recevent->finalfilename = pathinfo($recevent->finalfile, PATHINFO_BASENAME);
                     }
                 }
@@ -348,8 +361,8 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
 
             case 'qtype_cloudpoodll_audio':
                 $recordertype = constants::REC_AUDIO;
-                $recorderskin = $question->audioskin;
-                switch ($question->audioskin) {
+                $recorderskin = $this->recorder_skin($question->audioskin, $question);
+                switch ($recorderskin) {
                     case constants::SKIN_FRESH:
                         $width = '400';
                         $height = '300';
@@ -368,8 +381,8 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             case 'qtype_cloudpoodll_video':
             default:
                 $recordertype = constants::REC_VIDEO;
-                $recorderskin = $question->videoskin;
-                switch ($question->videoskin) {
+                $recorderskin = $this->recorder_skin($question->videoskin, $question);
+                switch ($recorderskin) {
                     case constants::SKIN_BMR:
                         $width = '360';
                         $height = '450';
@@ -451,6 +464,10 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             return $this->show_cbcredentials_notice($errormessage);
         }
 
+        if (utils::is_local_skin($recorderskin)) {
+            return $this->fetch_local_recorder($qa, $question, $recordertype, $recorderskin, $inputname);
+        }
+
         // Fetch token.
         $token = utils::fetch_token($apiuser, $apisecret);
 
@@ -505,6 +522,61 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
 
         $this->page->requires->js_call_amd(CONSTANTS::M_COMP . '/cloudpoodllhelper', 'init', [$opts]);
         return $recorderhtml;
+    }
+
+    /**
+     * The skin to show for a question, given the skin it was saved with.
+     *
+     * Chrome speech recognition runs inside the iframe recorders, so questions that use it keep the
+     * iframe recorder that matches the local one.
+     *
+     * @param string $skin the saved audioskin or videoskin
+     * @param qtype_cloudpoodll_question $question
+     * @return string the skin
+     */
+    protected function recorder_skin($skin, $question) {
+        $skin = utils::effective_skin($skin);
+        if (utils::is_local_skin($skin) && $question->transcriber == constants::TRANSCRIBER_GOOGLECHROME) {
+            return $skin === constants::SKIN_LOCALONCE ? constants::SKIN_ONCE : constants::SKIN_123;
+        }
+        return $skin;
+    }
+
+    /**
+     * The html of a local recorder, which runs in the plugin instead of a Cloud Poodll iframe.
+     *
+     * No token goes to the page. The recorder asks for its upload URL through the
+     * fetch_upload_details web service when the recording is finished.
+     *
+     * @param question_attempt $qa
+     * @param qtype_cloudpoodll_question $question
+     * @param string $recordertype audio or video
+     * @param string $recorderskin a local skin
+     * @param string $inputname the name of the answer field
+     * @return string html
+     */
+    protected function fetch_local_recorder($qa, $question, $recordertype, $recorderskin, $inputname) {
+        $rootid = html_writer::random_id('plr');
+        $config = [
+            'rootid' => $rootid,
+            'component' => constants::M_COMP,
+            'wsfunction' => constants::M_COMP . '_fetch_upload_details',
+            'wsargs' => ['qubaid' => (int)$qa->get_usage_id(), 'slot' => (int)$qa->get_slot()],
+            'mediatype' => $recordertype == constants::REC_VIDEO ? 'video' : 'audio',
+            'timelimit' => (int)$question->timelimit,
+            'allowpause' => !empty($question->allowpause),
+            // A question is often a speaking test, so the answer must be recorded here.
+            'allowupload' => false,
+            'asktouse' => $recorderskin !== constants::SKIN_LOCALONCE,
+            'noaudiofilters' => !empty($question->noaudiofilters),
+        ];
+        $this->page->requires->js_call_amd(constants::M_COMP . '/localrecorder/skin_123', 'init', [$config]);
+        $this->page->requires->js_call_amd(constants::M_COMP . '/cloudpoodllhelper', 'initlocal', [[
+            'rootid' => $rootid,
+            'inputname' => $inputname,
+            'safesave' => $question->safesave,
+        ]]);
+        return html_writer::div('', 'plr-root', ['id' => $rootid]);
     }
 
     /**

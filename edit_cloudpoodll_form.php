@@ -67,7 +67,7 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
         $type = constants::REC_AUDIO;
         $options = utils::fetch_options_skins($type);
         $mform->addElement('select', $name, $label, $options);
-        $mform->setDefault('audioskin', $config->$name);
+        $mform->setDefault('audioskin', utils::effective_skin($config->$name));
 
         // videoskin
         $name = 'videoskin';
@@ -75,7 +75,7 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
         $type = constants::REC_VIDEO;
         $options = utils::fetch_options_skins($type);
         $mform->addElement('select', $name, $label, $options);
-        $mform->setDefault($name, $config->$name);
+        $mform->setDefault($name, utils::effective_skin($config->$name));
 
         // transcriber
         $name = 'transcriber';
@@ -127,6 +127,12 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
         $default = isset($config->$name) ? $config->$name : 0;
         $mform->setDefault($name, $default);
 
+        // Pause button in the local recorders. Off by default, because questions are often speaking tests.
+        $mform->addElement('advcheckbox', 'allowpause', get_string('allowpause', constants::M_COMP),
+            get_string('allowpause_details', constants::M_COMP));
+        $mform->setDefault('allowpause', 0);
+        $mform->hideIf('allowpause', 'responseformat', 'eq', constants::RESPONSEFORMAT_WHITEBOARD);
+
         // Whiteboard size
         $mform->addElement('text', 'whiteboardwidth', get_string('whiteboardwidth', constants::M_COMP));
         $mform->setType('whiteboardwidth', PARAM_INT);
@@ -158,6 +164,9 @@ class qtype_cloudpoodll_edit_form extends question_edit_form {
                     $question->{$field} = $question->options->{$field};
             }
         }
+        // Old skins show as the local recorder that replaces them.
+        $question->audioskin = utils::effective_skin($question->audioskin ?? '');
+        $question->videoskin = utils::effective_skin($question->videoskin ?? '');
 
         // Set qresource details, and configure a draft area to accept any uploaded pictures
         // all this and this whole method does, is to load existing files into a filearea
