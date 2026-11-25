@@ -426,6 +426,8 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: relative;
     user-select: none;
+    /* Stop touch drawing from scrolling or zooming the page (covers canvas and overlays). */
+    touch-action: none;
     margin: 0;
 }
 
