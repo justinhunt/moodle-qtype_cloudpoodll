@@ -104,16 +104,15 @@ define(["jquery", "core/log", "qtype_cloudpoodll/cloudpoodllloader", "core/templ
             if (!root) {
                 return;
             }
+            // The recorder itself warns before the page is left with a recording that is not saved.
             var safesave = function (on) {
                 if (opts.safesave != 1) {
                     return;
                 }
                 if (on) {
                     controls.nextpagebtn.attr('disabled', 'disabled');
-                    $(window).on('beforeunload', that.preventPrematureLeaving);
                 } else {
                     controls.nextpagebtn.removeAttr('disabled');
-                    $(window).off('beforeunload', that.preventPrematureLeaving);
                 }
             };
             root.addEventListener('localrecorder', function (e) {

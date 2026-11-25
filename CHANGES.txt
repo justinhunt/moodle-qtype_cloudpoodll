@@ -7,6 +7,8 @@ Version 1.0.32 (Build 2026112501)
 - Added a Use the old recorders site setting to go back to the Cloud Poodll recorders
 - Questions that use Chrome speech recognition keep the old recorders
 - The recorder says "Ready when you are" when the browser already allows the microphone, and says so straight away when it is blocked
+- The recorder warns before leaving the page with a recording that is not saved, and asks before Record again deletes one
+- The microphone or camera list shows from the start when the browser already allows them
 - Added an Allow pausing question setting for the new recorders, off by default
 - Backups now keep the No Audio Filters and whiteboard size settings
 - Recordings and recorder log links only show if they are in Cloud Poodll's storage
