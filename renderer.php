@@ -361,7 +361,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
 
             case 'qtype_cloudpoodll_audio':
                 $recordertype = constants::REC_AUDIO;
-                $recorderskin = $this->recorder_skin($question->audioskin, $question);
+                $recorderskin = utils::effective_skin($question->audioskin);
                 switch ($recorderskin) {
                     case constants::SKIN_FRESH:
                         $width = '400';
@@ -381,7 +381,7 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
             case 'qtype_cloudpoodll_video':
             default:
                 $recordertype = constants::REC_VIDEO;
-                $recorderskin = $this->recorder_skin($question->videoskin, $question);
+                $recorderskin = utils::effective_skin($question->videoskin);
                 switch ($recorderskin) {
                     case constants::SKIN_BMR:
                         $width = '360';
@@ -522,24 +522,6 @@ class qtype_cloudpoodll_renderer extends qtype_renderer {
 
         $this->page->requires->js_call_amd(CONSTANTS::M_COMP . '/cloudpoodllhelper', 'init', [$opts]);
         return $recorderhtml;
-    }
-
-    /**
-     * The skin to show for a question, given the skin it was saved with.
-     *
-     * Chrome speech recognition runs inside the iframe recorders, so questions that use it keep the
-     * iframe recorder that matches the local one.
-     *
-     * @param string $skin the saved audioskin or videoskin
-     * @param qtype_cloudpoodll_question $question
-     * @return string the skin
-     */
-    protected function recorder_skin($skin, $question) {
-        $skin = utils::effective_skin($skin);
-        if (utils::is_local_skin($skin) && $question->transcriber == constants::TRANSCRIBER_GOOGLECHROME) {
-            return $skin === constants::SKIN_LOCALONCE ? constants::SKIN_ONCE : constants::SKIN_123;
-        }
-        return $skin;
     }
 
     /**

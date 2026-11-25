@@ -95,14 +95,16 @@ class fetch_upload_details extends external_api {
             throw new \moodle_exception('lr_cannotrecord', constants::M_COMPONENT);
         }
 
-        // The local recorder uses Amazon Transcribe for both kinds of server transcription, as the
-        // iframe recorders do for video. Chrome speech recognition questions keep the iframe recorder.
+        // The local recorder uses Amazon Transcribe for every kind of transcription. Google Cloud Speech
+        // and Chrome speech recognition can no longer be chosen, but older questions may have them.
         $siteconfig = get_config(constants::M_COMPONENT);
         $transcribe = constants::TRANSCRIBER_NONE;
-        if (
-            in_array((int)$question->transcriber, [constants::TRANSCRIBER_AMAZONTRANSCRIBE,
-                constants::TRANSCRIBER_GOOGLECLOUDSPEECH]) && utils::can_transcribe($siteconfig)
-        ) {
+        $transcribers = [
+            constants::TRANSCRIBER_AMAZONTRANSCRIBE,
+            constants::TRANSCRIBER_GOOGLECLOUDSPEECH,
+            constants::TRANSCRIBER_GOOGLECHROME,
+        ];
+        if (in_array((int)$question->transcriber, $transcribers) && utils::can_transcribe($siteconfig)) {
             $transcribe = constants::TRANSCRIBER_AMAZONTRANSCRIBE;
         }
 

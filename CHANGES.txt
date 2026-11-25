@@ -5,7 +5,6 @@ Version 1.0.32 (Build 2026112501)
 - New audio and video recorders that run in Moodle instead of a frame from Cloud Poodll: One Two Three and Once
 - Questions with the old skins use the new recorders: Once becomes the new Once and the others become the new One Two Three
 - Added a Use the old recorders site setting to go back to the Cloud Poodll recorders
-- Questions that use Chrome speech recognition keep the old recorders
 - The recorder says "Ready when you are" when the browser already allows the microphone, and says so straight away when it is blocked
 - The recorder warns before leaving the page with a recording that is not saved, and asks before Record again deletes one
 - The microphone or camera list shows from the start when the browser already allows them
